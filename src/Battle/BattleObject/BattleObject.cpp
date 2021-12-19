@@ -1,7 +1,7 @@
 #include"./BattleObject.h"
 
 
-BattleObject::BattleObject(float posx,float posy,CollisionState* state):Field_Object(posx,posy,0.f),CollisionObject(state) {
+BattleObject::BattleObject(float posx,float posy,CollisionState* state):Field_Object(posx,posy,1.f),CollisionObject(state) {
 	MoveFlag = false;
 	Width = 0.f;
 	Height = 0.f;

@@ -14,15 +14,16 @@ namespace UI {
 
 	int BackGround::TextureNumber;
 
-	BackGround::BackGround(float x, float y) :UI_Base(x, y, 2.f) {
+	BackGround::BackGround(float x, float y) :UI_Base(x, y, -2.f) {
 		float imgx = ((ScreenLX()+ScreenWidth()) / 2.f)*(2.f/3.f);
 		float imgy = (ScreenUpperY() + ScreenHeigth()) / 2.f;
-		img = make_unique<Primitive>(Primitive(SQUARE, -12.f, y, 2.f, ScreenWidth()*(2.f/3.f), ScreenHeigth(), 1.f, 1.f, 1.f, 1.f));
+		img = make_unique<Primitive>(Primitive(SQUARE, -12.f, y, -2.f, ScreenWidth()*(2.f/3.f), ScreenHeigth(),1.f, 1.f, 1.f, 1.f));
 		TextureNumber = Images::GetInstance()->SaveImage("center2.png");
 	}
 
 	void BackGround::Draw() {
-		pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+		//pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+		pD3DDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 		Images::GetInstance()->LoadImage(TextureNumber, 0);
 		img->Draw(this->GetMatrix());
 		Images::GetInstance()->Reset();
@@ -114,7 +115,6 @@ namespace UI {
 	}
 
 	UIMNG::UIMNG() {
-		CreateUI();
 	}
 
 	void UIMNG::CreateUI() {
@@ -138,8 +138,14 @@ namespace UI {
 
 	}
 
+	void UIMNG::SetMorale(int MaxMorale) {
+		Morale = new MoraleUI(0.f, 0.f, MaxMorale);
+		
+	}
+
 	void UIMNG::Release() {
 		delete Charging;
+		delete Morale;
 	}
 
 }

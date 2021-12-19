@@ -37,6 +37,13 @@ Player::~Player() {
 	delete BBullet;
 }
 
+void Player::SetPanel(Panel_Field* p) {
+	StandPos = p;
+	NTPrevX = StandPos->x;
+	NTPrevY = StandPos->y;
+	this->Move(p->GetLocation().x, p->GetLocation().y);
+}
+
 void Player::Update() {
 
 	MoveState->ChangeValue(MoveState->GetVal()->Update(this));

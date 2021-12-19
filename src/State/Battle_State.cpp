@@ -49,14 +49,14 @@ Battle_State::Battle_State(int delay)
 	schemelist = new SchemeBox();
 	Predominant = new Numerical<int>(new int(0), new NormalValue<int>(), 100, -100);
 
-	pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
-	pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	//pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	pD3DDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	//pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
-
 	/*UI生成(カメラ分割にするべきかステンシルバッファを利用)*/
-	UI::UIMNG* ui=UI::UIMNG::GetInstance();
+	UI::UIMNG* ui = UI::UIMNG::GetInstance();
+	ui->CreateUI();
 	ui->textBoard->SetDelayFrame(delayFrame);
 	objects.push_back((Field_Object*)ui->backGround.get());
 	objects.push_back((Field_Object*)ui->textBoard.get());
@@ -64,6 +64,7 @@ Battle_State::Battle_State(int delay)
 	objects.push_back((Field_Object*)ui->EnemyHP.get());
 	objects.push_back((Field_Object*)ui->Predominant.get());
 	objects.push_back((Field_Object*)ui->Charging);
+
 
 	p_blue = Panel_Blue::GetInstance();
 	objects.push_back(p_blue);
@@ -123,17 +124,23 @@ Battle_State::Battle_State(int delay)
 #endif
 	}
 
-	for (i = 0;i < width-1;i++) {	
-		for (j = 0;j < length;j++) {
+	for (i = 0; i < width - 1; i++) {
+		for (j = 0; j < length; j++) {
 			objects.push_back((Field_Object*)Player_Panel[i][j]);
 			objects.push_back((Field_Object*)Enemy_Panel[i][j]);
 		}
 	}
-	p_blue->Set(Panel_ALL[1][1]);
-	ObjectMNG::GetMNG()->player = new Hero(1, 1, Panel_ALL[1][1], PLAYER,&DMGPlayerHP,schemelist);//, Panel_ALL[1][1]->GetLocation().x, Panel_ALL[1][1]->GetLocation().y
-	Panel_ALL[1][1]->AddObject(ObjectMNG::GetMNG()->player);
 
-	ObjectMNG::GetMNG()->enemy = new HeroT(1, 6, Panel_ALL[6][1], ENEMY,&DMGEnemyHP,schemelist);
+	ObjectMNG::GetMNG()->player = new Hero(1, 1, Panel_ALL[1][1], PLAYER, &DMGPlayerHP, schemelist);
+	ObjectMNG::GetMNG()->enemy = new HeroT(1, 6, Panel_ALL[6][1], ENEMY, &DMGEnemyHP, schemelist);
+
+	ui->SetMorale(ObjectMNG::GetMNG()->player->Morale->GetMax());
+	objects.push_back((Field_Object*)ui->Morale);
+
+	p_blue->Set(Panel_ALL[1][1]);
+
+
+	Panel_ALL[1][1]->AddObject(ObjectMNG::GetMNG()->player);
 	Panel_ALL[6][1]->AddObject(ObjectMNG::GetMNG()->enemy);
 
 	this->NextState = this;
@@ -293,6 +300,11 @@ void Battle_State::UpdateUI() {
 	UI::UIMNG::GetInstance()->Charging->UpdateGauge(SBullet,MBullet,BBullet,Morale);
 	UI::UIMNG::GetInstance()->Charging->UpdateBullet(ply->SBullet->GetRemain(), 
 		ply->MBullet->GetRemain(), ply->BBullet->GetRemain(),ply->Morale->GetRemain());
+
+	float MoraleRate = ((float)ply->Morale->GetRemain()*(float)ply->Morale->GetMaxCounter() + (float)ply->Morale->GetRemainCounter()) /
+		((float)ply->Morale->GetMax()*(float)ply->Morale->GetMaxCounter());
+
+	UI::UIMNG::GetInstance()->Morale->UpdateGauge(MoraleRate);
 
 }
 

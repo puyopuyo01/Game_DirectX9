@@ -40,10 +40,12 @@ class Scheme;
 class Player:public BattleObject{
 public:
 	int GetID() override;
-	Player(int x,int y, Panel_Field* p,int ID,float *HP,SchemeBox* schemeBox);
+	Player(int x,int y,Panel_Field* p,int ID,float *HP,SchemeBox* schemeBox);
 	~Player();
 	void Update() override;
 	void Draw() override;
+
+	void SetPanel(Panel_Field* p);
 	ValueState<HandleMove>* MoveState;
 	ValueState<HandleBullet>* BulletState;
 	ValueState<HandleScheme>* SchemeState;

@@ -20,6 +20,8 @@ namespace UI {
 		delete S;
 		delete M;
 		delete B;
+
+		
 	}
 
 	void ChargingUI::UpdateGauge(float S_Rate, float M_Rate, float B_Rate, float MoraleRate) {

@@ -43,6 +43,7 @@ private:
 
 class PrimitiveUp :public ImageBoard {
 public:
+	PrimitiveUp(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a,int UV_X,int UV_Y);
 	PrimitiveUp(D3DPRIMITIVETYPE type, float x, float y, float z,float imgWidth, float imgHeight, float r, float g, float b, float a);
 	void Draw(D3DXMATRIX location) override;
 	void VertexPosition(const int index, float x, float y, float z);
@@ -50,6 +51,12 @@ public:
 	void VertexY(const int index, float y);
 	void VertexColor(const int index, float r, float g,float b,float a);
 
+	void SetUV(int index_X,int index_Y);
+
 private:
 	ImageVertex imgvertex[4];
+
+	int UV_X, UV_Y;
+
+	void init(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a);
 };

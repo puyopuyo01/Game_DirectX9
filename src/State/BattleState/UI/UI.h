@@ -150,16 +150,33 @@ namespace UI {
 		char SB[10];
 		char MB[10];
 		char BB[10];
-		char Mo[10];
+		char Mo[10];	
+	};
+
+	class MoraleUI :public Field_Object {
+	public:
+		MoraleUI(float x, float y,int MoraleNum);
+		~MoraleUI();
+
+		void Draw() override;
+
+		void UpdateGauge(float MoraleRate);
+
+	private:
+		vector<Primitive*> Frame;
+		ChargingBar* MoraleBar;
 	};
 
 
 
 	/*UIを管理するクラス*/
+	/*パラメータが不必要なUIはCreateUI関数で作成*/
 	class UIMNG {
 	public:
 		UIMNG();
 		void CreateUI();
+		void SetMorale(int MaxMorale);
+
 
 		void Release();
 
@@ -172,6 +189,7 @@ namespace UI {
 
 
 		ChargingUI* Charging;
+		MoraleUI* Morale;
 
 
 		unique_ptr<PredominantBar> Predominant;
