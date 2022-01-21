@@ -1,6 +1,7 @@
 #include"./Battle_State.h"
 #include"Player/Character/Character.h"
 #include"State/InputIP.h"
+#include"SingleTonImage/NumberIMG.h"
 
 float UpperPanel;
 float ButtomPanel;
@@ -27,7 +28,9 @@ void Game_State::deleteObject(int index) { objects.erase(objects.begin() + index
  
 Battle_State::Battle_State(int delay)
 {
+	Number_Symbol::Init();
 	Bullet::Init();
+	
 	BGM = new Sound("PerituneMaterial_Spook4_loop.wav"); 
 	BGM->Play(true);
 	File = FileMapping::GetInstance();

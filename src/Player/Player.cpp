@@ -54,9 +54,7 @@ void Player::Update() {
 }
 
 void Player::Draw() {
-	pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);
-	pD3DDevice->SetRenderState(D3DRS_ALPHAREF, 0x66);
+	BackGroundTransparent();
 	Images::GetInstance()->LoadImage(play, 0);
 	img->Draw(this->GetMatrix());
 	Images::GetInstance()->Reset();

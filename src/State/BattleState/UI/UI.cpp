@@ -139,7 +139,7 @@ namespace UI {
 	}
 
 	void UIMNG::SetMorale(int MaxMorale) {
-		Morale = new MoraleUI(0.f, 0.f, MaxMorale);
+		Morale = new MoraleUI(-10.f, -30.f, MaxMorale);
 		
 	}
 

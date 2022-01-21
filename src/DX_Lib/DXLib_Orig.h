@@ -108,6 +108,8 @@ extern LPDIRECTSOUNDBUFFER PrBuf;
 		void Rot(float a);
 		D3DXMATRIX GetMatrix();
 		D3DXVECTOR3 GetLocation();
+		/*îwåiìßâﬂÇ≥ÇπÇÈê›íËÇçsÇ§ä÷êî*/
+		void BackGroundTransparent();
 	private:
 		D3DXVECTOR3 move_vector;
 		D3DXVECTOR3 pos;

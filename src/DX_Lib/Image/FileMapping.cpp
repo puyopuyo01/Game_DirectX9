@@ -95,7 +95,7 @@ const char* FileMapping::GetPointer(string FileName) {
 	}
 	else {
 		MessageBox(NULL,
-			"P", "Ž¸”s_GetPointer", MB_OK);
+			FileName.c_str(), "Ž¸”s_GetPointer", MB_OK);
 		return(NULL);
 	}
 }

@@ -40,3 +40,9 @@ void Field_Object::Rot(float a) {
 	D3DXMatrixRotationYawPitchRoll(&rot, 0.f, D3DXToRadian(180.0f)/*D3DXToRadian(180.0f)*/, 0.f /*D3DXToRadian(45.0f)*/);
 	D3DXMatrixMultiply(&output, &rot, &loc);
 }
+
+void Field_Object::BackGroundTransparent() {
+	pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);
+	pD3DDevice->SetRenderState(D3DRS_ALPHAREF, 0x66);
+}

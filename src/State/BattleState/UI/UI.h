@@ -5,6 +5,7 @@
 #include"Screen.h"
 #include"DXLib_Orig.h"
 #include"FPS/FPS.h"
+#include"SingleTonImage/NumberIMG.h"
 
 #define PLAYERBAR 1
 #define ENEMYBAR -1
@@ -90,6 +91,8 @@ namespace UI {
 	class ChargingBar :public Field_Object,Gauge {
 	public:
 		ChargingBar(float x, float y,float Width);
+		ChargingBar(float x, float y, float Width, float r, float g, float b,float a,
+					float fr,float fg,float fb,float fa);
 
 		void UpdateGauge(float Rate);
 		void Draw() override;
@@ -97,6 +100,8 @@ namespace UI {
 	private:
 		float Origin; //Œ´“_
 		float Width;
+
+		void init(float x, float y, float Width,float r,float g,float b, float a,float fr, float fg, float fb,float ra);
 
 	};
 
@@ -151,6 +156,10 @@ namespace UI {
 		char MB[10];
 		char BB[10];
 		char Mo[10];	
+
+		Number_Symbol* SNumber;
+		Number_Symbol* MNumber;
+		Number_Symbol* BNumber;
 	};
 
 	class MoraleUI :public Field_Object {

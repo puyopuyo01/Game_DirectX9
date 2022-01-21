@@ -15,7 +15,7 @@ void PrimitiveUp::init(D3DPRIMITIVETYPE type, float x, float y, float z, float i
 	if (type == SQUARE) {
 		Square(imgvertex, x, y, z, imgWidth, imgHeight, r, g, b, a);
 		imgvertex[0].uv = D3DXVECTOR2(0.0f, 0.0f);
-		imgvertex[1].uv = D3DXVECTOR2(1.0f, 0.0f);
+		imgvertex[1].uv = D3DXVECTOR2(1.f, 0.0f);
 		imgvertex[2].uv = D3DXVECTOR2(0.0f, 1.0f);
 		imgvertex[3].uv = D3DXVECTOR2(1.0f, 1.0f);
 	}
@@ -27,24 +27,30 @@ void PrimitiveUp::init(D3DPRIMITIVETYPE type, float x, float y, float z, float i
 	else if (type == SQUARELINE) { VNum = 4; }
 }
 
+
+/*
+UV_Xc‰¡‚É‰½•ªŠ„‚·‚é‚©.
+UV_Ycc‚É‰½•ªŠ„‚·‚é‚©.
+*/
 PrimitiveUp::PrimitiveUp(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a) {
 	init(type, x, y, z, imgWidth, imgHeight, r, g, b, a);
-	UV_X = 1;
-	UV_Y = 1;
+	UV_X = 1.f;
+	UV_Y = 1.f;
 }
 
-PrimitiveUp::PrimitiveUp(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a, int UV_X, int UV_Y) {
+PrimitiveUp::PrimitiveUp(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a, float UV_X, float UV_Y) {
 	init(type, x, y, z, imgWidth, imgHeight, r, g, b, a);
-	this->UV_X = UV_X;
-	this->UV_Y = UV_Y;
+	this->UV_X = (float)UV_X;
+	this->UV_Y = (float)UV_Y;
 }
 
 
-void PrimitiveUp::SetUV(int index_X,int index_Y) {
-	imgvertex[0].uv = D3DXVECTOR2((float)index_X/ (float)UV_X, (float)index_Y/ (float)UV_Y);
-	imgvertex[1].uv = D3DXVECTOR2((float)(index_X+1) / (float)UV_X,(float)index_Y /(float)UV_Y);
-	imgvertex[2].uv = D3DXVECTOR2((float)index_X/ (float)UV_X, (float)(index_Y+1) / (float)UV_Y);
-	imgvertex[2].uv = D3DXVECTOR2((float)(index_X+1) / (float)UV_X, (float)(index_Y+1) / (float)UV_Y);
+void PrimitiveUp::SetUV(float index_X,float index_Y) {
+	imgvertex[0].uv = D3DXVECTOR2(index_X/ UV_X, index_Y/ UV_Y);
+	imgvertex[1].uv = D3DXVECTOR2((index_X+ 1.f) / UV_X,index_Y /UV_Y);
+	imgvertex[2].uv = D3DXVECTOR2((index_X)/ UV_X,(index_Y+ 1.f) / UV_Y);
+	imgvertex[3].uv = D3DXVECTOR2((index_X+ 1.f) / UV_X,(index_Y+ 1.f) / UV_Y);
+	printf("UV %lf %lf %lf \n", index_X / UV_X, (index_X + 1.f) / UV_X, index_Y / UV_Y);
 }
 
 void PrimitiveUp::VertexPosition(const int index, float x, float y, float z) {

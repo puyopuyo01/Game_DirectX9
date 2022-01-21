@@ -4,9 +4,9 @@
 namespace UI {
 	MoraleUI::MoraleUI(float x,float y,int MoraleNum) : Field_Object(x, y, 0.f) {
 		/*MoraleÉoÅ[êßçÏ*/
-		float Width = 20.f;
+		float Width = 55.f;
 		float Height = 1.f;
-		MoraleBar = new ChargingBar(x,y,Width);
+		MoraleBar = new ChargingBar(x,y,Width,1.f,0.f,0.f,0.6f,1.f,1.f,1.f,1.f);
 
 		int i;
 		float TempWidth;
@@ -15,13 +15,12 @@ namespace UI {
 		}
 		else { TempWidth = 0.f; }
 		for (i = 0; i < MoraleNum; i++) {
-			//float pos_x = (TempWidth/2.f)*i - (TempWidth/2.f);
 			float pos = (float)i - ((float)MoraleNum / 2.f);
-			float pos_x = (TempWidth * pos)+TempWidth/2,f;
+			float pos_x = x+(TempWidth * pos)+TempWidth/2.f;
 			Frame.push_back(new Primitive(SQUARELINE,
 											pos_x, y, 0.f,
 											TempWidth, Height,
-											1.f, 1.f, 1.f, 0.6f));
+											1.f, 1.f, 1.f, 1.f));
 		}
 	}
 
