@@ -106,6 +106,7 @@ extern LPDIRECTSOUNDBUFFER PrBuf;
 		virtual void Draw();
 		void Move(float x, float y);
 		void Rot(float a);
+		void Inversion();
 		D3DXMATRIX GetMatrix();
 		D3DXVECTOR3 GetLocation();
 		/*îwåiìßâﬂÇ≥ÇπÇÈê›íËÇçsÇ§ä÷êî*/

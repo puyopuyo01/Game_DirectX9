@@ -2,7 +2,7 @@
 #include"Bullet/Bullet.h"
 
 namespace UI {
-	UI_Base::UI_Base(float x, float y, float z) :Field_Object(x*(2.f / 3.f), y, z) {
+	UI_Base::UI_Base(float x, float y, float z) :Field_Object(x/*(2.f / 3.f)*/, y, z) {
 	}
 
 	void UI_Base::Draw() {
@@ -15,9 +15,9 @@ namespace UI {
 	int BackGround::TextureNumber;
 
 	BackGround::BackGround(float x, float y) :UI_Base(x, y, -2.f) {
-		float imgx = ((ScreenLX()+ScreenWidth()) / 2.f)*(2.f/3.f);
+		float imgx = ((ScreenLX() + ScreenWidth()) / 2.f)*(2.f/3.f);
 		float imgy = (ScreenUpperY() + ScreenHeigth()) / 2.f;
-		img = make_unique<Primitive>(Primitive(SQUARE, -12.f, y, -2.f, ScreenWidth()*(2.f/3.f), ScreenHeigth(),1.f, 1.f, 1.f, 1.f));
+		img = make_unique<Primitive>(Primitive(SQUARE, ScreenCenterX()-1.f, y, -2.f, ScreenWidth()/*(2.f/3.f)*/, ScreenHeigth(),1.f, 1.f, 1.f, 1.f));
 		TextureNumber = Images::GetInstance()->SaveImage("center2.png");
 	}
 
@@ -34,25 +34,61 @@ namespace UI {
 
 	/*‘Ì—Íƒo[*/
 
+	int HitPointBar::GaugeTexture;
+	int HitPointBar::GaugeCoverTexture;
+	int HitPointBar::GaugeBaseTexture;
+	
+	void HitPointBar::LoadIMG() {
+		GaugeTexture = Images::GetInstance()->SaveImage("gauge.png");
+		GaugeCoverTexture = Images::GetInstance()->SaveImage("gaugeCover.png");
+		GaugeBaseTexture = Images::GetInstance()->SaveImage("gaugeBase.png");
+	}
 
 	HitPointBar::HitPointBar(const int LR, float x, float y) :Field_Object(x, y, 0.f) {
 		LorR = LR;
-		HPwidth = (ScreenWidth() / 2.f)-4.f;
+		HPwidth = (ScreenWidth() / 2.f)-10.f;
 		OriginX = x + ((HPwidth/2.f)*LR);
-		Overall = make_unique<Primitive>(Primitive(SQUARE,
-			x, y, 0.f,
-			HPwidth, 3.f,
-			1.f, 0.f, 0.f, 1.f));
+
+
 		Remain = make_unique<PrimitiveUp>(PrimitiveUp(SQUARE,
 			x, y, 0.f,
 			HPwidth, 3.f,
-			0.f, 1.f, 0.f, 1.f));
+			1.f, 1.f, 1.f, 1.f));
+
+
+		if (LR != RIGHTHP) {
+			Overall = make_unique<Primitive>(Primitive(SQUARE,
+				x, y, 0.f,
+				HPwidth, 3.f,
+				1.f, 1.f, 1.f, 1.f,true));
+			Cover = make_unique<Primitive>(Primitive(SQUARE,
+				x, y, 0.f,
+				HPwidth+2.f, 4.f,
+				1.f, 1.f, 1.f, 1.f, true));
+			Remain->UVRevers();
+		}
+
+		else {
+			Overall = make_unique<Primitive>(Primitive(SQUARE,
+				x, y, 0.f,
+				HPwidth, 3.f,
+				1.f, 1.f, 1.f, 1.f));
+			Cover = make_unique<Primitive>(Primitive(SQUARE,
+				x, y, 0.f,
+				HPwidth+2.f, 4.f,
+				1.f, 1.f, 1.f, 1.f));
+		}
+
 
 	}
 
 
 	void HitPointBar::UpdateGauge(float MAXHP, float HP) {
 		float val = OriginX + ((HP / MAXHP)*HPwidth)*(LorR*-1);
+		/*float val = OriginX + ((HP / MAXHP)*HPwidth)*-1;
+		Remain->VertexX(UPPERLEFT, val);
+		Remain->VertexX(LOWERLEFT, val);*/
+		
 		if (LEFTHP == LorR) {
 			Remain->VertexX(UPPERLEFT, val);
 			Remain->VertexX(LOWERLEFT, val);
@@ -61,16 +97,26 @@ namespace UI {
 			Remain->VertexX(UPPERRIGHT, val);
 			Remain->VertexX(LOWERRIGHT, val);
 		}
+		
 	}
 
 	void HitPointBar::Update() {}
 
 
 	void HitPointBar::Draw() {
-		pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
-		pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+		//pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+		BackGroundTransparent();
+		Images::GetInstance()->LoadImage(GaugeBaseTexture, 0);
 		Overall->Draw(this->GetMatrix());
+		Images::GetInstance()->Reset();
+		BackGroundTransparent();
+		Images::GetInstance()->LoadImage(GaugeTexture, 0);
 		Remain->Draw(this->GetMatrix());
+		Images::GetInstance()->Reset();
+		BackGroundTransparent();
+		Images::GetInstance()->LoadImage(GaugeCoverTexture, 0);
+		Cover->Draw(this->GetMatrix());
+		Images::GetInstance()->Reset();
 	}
 
 
@@ -134,6 +180,7 @@ namespace UI {
 
 		imgx = ScreenLX()+ScreenWidth()*(3.f/4.f)-3.f;
 		EnemyHP.reset(new HitPointBar(RIGHTHP, imgx, imgy));
+		PlayerHP->LoadIMG();
 
 
 	}
@@ -143,9 +190,16 @@ namespace UI {
 		
 	}
 
+	void UIMNG::CreatePanel(int Player, int Enemy) {
+		PlayerPanel = new CharacterPanelUI(ScreenLX()+3.f, 0.f,Player);
+		EnemyPanel = new CharacterPanelUI(ScreenRX()-10.f, 0.f, Enemy);
+	}
+
 	void UIMNG::Release() {
 		delete Charging;
 		delete Morale;
+		delete PlayerPanel;
+		delete EnemyPanel;
 	}
 
 }

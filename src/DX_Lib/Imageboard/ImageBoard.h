@@ -29,10 +29,12 @@ protected:
 class Primitive :public  ImageBoard {
 public:
 	Primitive(D3DPRIMITIVETYPE type, float x, float y, float z,float imgWidth, float imgHeight, float r, float g, float b, float a);
+	Primitive(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a,bool Reverse);
 	~Primitive();
 	void Draw(D3DXMATRIX location) override;
 private:
 	ImageVertex* imgvertex;
+	void init(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a,bool Reverse);
 };
 
 /*Square‚Ì‚Æ‚«‚Ì‚ÝŽg‚¦‚é*/
@@ -52,11 +54,17 @@ public:
 	void VertexColor(const int index, float r, float g,float b,float a);
 
 	void SetUV(float index_X,float index_Y);
+	void SetUV(float xLeft,float xRight,float yU,float yL);
+	void UVRevers();
+
+
 
 private:
 	ImageVertex imgvertex[4];
-
+	
 	float UV_X, UV_Y;
+	
+	int LX, RX, LY, RY;
 
 	void init(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a);
 };

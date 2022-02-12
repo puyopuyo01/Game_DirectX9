@@ -13,6 +13,8 @@ public:
 	static int Portrate;
 	static int GhostTexture;
 	static int GhostEyeTexture;
+
+	static int PlayerDamage;
 };
 
 class HeroT:public Player{
@@ -23,4 +25,6 @@ public:
 	static int Portrate;
 	static int GhostTexture;
 	static int GhostEyeTexture;
+
+	static int PlayerDamage;
 };

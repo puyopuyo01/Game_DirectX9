@@ -142,7 +142,7 @@ void Panel_Field::CollisionUpdate() {
 			float nextBottom = (*next)->GetLocation().y + ((*next)->Height / 2.f);
 
 			if ((iLeft > nextRight && iRight < nextLeft) && (iTop < nextBottom && iBottom > nextTop)) {
-				if (next != obj.end()) { (*i)->Accept(((CollisionObject*)*next)); }
+				if (next != obj.end()) {(*i)->Accept(((CollisionObject*)*next));}
 			}
 		}
 		i++;

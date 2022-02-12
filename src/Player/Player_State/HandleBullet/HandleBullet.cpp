@@ -30,7 +30,7 @@ HandleBullet* IdleBullet::Update(Player* player) {
 	if (strncmp(Key_Q, "1", 1) == 0) {
 		if (Small) { return this; }
 		if (player->SBullet->Consumption(1)/*‚±‚ÌUŒ‚‚ÉÁ”ï‚·‚é’e‚Í1*/ ) {
-			Bullet* bullet = new Bullet(player->GetID(), SMALLBULLET, 3, 0.4f, new NonCharacteristic(), x, y, SIZE / 3.f);
+			Bullet* bullet = new Bullet(player->GetID(), SMALLBULLET, 3, 10.f, new NonCharacteristic(), x, y, SIZE / 3.f);
 			player->StandPos->AddObject(bullet, x, y);
 			ObjectMNG::GetMNG()->AddBullet(bullet);
 			Small = true;
@@ -42,7 +42,7 @@ HandleBullet* IdleBullet::Update(Player* player) {
 		if (Middle) { return this; }
 		if (player->MBullet->Consumption(1))
 		{
-			Bullet* bullet = new Bullet(player->GetID(), MIDDLEBULLET, 5, 0.25f, new Shield(player->GetID(), x, y, SIZE / 2.3f), x, y, SIZE / 2.3f);
+			Bullet* bullet = new Bullet(player->GetID(), MIDDLEBULLET, 5, 30.0f, new Shield(player->GetID(), x, y, SIZE / 2.3f), x, y, SIZE / 2.3f);
 			player->StandPos->AddObject(bullet, x, y);
 			ObjectMNG::GetMNG()->AddBullet(bullet);
 			Middle = true;
@@ -53,7 +53,7 @@ HandleBullet* IdleBullet::Update(Player* player) {
 	if (strncmp(Key_E, "1", 1) == 0) {
 		if (Big) { return this; }
 		if (player->BBullet->Consumption(1)) {
-			Bullet* bullet = new Bullet(player->GetID(), BIGBULLET, 10, 0.1f, new NonCharacteristic(), x, y, SIZE / 1.6f);
+			Bullet* bullet = new Bullet(player->GetID(), BIGBULLET, 10, 90.f, new NonCharacteristic(), x, y, SIZE / 1.6f);
 			player->StandPos->AddObject(bullet, x, y);
 			ObjectMNG::GetMNG()->AddBullet(bullet);
 			Big = true;

@@ -14,11 +14,11 @@ void DefenseMass::AddObject(BattleObject* object) {
 }
 
 
-void DefenseMass::Update() {	//何かフリーズするから修正(Siegeが原因)
+void DefenseMass::Update() {	
 	list<BattleObject*>::iterator i = obj.begin();
 	if (i == obj.end()) return;
 	while (i != obj.end()) {
-			if ((*i)->Siege(Dmg)) {	/*TODO:falseだったら入ってきたマスに戻す*/
+			if ((*i)->Siege(Dmg)) {	
 				ObjectMNG::GetMNG()->Delete(*i);
 				i=obj.erase(i);
 			}

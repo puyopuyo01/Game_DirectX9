@@ -11,6 +11,7 @@
 #define ENEMYBAR -1
 
 class Bullet;
+class Counter;
 namespace UI {
 
 	class UI_Base :public Field_Object {
@@ -30,6 +31,7 @@ namespace UI {
 
 	class Gauge {		/*ボード二枚で表現する*/
 	protected:
+		unique_ptr<Primitive> Cover;
 		unique_ptr<Primitive> Overall;
 		unique_ptr<PrimitiveUp> Remain;
 	};
@@ -54,11 +56,17 @@ namespace UI {
 
 		void Update() override;
 		void Draw() override;
+
+		void LoadIMG();
 	private:
 		int LorR;
 
 		float OriginX; /*HPボードの左端のスクリーン座標。*/
 		float HPwidth;
+		
+		static int GaugeTexture;
+		static int GaugeCoverTexture;
+		static int GaugeBaseTexture;
 	};
 
 	class PredominantPointer :public Field_Object {
@@ -169,11 +177,40 @@ namespace UI {
 
 		void Draw() override;
 
-		void UpdateGauge(float MoraleRate);
+		void UpdateGauge(float MoraleRate,int Mol);
 
 	private:
 		vector<Primitive*> Frame;
 		ChargingBar* MoraleBar;
+
+		Number_Symbol* Number;
+	};
+
+
+
+	class CharacterPanelUI :public Field_Object {
+		/*カットイン用のパネル。
+		右は必要な情報を表示しているので左から入り左から出る。*/
+	public:
+		CharacterPanelUI(float x, float y, int TextureNumber);
+		~CharacterPanelUI();
+
+		void Draw() override;
+		void Update() override;
+
+		void Dmg(int texture);
+
+		float Width;
+		float Height;
+
+		int TextureNumber;
+
+	private:
+		Counter* counter;
+		bool DMG;
+
+		unique_ptr<ImageBoard> img;
+		int TextureMem;
 	};
 
 
@@ -185,6 +222,7 @@ namespace UI {
 		UIMNG();
 		void CreateUI();
 		void SetMorale(int MaxMorale);
+		void CreatePanel(int Hero, int Enemy);
 
 
 		void Release();
@@ -196,9 +234,14 @@ namespace UI {
 		unique_ptr<HitPointBar> PlayerHP;
 		unique_ptr<HitPointBar> EnemyHP;
 
-
+		/*unique_ptrが使えない(C2280発生)*/
 		ChargingUI* Charging;
 		MoraleUI* Morale;
+
+		/*unique_ptrが使えない(C2280発生)*/
+		CharacterPanelUI* PlayerPanel;
+		CharacterPanelUI* EnemyPanel;
+
 
 
 		unique_ptr<PredominantBar> Predominant;

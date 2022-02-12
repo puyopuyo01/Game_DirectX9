@@ -10,6 +10,9 @@ ObjectMNG* ObjectMNG::GetMNG() {
 	return SingleTon;
 }
 
+ObjectMNG::ObjectMNG() {
+	drawObj = new DrawObjectMNG();
+}
 
 void ObjectMNG::AddObject(BattleObject* obj) {
 	if (obj->GetID() == PLAYER) { playerObject.push_back(obj); }
@@ -24,6 +27,7 @@ void ObjectMNG::AddBullet(Bullet* bullet) {
 }
 
 void ObjectMNG::Delete(BattleObject* obj) {
+	obj->Death();
 	list<Bullet*> i;
 	list<Bullet*>::iterator itr;
 	list<Bullet*>::iterator end;
@@ -58,5 +62,6 @@ list<BattleObject*> ObjectMNG::Get_Object(int ID){
 }
 
 void ObjectMNG::SueSide() {
+	delete drawObj;
 	delete SingleTon;
 }

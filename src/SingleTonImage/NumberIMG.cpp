@@ -34,7 +34,7 @@ void Number_Symbol::initialize(float x, float y, float Width, float Heigth, int 
 
 	if (0.f <= SymbolNum && SymbolNum < NONSYMBOL) {
 		this->Symbol = make_unique<PrimitiveUp>(PrimitiveUp(SQUARE, x + displacement, y, 0.f,
-			Width, Heigth,
+			Width, Heigth/2.f,
 			1.f, 1.f, 1.f, 1.f
 			, 10.f, 2.f));
 		displacement += Width;

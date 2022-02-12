@@ -8,9 +8,9 @@ namespace UI {
 		float by = y + 4.f;
 		
 		Text = Font::GetInstance();
-		S = new Bullet(ENEMY, SMALLBULLET, 1, y, new NonCharacteristic(), x-8.f, y-4.f, SIZE / 3.f);
-		M = new Bullet(ENEMY, MIDDLEBULLET, 1, y, new Shield(PLAYER, x, y, SIZE / 2.3f), x-8.f, y, SIZE / 2.3f);
-		B = new Bullet(ENEMY, BIGBULLET, 1, y, new NonCharacteristic(), x-8.f, y+4.f, SIZE / 1.6f);
+		S = new Bullet(ENEMY, SMALLBULLET, x - 8.f, y - 4.f,SIZE / 3.f);
+		M = new Bullet(ENEMY, MIDDLEBULLET, x - 8.f, y, SIZE / 2.3);
+		B = new Bullet(ENEMY, BIGBULLET, x - 8.f, y + 4.f, SIZE / 1.6f);
 
 
 		SBar = new ChargingBar(x,y-4.f,8.f);
@@ -62,11 +62,12 @@ namespace UI {
 	}
 
 	void ChargingUI::Draw() {
+
 		S->Draw();
 		M->Draw();
 		B->Draw();
 
-		Morale->Draw();
+		//Morale->Draw();
 
 		SBar->Draw();
 		MBar->Draw();

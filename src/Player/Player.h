@@ -65,10 +65,11 @@ public:
 
 
 	SchemeBox* schemeBox;
+	int play;
+	int damage;
 	int portrate;
 protected:
 	int ID;
-	int play;
 private:
 
 	ImageBoard* img;

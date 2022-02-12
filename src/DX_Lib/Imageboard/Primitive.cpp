@@ -1,6 +1,7 @@
 #include"ImageBoard.h"
 
-Primitive::Primitive(D3DPRIMITIVETYPE type,float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a) {
+
+void Primitive::init(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a,bool Reverse) {
 	this->type = type;
 	if (pD3DDevice == 0) {
 		MessageBox(NULL,
@@ -20,15 +21,23 @@ Primitive::Primitive(D3DPRIMITIVETYPE type,float x, float y, float z, float imgW
 	}
 
 	pVB->Lock(0, 0, (void**)&imgvertex, 0);
-	if (type == SQUARE) { 
-		Square(imgvertex,x,y,z,imgWidth,imgHeight,r,g,b,a);
-		imgvertex[0].uv = D3DXVECTOR2(0.0f, 0.0f);
-		imgvertex[1].uv = D3DXVECTOR2(1.0f, 0.0f);
-		imgvertex[2].uv= D3DXVECTOR2(0.0f, 1.0f);
-		imgvertex[3].uv= D3DXVECTOR2(1.0f, 1.0f);
+	if (type == SQUARE) {
+		Square(imgvertex, x, y, z, imgWidth, imgHeight, r, g, b, a);
+		if (!Reverse) {
+			imgvertex[0].uv = D3DXVECTOR2(0.0f, 0.0f);
+			imgvertex[1].uv = D3DXVECTOR2(1.0f, 0.0f);
+			imgvertex[2].uv = D3DXVECTOR2(0.0f, 1.0f);
+			imgvertex[3].uv = D3DXVECTOR2(1.0f, 1.0f);
+		}
+		else {
+			imgvertex[0].uv = D3DXVECTOR2(1.f, 0.f);
+			imgvertex[1].uv = D3DXVECTOR2(0.f, 0.f);
+			imgvertex[2].uv = D3DXVECTOR2(1.f, 1.f);
+			imgvertex[3].uv = D3DXVECTOR2(0.f, 1.f);
+		}
 	}
-	else if(type == SQUARELINE){
-		SquareLine(imgvertex,x, y, z,imgWidth,imgHeight, r, g, b, a);
+	else if (type == SQUARELINE) {
+		SquareLine(imgvertex, x, y, z, imgWidth, imgHeight, r, g, b, a);
 	}
 	pVB->Unlock();
 
@@ -36,6 +45,15 @@ Primitive::Primitive(D3DPRIMITIVETYPE type,float x, float y, float z, float imgW
 	else if (type == SQUARELINE) { VNum = 4; }
 
 	D3DXMatrixIdentity(&pos);
+
+}
+
+Primitive::Primitive(D3DPRIMITIVETYPE type,float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a) {
+	init(type, x, y, z, imgWidth, imgHeight, r, g, b, a,false);
+}
+
+Primitive::Primitive(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a,bool Reverse) {
+	init(type, x, y, z, imgWidth, imgHeight, r, g, b, a,true);
 }
 
 Primitive::~Primitive() {

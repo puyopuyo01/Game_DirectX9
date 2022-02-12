@@ -2,6 +2,7 @@
 #include"Player/Character/Character.h"
 #include"State/InputIP.h"
 #include"SingleTonImage/NumberIMG.h"
+#include"Effect/Effect.h"
 
 float UpperPanel;
 float ButtomPanel;
@@ -28,11 +29,13 @@ void Game_State::deleteObject(int index) { objects.erase(objects.begin() + index
  
 Battle_State::Battle_State(int delay)
 {
-	Number_Symbol::Init();
-	Bullet::Init();
+	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+
+	LoadIMG();
 	
 	BGM = new Sound("PerituneMaterial_Spook4_loop.wav"); 
-	BGM->Play(true);
+	//BGM->Play(true);
 	File = FileMapping::GetInstance();
 	this->Finish = false;
 
@@ -52,6 +55,8 @@ Battle_State::Battle_State(int delay)
 	schemelist = new SchemeBox();
 	Predominant = new Numerical<int>(new int(0), new NormalValue<int>(), 100, -100);
 
+
+
 	//pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	pD3DDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	//pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
@@ -62,15 +67,15 @@ Battle_State::Battle_State(int delay)
 	ui->CreateUI();
 	ui->textBoard->SetDelayFrame(delayFrame);
 	objects.push_back((Field_Object*)ui->backGround.get());
-	objects.push_back((Field_Object*)ui->textBoard.get());
-	objects.push_back((Field_Object*)ui->PlayerHP.get());
-	objects.push_back((Field_Object*)ui->EnemyHP.get());
-	objects.push_back((Field_Object*)ui->Predominant.get());
-	objects.push_back((Field_Object*)ui->Charging);
+
+	objects.push_back((Field_Object*)ObjectMNG::GetMNG()->drawObj);
 
 
 	p_blue = Panel_Blue::GetInstance();
 	objects.push_back(p_blue);
+
+
+
 
 
 	int i = 0, j = 0;
@@ -87,7 +92,6 @@ Battle_State::Battle_State(int delay)
 					1.f, 0.f, 0.f, 0.6f, SIZE);
 				Panel_ALL[i][j] = DefensePanel[0][j];
 				Panel_Field::AllPanel[i][j] = DefensePanel[0][j];
-				objects.push_back((Field_Object*)DefensePanel[0][j]);
 				continue;
 			}
 			if(i == width)	/*“Gƒpƒlƒ‹*/
@@ -100,7 +104,6 @@ Battle_State::Battle_State(int delay)
 				index_h = i+PANELWIDTH;
 				Panel_ALL[index_h][j] = DefensePanel[1][j];
 				Panel_Field::AllPanel[index_h][j] = DefensePanel[1][j];
-				objects.push_back((Field_Object*)DefensePanel[1][j]);
 				continue;
 			}
 
@@ -127,18 +130,37 @@ Battle_State::Battle_State(int delay)
 #endif
 	}
 
+
+	ObjectMNG::GetMNG()->player = new Hero(1, 1, Panel_ALL[1][1], PLAYER, &DMGPlayerHP, schemelist);
+	ObjectMNG::GetMNG()->enemy = new HeroT(1, 6, Panel_ALL[6][1], ENEMY, &DMGEnemyHP, schemelist);
+
+
+	ui->CreatePanel(ObjectMNG::GetMNG()->player->portrate, ObjectMNG::GetMNG()->enemy->portrate);
+	objects.push_back((Field_Object*)ui->PlayerPanel);
+	objects.push_back((Field_Object*)ui->EnemyPanel);
+
+	objects.push_back((Field_Object*)ui->textBoard.get());
+	objects.push_back((Field_Object*)ui->PlayerHP.get());
+	objects.push_back((Field_Object*)ui->EnemyHP.get());
+	objects.push_back((Field_Object*)ui->Predominant.get());
+	objects.push_back((Field_Object*)ui->Charging);
+
+	ui->SetMorale(ObjectMNG::GetMNG()->player->Morale->GetMax());
+	objects.push_back((Field_Object*)ui->Morale);
+
+
+	for (i = 0; i < 2; i++) {
+		for (j = 0; j < length; j++) {
+			objects.push_back((Field_Object*)DefensePanel[i][j]);
+		}
+	}
+
 	for (i = 0; i < width - 1; i++) {
 		for (j = 0; j < length; j++) {
 			objects.push_back((Field_Object*)Player_Panel[i][j]);
 			objects.push_back((Field_Object*)Enemy_Panel[i][j]);
 		}
 	}
-
-	ObjectMNG::GetMNG()->player = new Hero(1, 1, Panel_ALL[1][1], PLAYER, &DMGPlayerHP, schemelist);
-	ObjectMNG::GetMNG()->enemy = new HeroT(1, 6, Panel_ALL[6][1], ENEMY, &DMGEnemyHP, schemelist);
-
-	ui->SetMorale(ObjectMNG::GetMNG()->player->Morale->GetMax());
-	objects.push_back((Field_Object*)ui->Morale);
 
 	p_blue->Set(Panel_ALL[1][1]);
 
@@ -247,6 +269,8 @@ Game_State* Battle_State::Update() {
 		state = stateTemp;
 	}
 
+	UpdateUI();
+
 	Player* enemy = ObjectMNG::GetMNG()->enemy;
 	Player* player = ObjectMNG::GetMNG()->player;
 
@@ -263,8 +287,6 @@ Game_State* Battle_State::Update() {
 			Finish = true;
 		}
 	}
-
-	UpdateUI();
 
 	KeyBoxes->FinishPacket(ProcessID);
 
@@ -292,6 +314,12 @@ void Battle_State::UpdateUI() {
 
 	UI::UIMNG::GetInstance()->PlayerHP->UpdateGauge(ply->MaxHP, *(ply->hp->GetVal()));
 	UI::UIMNG::GetInstance()->EnemyHP->UpdateGauge(enem->MaxHP, *(enem->hp->GetVal()));
+
+
+	UI::UIMNG::GetInstance()->PlayerPanel->Update();
+	UI::UIMNG::GetInstance()->EnemyPanel->Update();
+	if (DMGPlayerHP > 0) { UI::UIMNG::GetInstance()->PlayerPanel->Dmg(ply->damage); }
+	if (DMGEnemyHP > 0) { UI::UIMNG::GetInstance()->EnemyPanel->Dmg(enem->damage); }
 	
 	int MaxMorale = ply->Morale->GetMaxCounter();
 	int RemainMorale = ply->Morale->GetRemainCounter();
@@ -307,7 +335,7 @@ void Battle_State::UpdateUI() {
 	float MoraleRate = ((float)ply->Morale->GetRemain()*(float)ply->Morale->GetMaxCounter() + (float)ply->Morale->GetRemainCounter()) /
 		((float)ply->Morale->GetMax()*(float)ply->Morale->GetMaxCounter());
 
-	UI::UIMNG::GetInstance()->Morale->UpdateGauge(MoraleRate);
+	UI::UIMNG::GetInstance()->Morale->UpdateGauge(MoraleRate,ply->Morale->GetRemain());
 
 }
 
@@ -319,5 +347,11 @@ void Battle_State::Reset(){
 void Battle_State::Abort(){
 	Communication->Close();
 	NextState = new InputIP();
+}
+
+void Battle_State::LoadIMG() {
+	Number_Symbol::Init();
+	Bullet::Init();
+	EffectIMG::LoadImg();
 }
 

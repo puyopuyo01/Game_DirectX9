@@ -21,6 +21,7 @@ namespace UI {
 											pos_x, y, 0.f,
 											TempWidth, Height,
 											1.f, 1.f, 1.f, 1.f));
+			if(i == MoraleNum-1){ Number = new Number_Symbol(pos_x + 6.f, y, 1.5f, 3.f, 2, MULTI); }
 		}
 	}
 
@@ -34,14 +35,17 @@ namespace UI {
 		}
 
 		delete MoraleBar;
+		delete Number;
 	}
 
-	void MoraleUI::UpdateGauge(float MoraleRate) {
+	void MoraleUI::UpdateGauge(float MoraleRate,int Mol) {
 		MoraleBar->UpdateGauge(MoraleRate);
+		Number->Update(Mol);
 	}
 
 	void MoraleUI::Draw() {
 		MoraleBar->Draw();
+		Number->Draw();
 
 		vector<Primitive*>::iterator itr = Frame.begin();
 

@@ -13,6 +13,8 @@ HandleScheme* IdleScheme::Update(Player* player) {
 	const char *KeyG = KeyBox::GetInstance()->
 		updateframe->GetKey(player->GetID(), GB);
 
+	//if (player->GetID() == ENEMY) { return this; }
+
 	if (strncmp(KeySpace, "1", 1) == 0){ 
 		if (player->Morale->Consumption(5)) {
 			string name = "幽霊強化";
@@ -25,7 +27,7 @@ HandleScheme* IdleScheme::Update(Player* player) {
 		if (player->Morale->Consumption(3)) {
 			string name = "速度上昇";
 			string intro = "フィールドにいる自身の幽霊の速度を上昇させる";
-			player->schemeBox->InsertScheme(new Enhancement(player->GetID(), 0, 0.3f, player->portrate,name,intro));
+			player->schemeBox->InsertScheme(new Enhancement(player->GetID(), 0, 15.f, player->portrate,name,intro));
 		}
 
 	}

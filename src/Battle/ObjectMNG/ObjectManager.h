@@ -1,5 +1,6 @@
 #pragma once
 #include"Battle/BattleObject/BattleObject.h"
+#include"Battle/DrawObject/DrawObject.h"
 
 class Player;
 class BattleObject;
@@ -8,10 +9,13 @@ class Bullet;
 /*試合のオブジェクトを管理する*/
 class ObjectMNG {
 public:
+	ObjectMNG();
+
 	static ObjectMNG* GetMNG();
 	void SueSide();
 	void AddObject(BattleObject* obj);
 	void Delete(BattleObject* obj);
+
 
 
 	void AddBullet(Bullet* bullet);
@@ -22,6 +26,8 @@ public:
 
 	Player* player;
 	Player* enemy;
+
+	DrawObjectMNG* drawObj;
 
 
 

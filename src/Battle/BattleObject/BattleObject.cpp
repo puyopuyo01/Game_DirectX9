@@ -44,9 +44,11 @@ int BattleObject::GetPredominate() {
 }
 
 bool BattleObject::Siege(float *Dmg){
+	printf("Siege\n");
 	(*Dmg) += 50.f;
 	return true;
 }
 
 
 void BattleObject::ApplyStatus(){}
+void BattleObject::Death(){}

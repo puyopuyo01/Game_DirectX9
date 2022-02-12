@@ -20,3 +20,10 @@ public:
 	bool Draw(Bullet* bullet) override;
 	void Update(Bullet* bullet,int vec) override;
 };
+
+
+class Death :public BulletState {
+public:
+	bool Draw(Bullet* bullet) override;
+	void Update(Bullet* bullet, int vec) override;
+};

@@ -15,6 +15,7 @@ public:
 	void SetPanel(Panel_Field* panel);
 	virtual bool Siege(float* Dmg);
 	virtual int GetPredominate();
+	virtual void Death();
 	bool MoveFlag;
 	Panel_Field* StandPos;
 
@@ -24,7 +25,7 @@ public:
 private:
 	int x, y;
 	list<BattleObject*> RecObj; /*自身の情報を持つオブジェクト*/
-	list<BattleObject*> RefObj; /*自信が参照するオブジェクト*/
+	list<BattleObject*> RefObj; /*自身が参照するオブジェクト*/
 };
 
 

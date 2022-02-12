@@ -62,6 +62,9 @@ private:
 
 	int PredmGauge;
 private:
+	void LoadIMG();
+
+
 	/*ネットワーク周り*/
 	int NoReach;
 	int ProcessID;

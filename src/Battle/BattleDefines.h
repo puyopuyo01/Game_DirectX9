@@ -23,6 +23,8 @@
 #define OPERATOR 1
 #define BULLET 2
 
+#define FRAMEPERSEC 60.f
+
 extern bool Finish;
 
 extern int Code(float x); //Panel_Field.cpp

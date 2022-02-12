@@ -36,6 +36,7 @@ public:
 	仮の死亡フラグ。これをしないと処理によっては、通信相手との矛盾を生む。
 	*/
 	bool TemporaryFlag;
+	bool Erasable;
 private:
 	unique_ptr<CollisionState> CollisionBridge;
 	void BaseCollision(CollisionObject* HitObj);

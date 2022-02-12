@@ -62,7 +62,7 @@ void CollisionState::CollisionAlly(CollisionObject* HitObj, CollisionObject* me)
 
 void CollisionState::CollisionEnemy(CollisionObject* HitObj, CollisionObject* me) {
 	HitObj->Ability(me);
-	if (HitObj->GetPow() >= me->GetPow() || HitObj->GetSpeed() >= 0.4f) {
+	if (HitObj->GetPow() >= me->GetPow() || HitObj->GetSpeed() >= 30.f) {
 		me->TemporaryFlag = true;
 	}
 }
@@ -74,5 +74,9 @@ PlayerCollisionState::PlayerCollisionState(float *HP) {
 }
 
 void PlayerCollisionState::CollisionEnemy(CollisionObject* HitObj, CollisionObject* me) {
+	/*被ダメージが端末で異なる？*/
+	/*同時に幽霊と衝突するとバグ？*/
 	(*HP) += 30.f;
+	HitObj->TemporaryFlag = true;
+	printf("CollisionPlayer %lf\n",(*HP));
 }

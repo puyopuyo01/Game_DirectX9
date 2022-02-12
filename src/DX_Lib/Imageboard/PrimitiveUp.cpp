@@ -25,6 +25,8 @@ void PrimitiveUp::init(D3DPRIMITIVETYPE type, float x, float y, float z, float i
 
 	if (type == SQUARE) { VNum = 2; }
 	else if (type == SQUARELINE) { VNum = 4; }
+
+	LX = 0; RX = 1; LY = 2, RY = 3;
 }
 
 
@@ -44,13 +46,27 @@ PrimitiveUp::PrimitiveUp(D3DPRIMITIVETYPE type, float x, float y, float z, float
 	this->UV_Y = (float)UV_Y;
 }
 
+void PrimitiveUp::UVRevers() {
+	LX = 1; RX = 0; LY = 3, RY = 2;
+	imgvertex[0].uv = D3DXVECTOR2(1.f,0.f);
+	imgvertex[1].uv = D3DXVECTOR2(0.f,0.f);
+	imgvertex[2].uv = D3DXVECTOR2(1.f,1.f);
+	imgvertex[3].uv = D3DXVECTOR2(0.f,1.f);
+}
+
+void PrimitiveUp::SetUV(float xLeft, float xRight, float yU, float yL) {
+	imgvertex[LX].uv = D3DXVECTOR2(xLeft,yU);
+	imgvertex[RX].uv = D3DXVECTOR2(xRight,yU);
+	imgvertex[LY].uv = D3DXVECTOR2(xLeft,yL);
+	imgvertex[RY].uv = D3DXVECTOR2(xRight,yL);
+}
 
 void PrimitiveUp::SetUV(float index_X,float index_Y) {
-	imgvertex[0].uv = D3DXVECTOR2(index_X/ UV_X, index_Y/ UV_Y);
-	imgvertex[1].uv = D3DXVECTOR2((index_X+ 1.f) / UV_X,index_Y /UV_Y);
-	imgvertex[2].uv = D3DXVECTOR2((index_X)/ UV_X,(index_Y+ 1.f) / UV_Y);
-	imgvertex[3].uv = D3DXVECTOR2((index_X+ 1.f) / UV_X,(index_Y+ 1.f) / UV_Y);
-	printf("UV %lf %lf %lf \n", index_X / UV_X, (index_X + 1.f) / UV_X, index_Y / UV_Y);
+	imgvertex[LX].uv = D3DXVECTOR2(index_X/ UV_X, index_Y/ UV_Y);
+	imgvertex[RX].uv = D3DXVECTOR2((index_X+ 1.f) / UV_X,index_Y /UV_Y);
+	imgvertex[LY].uv = D3DXVECTOR2((index_X)/ UV_X,(index_Y+ 1.f) / UV_Y);
+	imgvertex[RY].uv = D3DXVECTOR2((index_X+ 1.f) / UV_X,(index_Y+ 1.f) / UV_Y);
+	//printf("UV %lf %lf %lf \n", index_X / UV_X, (index_X + 1.f) / UV_X, index_Y / UV_Y);
 }
 
 void PrimitiveUp::VertexPosition(const int index, float x, float y, float z) {
@@ -72,14 +88,21 @@ void PrimitiveUp::VertexColor(const int index, float r, float g, float b, float 
 
 
 void PrimitiveUp::Draw(D3DXMATRIX location) {
-	if (pVB == 0) {
+	/*if (pVB == 0) {
 		MessageBox(NULL,
 			"PrimitiveUP.Draw()‚ÌŽ¸”s", "Ž¸”s", MB_OK);
 		return;
-	}
+	}*/
+
+	pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);
+	pD3DDevice->SetRenderState(D3DRS_ALPHAREF, 0x66);
+
 	pD3DDevice->SetTransform(D3DTS_WORLD, &location);
 	pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 	pD3DDevice->SetFVF(IMG_VERTEX_FVF);
 	pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,VNum,imgvertex,sizeof(ImageVertex));
+
+	pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }

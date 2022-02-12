@@ -17,6 +17,7 @@ public:
 
 	float Width;
 	float Height;
+
 private:
 	unique_ptr<ImageBoard> img;
 	int TextureNumber;

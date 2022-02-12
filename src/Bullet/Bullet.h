@@ -6,6 +6,7 @@
 #include"Battle/BattleObject/BattleObject.h"
 #include"BulletState/BulletState.h"
 #include"./Characteristic/Characteristic.h"
+#include"Effect/Effect.h"
 
 #define SMALLBULLET 0
 #define MIDDLEBULLET 1
@@ -19,10 +20,13 @@ class StatusBox;
 class Bullet:public BattleObject{
 public:
 	Bullet(int GroupID,int BulletID,int power, float speedx,BulletCharacteristic* BState,float posx,float posy,float size);
+	Bullet(int GroupID, int BulletID, float posx, float posy, float size); //ï`âÊî¬çÏê¨óp 
 	~Bullet();
 
 
 	static void Init();
+
+	static int GetTexture();
 
 	void Update() override;
 	void Draw() override;
@@ -34,7 +38,7 @@ public:
 	int GetPredominate() override;
 
 	bool Siege(float* Dmg) override;
-
+	void Death() override;
 
 	ValueState<int>* power;
 	ValueState<float>* speed;
@@ -44,11 +48,13 @@ public:
 	int GetObjectID() override;
 	int GetPow() override;
 	float GetSpeed() override;
+
 protected:
 	static int Body; 
 	static int Eye;
 	int BulletID;
 	int GroupID;
+
 private:
 	float speedx;
 	BulletState* state;
