@@ -2,8 +2,9 @@
 #include"DXLib_Orig.h"
 
 
-/*画面の座標をfloat型で取得する関数群
- 若干のずれあり。
+/*
+画面の座標をfloat型で取得する関数群
+若干のずれあり。
 */
 
 extern const float CAMERA_X;

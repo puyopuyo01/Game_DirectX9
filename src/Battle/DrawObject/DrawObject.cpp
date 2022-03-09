@@ -15,11 +15,14 @@ DrawObjectMNG::~DrawObjectMNG() {
 	}
 }
 
+
+/*管理しているDrawObjectを更新させる。*/
 void DrawObjectMNG::Update() {
 	if ((int)drawobj.size() == 0) { return; }
 	list<DrawObject*>::iterator itr = drawobj.begin();
 	while (itr != drawobj.end()) {
 		(*itr)->Update();
+		/*DrawObjectは演出等ためのクラスなのでアニメーションが終わればリストから消す。*/
 		if ((*itr)->GetDeath()) {
 			delete (*itr);
 			itr = drawobj.erase(itr);
@@ -34,7 +37,6 @@ void DrawObjectMNG::Draw() {
 	list<DrawObject*>::iterator itr = drawobj.begin();
 	if (itr == drawobj.end()){ return; }
 	while (itr != drawobj.end()) {
-		/*バグ*/
 		(*itr)->Draw();
 		itr++;
 	}

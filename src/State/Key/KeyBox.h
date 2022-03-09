@@ -40,10 +40,10 @@ public:
 private:
 	static std::unique_ptr<KeyBox> SingleTon;
 	std::list<unique_ptr<FramePacket>> PacketQueue;
-	std::list<FramePacket*> WaitingPacket;
+	std::list<FramePacket*> WaitingPacket;/*まだ通信相手のキー入力が届いてないFramePacketクラスのリスト*/
 
-	int LatestRecvID;
+	int LatestRecvID;	/*最新のフレームIDを保持*/
 
 	FramePacket* SearchFrame(const int FrameID);
-	char PrevSending[1023];
+	char PrevSending[1023]; 
 };

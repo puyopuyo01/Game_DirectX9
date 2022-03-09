@@ -55,7 +55,7 @@ public:
 private:
 	int FrameID;
 	int delay;
-	char* EnemyKey[NumOfKeys];
+	char* EnemyKey[NumOfKeys]; /*Še“ü—Í‚²‚Æ‚É•ª‚¯‚é‚½‚ß‚Ì”z—ñ*/
 	char* PlayerKey[NumOfKeys];
 
 	char SendKeyCpy[1023];

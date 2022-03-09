@@ -38,6 +38,7 @@ Sound::Sound(const char* file) {
 
 	// 'fmt 'チャンクチェック
 	ZeroMemory(&mSrcWaveFmt, sizeof(mSrcWaveFmt));
+	mSrcWaveFmt.ckid = mmioFOURCC('f', 'm', 't', ' ');
 	mmioDescend(hSrc, &mSrcWaveFmt, &mSrcWaveFile, MMIO_FINDCHUNK);
 	if (mSrcWaveFmt.ckid != mmioFOURCC('f', 'm', 't', ' ')) {
 		MessageBox(NULL,
@@ -89,8 +90,7 @@ Sound::Sound(const char* file) {
 	DSBUFFERDESC dsdesc;
 	ZeroMemory(&dsdesc, sizeof(DSBUFFERDESC));
 	dsdesc.dwSize = sizeof(DSBUFFERDESC);
-	//dsdesc.dwFlags = DSBCAPS_GETCURRENTPOSITION2 | DSBCAPS_STATIC | DSBCAPS_LOCDEFER | DSBCAPS_CTRLVOLUME;
-	dsdesc.dwFlags = DSBCAPS_CTRLVOLUME;
+	dsdesc.dwFlags = DSBCAPS_GETCURRENTPOSITION2 | DSBCAPS_STATIC | DSBCAPS_LOCDEFER | DSBCAPS_CTRLVOLUME;
 	dsdesc.dwBufferBytes = mSrcWaveData.cksize;
 	dsdesc.lpwfxFormat = wf;
 	dsdesc.guid3DAlgorithm = DS3DALG_DEFAULT;
@@ -144,4 +144,8 @@ void Sound::Reset() {
 void Sound::Play(bool loop) {
 	if (loop) { Secondary->SetCurrentPosition(0); Secondary->Play(0, 0, DSBPLAY_LOOPING); }
 	else{ Secondary->SetCurrentPosition(0); Secondary->Play(0, 0, 0); }
+}
+
+void Sound::Stop() {
+	Secondary->Stop();
 }

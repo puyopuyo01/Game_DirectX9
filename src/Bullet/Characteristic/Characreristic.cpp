@@ -6,8 +6,6 @@ BulletCharacteristic::BulletCharacteristic(){
 }
 
 BulletCharacteristic::~BulletCharacteristic() {
-	delete collisionState;
-	delete bulletState;
 }
 
 /*------------------------------------Šî’êƒNƒ‰ƒX----------------------------------*/

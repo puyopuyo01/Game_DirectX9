@@ -94,11 +94,37 @@ HRESULT Sound_Init(HWND hWnd) {
 
 	if (FAILED(pSound->SetCooperativeLevel(
 				hWnd,
-		DSSCL_PRIORITY))){  /*DISCL_FOREGROUND | DISCL_EXCLUSIVE 本番はこの設定*/
+		DSSCL_NORMAL/*DSSCL_PRIORITY*/))){  /*DISCL_FOREGROUND | DISCL_EXCLUSIVE 本番はこの設定*/
 		MessageBox(NULL,
 			"SoundSetの確保に失敗(SetCooperativeLevel)", "失敗", MB_OK);
 		return E_FAIL;
 	}
+
+	HRESULT ret;
+	WAVEFORMATEX wf;
+
+	// プライマリサウンドバッファの作成
+	DSBUFFERDESC dsdesc;
+	ZeroMemory(&dsdesc, sizeof(DSBUFFERDESC));
+	dsdesc.dwSize = sizeof(DSBUFFERDESC);
+	dsdesc.dwFlags = DSBCAPS_PRIMARYBUFFER;
+	dsdesc.dwBufferBytes = 0;
+	dsdesc.lpwfxFormat = NULL;
+	ret = pSound->CreateSoundBuffer(&dsdesc, &PrBuf, NULL);
+	if (FAILED(ret)) {
+		printf("プライマリサウンドバッファ作成失敗\n");
+		return ret;
+	}
+
+	// プライマリバッファのステータスを決定
+	wf.cbSize = sizeof(WAVEFORMATEX);
+	wf.wFormatTag = WAVE_FORMAT_PCM;
+	wf.nChannels = 2;
+	wf.nSamplesPerSec = 44100;
+	wf.wBitsPerSample = 16;
+	wf.nBlockAlign = wf.nChannels * wf.wBitsPerSample / 8;
+	wf.nAvgBytesPerSec = wf.nSamplesPerSec * wf.nBlockAlign;
+	ret = PrBuf->SetFormat(&wf);
 
 
 	return S_OK;

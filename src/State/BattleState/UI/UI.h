@@ -40,6 +40,7 @@ namespace UI {
 	public:
 		BackGround(float x, float y);
 		void Draw() override;
+		static void LoadIMG();
 
 	private:
 		static int TextureNumber;
@@ -57,7 +58,7 @@ namespace UI {
 		void Update() override;
 		void Draw() override;
 
-		void LoadIMG();
+		static void LoadIMG();
 	private:
 		int LorR;
 
@@ -75,17 +76,31 @@ namespace UI {
 		unique_ptr<Primitive> CurrentPoint;
 		void Draw() override;
 	};
+
 	class PredominantBar :public Field_Object {
 	public:
-		PredominantBar(float x, float y);
+		PredominantBar(float x, float y,int Max);
 
 		unique_ptr<PrimitiveUp> PlayerSide;
 		unique_ptr<PrimitiveUp> EnemySide;
 
+		unique_ptr <Primitive> lv1;
+		unique_ptr <Primitive> lv2;
+		unique_ptr <Primitive> lv3;
+
+		unique_ptr <Number_Symbol> lv1Num;
+		unique_ptr <Number_Symbol> lv2Num;
+		unique_ptr <Number_Symbol> lv3Num;
+
+		/*
+		Number_Symbol* lv2Num;
+		Number_Symbol* lv3Num;
+		*/
+
 		unique_ptr<PredominantPointer> CurrentPoint;
 
 		void Draw() override;
-		void UpdateGauge(int gauge);
+		void UpdateGauge(int gauge,int increase);
 	private:
 		int PredominantTemp;
 		float offsetY;
@@ -94,6 +109,8 @@ namespace UI {
 		float Height;
 
 		int PredTemp;
+
+		int Max;
 	};
 
 	class ChargingBar :public Field_Object,Gauge {
@@ -159,11 +176,7 @@ namespace UI {
 		ChargingBar* SBar;
 		ChargingBar* MBar;
 		ChargingBar* BBar;
-		ChargingBar* Morale;
-		char SB[10];
-		char MB[10];
-		char BB[10];
-		char Mo[10];	
+		ChargingBar* Morale;	
 
 		Number_Symbol* SNumber;
 		Number_Symbol* MNumber;
@@ -220,7 +233,10 @@ namespace UI {
 	class UIMNG {
 	public:
 		UIMNG();
-		void CreateUI();
+
+		static void SaveImage();
+
+		void CreateUI(int PredMax);
 		void SetMorale(int MaxMorale);
 		void CreatePanel(int Hero, int Enemy);
 

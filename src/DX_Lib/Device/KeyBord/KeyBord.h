@@ -17,9 +17,9 @@
 #define KeyMax 256
 
 
+/*キー入力を管理するクラス*/
 class KeyBord {
 public:
-	KeyBord() {};
 	HRESULT init();
 	bool Press(int keycode);
 private:

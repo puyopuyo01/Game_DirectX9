@@ -4,7 +4,7 @@
 
 class Game_State;
 
-/*相手のDelay計測が終了したか確認、待機するクラス*/
+/*遅延計測するクラス*/
 class DelayMes:public Game_State {
 public:
 	DelayMes();

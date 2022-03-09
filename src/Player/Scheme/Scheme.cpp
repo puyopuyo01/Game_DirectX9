@@ -10,11 +10,13 @@ Scheme::Scheme(int ID,int Texture) {
 void Scheme::Excution(){}
 
 
-Enhancement::Enhancement(int ID, int pow, float speed,int TextureNumber,string name,string intro):Scheme(ID,TextureNumber){
+Enhancement::Enhancement(int ID, int pow, float speed,int* pred,int pred_inc,int TextureNumber,string name,string intro):Scheme(ID,TextureNumber){
 	this->Power = pow;
 	this->Speed = speed;
 	this->name = name;
 	this->intro = intro;
+	this->pred = pred;
+	this->pred_inc = pred_inc;
 }
 
 void Enhancement::Excution(){
@@ -28,4 +30,6 @@ void Enhancement::Excution(){
 		itr++;
 
 	}
+
+	(*pred) += pred_inc;
 }

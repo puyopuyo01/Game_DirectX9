@@ -1,5 +1,10 @@
 #include"ImageBoard.h"
 
+
+/*
+PrimitiveUpでポリゴンを作成する。
+ポリゴンの長さや色が変わるときはPrimitiveUpでポリゴンを作る。
+*/
 void PrimitiveUp::init(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a) {
 	this->type = type;
 	if (pD3DDevice == 0) {
@@ -46,6 +51,7 @@ PrimitiveUp::PrimitiveUp(D3DPRIMITIVETYPE type, float x, float y, float z, float
 	this->UV_Y = (float)UV_Y;
 }
 
+/*画像を反転させる関数。*/
 void PrimitiveUp::UVRevers() {
 	LX = 1; RX = 0; LY = 3, RY = 2;
 	imgvertex[0].uv = D3DXVECTOR2(1.f,0.f);
@@ -54,6 +60,7 @@ void PrimitiveUp::UVRevers() {
 	imgvertex[3].uv = D3DXVECTOR2(0.f,1.f);
 }
 
+/*画像の細かい一部を表示させるときに使用する関数*/
 void PrimitiveUp::SetUV(float xLeft, float xRight, float yU, float yL) {
 	imgvertex[LX].uv = D3DXVECTOR2(xLeft,yU);
 	imgvertex[RX].uv = D3DXVECTOR2(xRight,yU);
@@ -61,12 +68,13 @@ void PrimitiveUp::SetUV(float xLeft, float xRight, float yU, float yL) {
 	imgvertex[RY].uv = D3DXVECTOR2(xRight,yL);
 }
 
+
+/*アニメーションの再生に使用する関数。*/
 void PrimitiveUp::SetUV(float index_X,float index_Y) {
 	imgvertex[LX].uv = D3DXVECTOR2(index_X/ UV_X, index_Y/ UV_Y);
 	imgvertex[RX].uv = D3DXVECTOR2((index_X+ 1.f) / UV_X,index_Y /UV_Y);
 	imgvertex[LY].uv = D3DXVECTOR2((index_X)/ UV_X,(index_Y+ 1.f) / UV_Y);
 	imgvertex[RY].uv = D3DXVECTOR2((index_X+ 1.f) / UV_X,(index_Y+ 1.f) / UV_Y);
-	//printf("UV %lf %lf %lf \n", index_X / UV_X, (index_X + 1.f) / UV_X, index_Y / UV_Y);
 }
 
 void PrimitiveUp::VertexPosition(const int index, float x, float y, float z) {
@@ -88,12 +96,6 @@ void PrimitiveUp::VertexColor(const int index, float r, float g, float b, float 
 
 
 void PrimitiveUp::Draw(D3DXMATRIX location) {
-	/*if (pVB == 0) {
-		MessageBox(NULL,
-			"PrimitiveUP.Draw()の失敗", "失敗", MB_OK);
-		return;
-	}*/
-
 	pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);
 	pD3DDevice->SetRenderState(D3DRS_ALPHAREF, 0x66);

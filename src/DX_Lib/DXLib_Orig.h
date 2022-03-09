@@ -52,6 +52,7 @@ extern LPDIRECTSOUNDBUFFER PrBuf;
 
 #define M_VERTEX_FVF ( D3DFVF_XYZ | D3DFVF_DIFFUSE)
 
+	/*ゲーム内カーソルの更新、描画を行うクラス。*/
 	typedef struct m_loc {
 	public:
 		m_loc(HWND hWnd, LPDIRECTINPUTDEVICE8 mouse);
@@ -71,7 +72,6 @@ extern LPDIRECTSOUNDBUFFER PrBuf;
 		RECT field;
 		float cursor_width;
 		float cursor_height;
-		//RECT cursor;
 		float move_speed;
 		LPDIRECT3DTEXTURE9 image;
 		DIMOUSESTATE m_state;
@@ -106,7 +106,6 @@ extern LPDIRECTSOUNDBUFFER PrBuf;
 		virtual void Draw();
 		void Move(float x, float y);
 		void Rot(float a);
-		void Inversion();
 		D3DXMATRIX GetMatrix();
 		D3DXVECTOR3 GetLocation();
 		/*背景透過させる設定を行う関数*/
@@ -119,15 +118,7 @@ extern LPDIRECTSOUNDBUFFER PrBuf;
 		D3DXMATRIX output;
 	};
 
-	/*描画のみを行うオブジェクト。
-	多分使わない*/
-	class Draw_Object {
-	public:
-		virtual void Draw() {}
-	};
-
-	/*画像読み込み処理*/
-
+	/*画像を管理するクラス。SingleTon*/
 	class Images {
 	public:
 		static Images* GetInstance();

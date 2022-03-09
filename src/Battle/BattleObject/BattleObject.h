@@ -9,7 +9,7 @@ class Panel_Field;
 class BattleObject:public Field_Object,public CollisionObject {
 public:
 	BattleObject(float posx,float posy,CollisionState* state);
-	~BattleObject();	/*自身の情報を持っているオブジェクトに自信の終わりを伝える*/
+	virtual ~BattleObject();	/*自身の情報を持っているオブジェクトに自信の終わりを伝える*/
 	void RefDelete(BattleObject* obj); /*自身を参照するオブジェクトから引数のオブジェクトを削除*/
 	void SetPanel(Panel_Field* panel,float x,float y);
 	void SetPanel(Panel_Field* panel);
@@ -27,10 +27,3 @@ private:
 	list<BattleObject*> RecObj; /*自身の情報を持つオブジェクト*/
 	list<BattleObject*> RefObj; /*自身が参照するオブジェクト*/
 };
-
-
-
-class Siege{}; /*
-			   攻城する能力を持っているか。
-			   いらないかも。
-			   */

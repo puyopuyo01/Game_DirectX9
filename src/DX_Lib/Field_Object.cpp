@@ -36,16 +36,13 @@ void Field_Object::Move(float x, float y) {
 
 }
 
+/*ƒ|ƒŠƒSƒ“‚ð‰ñ“]‚³‚¹‚é*/
 void Field_Object::Rot(float a) {
-	D3DXMatrixRotationYawPitchRoll(&rot, 0.f, D3DXToRadian(180.0f)/*D3DXToRadian(180.0f)*/, 0.f /*D3DXToRadian(45.0f)*/);
+	D3DXMatrixRotationYawPitchRoll(&rot, 0.f, D3DXToRadian(180.0f), 0.f);
 	D3DXMatrixMultiply(&output, &rot, &loc);
 }
 
-void Field_Object::Inversion() {
-	D3DXMatrixRotationYawPitchRoll(&rot, D3DXToRadian(180.0f), 0.f, 0.f);
-	D3DXMatrixMultiply(&output, &rot, &loc);
-}
-
+/*”wŒi‚ð“§‰ß‚³‚¹‚éŠÖ”*/
 void Field_Object::BackGroundTransparent() {
 	pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);

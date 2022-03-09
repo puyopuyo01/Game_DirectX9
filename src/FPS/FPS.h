@@ -6,7 +6,8 @@
 #include"DX_Lib/Screen.h"
 #pragma comment(lib,"winmm.lib")
 
-/*FPS処理クラス
+/*
+FPS処理クラス
  60fpsで固定する
 */
 

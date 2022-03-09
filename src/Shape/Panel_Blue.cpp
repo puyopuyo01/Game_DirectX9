@@ -15,7 +15,6 @@ void Panel_Blue::Set(Panel_Field* offset) {
 		return;
 	}
 	SingleTon.get()->Location = nullptr;
-	//SingleTon.get()->Move(offset->GetLocation().x, offset->GetLocation().y);
 }
 
 
@@ -31,6 +30,7 @@ Panel_Blue::Panel_Blue():Shape(0.f,0.f,0.f)
 };
 
 
+/*ゲーム内カーソルがPanel_Field上にきたらそのパネルを保持する。*/
 void Panel_Blue::notif(Panel_Field* location,int x,int y){
 	if (location == nullptr) {
 		Location = nullptr;

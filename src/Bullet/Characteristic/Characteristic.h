@@ -28,15 +28,15 @@ protected:
 	BulletCharacteristic* State;
 };
 
-
+/*何も特性を持たないことを示すクラス。*/
 class NonCharacteristic :public BulletCharacteristic {
 public:
 	NonCharacteristic();
 };
 
-
+/*シールドを持っているということを示す。一定値以上の速度を持つ幽霊と衝突しても死亡しないという特性を持つ。*/
 class Shield :public BulletCharacteristic {
-	/*速度に影響されない特性を持つ。*/
+	
 public:
 	Shield(int ID,float x,float y,float size);
 	void Draw(Bullet* bullet) override;

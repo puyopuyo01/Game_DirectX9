@@ -10,7 +10,9 @@ ImageBoard::~ImageBoard(){
 void ImageBoard::Draw(D3DXMATRIX location) {
 }
 
+
 void ImageBoard::Square(ImageVertex imgvertex[],float x, float y, float z, float imgWidth, float imgHeight,float r, float g, float b,float a) {
+	/*ƒ|ƒŠƒSƒ“‚ğì¬*/
 	imgvertex[0].pos = D3DXVECTOR3(x - (imgWidth / 2.f), y + (imgHeight / 2.f), 0.f);
 	imgvertex[1].pos = D3DXVECTOR3(x + (imgWidth / 2.f), y + (imgHeight / 2.f), 0.f);
 	imgvertex[2].pos = D3DXVECTOR3(x - (imgWidth / 2.f), y - (imgHeight / 2.f), 0.f);

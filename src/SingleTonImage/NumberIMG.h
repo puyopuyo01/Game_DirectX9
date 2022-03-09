@@ -14,13 +14,13 @@
 #define LESSER 9.f
 #define NONSYMBOL 10.f
 
+
+/*複数の桁を持つ数字をテクスチャで表す場合、このクラスの機能を使用する。*/
 class NumberIMG {
 public:
 	static NumberIMG* GetInstance();
 
 	void Init();
-	void Set(int Number);
-	void Set(float Symbol);
 
 private:
 	static int ImageNumber;
@@ -34,7 +34,7 @@ class Number_Symbol:public Field_Object{
 public:
 	static void Init();
 
-	Number_Symbol(float x, float y, float Width,float Heigth,int digit,float Symbol); /*桁数を指定*/
+	Number_Symbol(float x, float y, float Width,float Heigth,int digit,float Symbol); /*桁数を指定,Symbol引数は数字の前に何か符号(+や-等)を付けるか指定するのに使用。*/
 	Number_Symbol(float x, float y, float Width, float Heigth, int digit); /*桁数を指定*/
 
 	void Update(int Number);
@@ -47,7 +47,7 @@ private:
 
 	std::vector<unique_ptr<PrimitiveUp>> numberList;
 	std::vector<int> digitNumber_mement;
-	int digit;
+	int digit; /*桁数*/
 	unique_ptr<PrimitiveUp> Symbol;
 	float SymbolNum;
 

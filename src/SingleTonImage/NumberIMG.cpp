@@ -32,7 +32,7 @@ void Number_Symbol::initialize(float x, float y, float Width, float Heigth, int 
 
 	SymbolNum = Symbol;
 
-	if (0.f <= SymbolNum && SymbolNum < NONSYMBOL) {
+	if (0.f <= SymbolNum && SymbolNum < NONSYMBOL) {	/*引数を定数指定しているか?*/
 		this->Symbol = make_unique<PrimitiveUp>(PrimitiveUp(SQUARE, x + displacement, y, 0.f,
 			Width, Heigth/2.f,
 			1.f, 1.f, 1.f, 1.f
@@ -70,6 +70,7 @@ void Number_Symbol::Update(int Number) {
 	digitNumber_mement.clear();
 	int digits = digit;
 	Number %= (int)pow(10, digits+1);
+	/*各桁の値をリストに入れていく*/
 	while (digits != 0) {
 		int notice_digit = (int)pow(10,(digits - 1));
 		int digitNumber = 0;
@@ -81,6 +82,7 @@ void Number_Symbol::Update(int Number) {
 		digits--;
 	}
 
+	/*各桁の値の画像をUV表示で取り出していく*/
 	for (int i = 0; i < (int)numberList.size(); i++) {
 		numberList[i].get()->SetUV((float)digitNumber_mement[i],0.f);
 	}

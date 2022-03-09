@@ -43,17 +43,6 @@ void P2P::Close() {
 	WSACleanup();
 }
 
-void P2P::MtdChange() { /*いらない*/
-
-	if(CommunicationMethod == 1){
-		CommunicationMethod = 0;
-	}
-
-	CommunicationMethod = 1;
-	ioctlsocket(s, FIONBIO, &CommunicationMethod);
-	return;
-
-}
 
 int P2P::Init(char *ip) {
 
@@ -113,8 +102,12 @@ int P2P::Init(char *ip) {
 
 #define YSTATE 0
 
+
+/*通信相手からパケットが届くか確認する関数。　ループさせることでNAT越えを行う。*/
 int P2P::Connect() {
 
+
+	/*「自身の接続状態|相手の接続状態」を送りお互いの状態を確認し合う。そうしなければどちらか一方が接続できても片方ができていないまま次の状態へ進んでしまう。*/
 	char MState[1024]="FALSE";
 
 	char YS[10] = "FALSE";
@@ -128,7 +121,6 @@ int P2P::Connect() {
 	int fromlen = (int)sizeof(from);
 
 	char RecvBuf[1024];
-	//printf("%s\n%s\n%s\n",RecvState[0],RecvState[1],RecvState[2]);
 
 	int n = recvfrom(s, RecvBuf, (int)sizeof(RecvBuf),0,(sockaddr *)&from,&fromlen);
 
@@ -146,7 +138,7 @@ int P2P::Connect() {
 			return 2;
 		}
 		else {
-			//printf("パケットが届いていません\n");
+			printf("パケットが届いていません\n");
 		}
 	}
 	else {
@@ -169,10 +161,8 @@ int P2P::Connect() {
 
 	if (strncmp(MState,"TRUE",4)==0 && strncmp(YState,"TRUE",4)==0) {
 		printf("%s %s\n", YState, MState);
-		/*MessageBox(NULL,
-			"P", "通信に成功", MB_OK);*/
-		printf("成功!!\n");
-		//printf("Success Connection!!!!\n");
+
+		printf("Success Connection!!!!\n");
 		return 1;
 	}
 

@@ -19,12 +19,12 @@ DelayMNG::~DelayMNG() {
 
 }
 
+/*遅延計測関数。計測が終わったらfalseを返す*/
 bool DelayMNG::Update() {
 	if (SendFinish && RecvFinish) {
 		this->AverageFrame = (int)((this->AverageFrame + this->PartnerDelay) / 2);
 		return true;
 	}
-	/*バッファオーバーラン*/
 	int i;
 	for (i = 0;i < SendID;i++) {
 		if (!delayList[i]->finish) {
@@ -47,6 +47,8 @@ bool DelayMNG::Update() {
 	}
 	
 	int resp = 1;
+
+	/*ping値を計測するための応答用パケットが来てないか、また応答用パケットを送る要請が確認するためのループ*/
 	while(resp >= 1){
 		char recvkey[1023] = { '\0' };
 		resp = P2P::GetInstance()->Recv(recvkey);
@@ -54,6 +56,7 @@ bool DelayMNG::Update() {
 		printf("%s\n", recvkey);
 		char* split[5];
 		Split(recvkey, split, '/');
+		/*相手から応答用パケットを送ってほしいと要請が来た*/
 		if (strncmp(split[0],DELAYSEND,7) == 0){
 			char reply[20] = { '\0' };
 			snprintf(reply, sizeof(reply), "%s/%s", DELAYREPLY,split[1]);
@@ -61,6 +64,7 @@ bool DelayMNG::Update() {
 			printf("split = %s\n",split[1]);	
 
 		}
+		/*ping値を計測するための応答用パケットが来た*/
 		else if (strncmp(split[0], DELAYREPLY,7) == 0){
 			int ID = atoi(split[1]);
 			printf("ID = %d\n", ID);
@@ -68,9 +72,8 @@ bool DelayMNG::Update() {
 			if (ID > this->LatestID) {
 				this->LatestID = ID;
 			}
-
-			//printf("Respone!!\n");
 		}
+		/*通信相手から計測終了の通知が来た*/
 		else if (strncmp(split[0], DELAYFINISH, 12) == 0) {
 			printf("DelayFinishを処理\n");
 			RecvFinish = true;
@@ -102,6 +105,7 @@ bool DelayMNG::Update() {
 
 }
 
+/*計測した遅延から平均を求める*/
 int DelayMNG::Average() {
 	int i;
 	int denom=0;

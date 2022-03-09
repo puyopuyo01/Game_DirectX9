@@ -9,8 +9,8 @@ public:
 	~Charging();
 
 	void Update();
-	bool Available(int Consum); /* 消費する分の値を持っているか確認する関数 */
-	bool Consumption(int Consum); /* 値を消費する関数 */
+	bool Available(int Consum); /* 消費する分の値(Remain)が引数(Consum)より大きいか確認する関数 */
+	bool Consumption(int Consum); /* 消費する分の値（Remain)から引数(Consum)分引く関数。もしRemain < Consumなら引かずにfalseを返す。*/
 
 	int GetRemain();
 	int GetMax();
@@ -21,5 +21,5 @@ public:
 protected:
 	int Remain;
 	int Max;
-	Counter* counter;
+	Counter* counter; /*チャージ量を示す。*/
 };

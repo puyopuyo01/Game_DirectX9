@@ -1,6 +1,6 @@
 #include"ImageBoard.h"
 
-
+/*Primitive‚Åƒ|ƒŠƒSƒ“‚ðì¬‚·‚éB*/
 void Primitive::init(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a,bool Reverse) {
 	this->type = type;
 	if (pD3DDevice == 0) {
@@ -23,6 +23,7 @@ void Primitive::init(D3DPRIMITIVETYPE type, float x, float y, float z, float img
 	pVB->Lock(0, 0, (void**)&imgvertex, 0);
 	if (type == SQUARE) {
 		Square(imgvertex, x, y, z, imgWidth, imgHeight, r, g, b, a);
+		/*”½“]‚³‚¹‚é‚©*/
 		if (!Reverse) {
 			imgvertex[0].uv = D3DXVECTOR2(0.0f, 0.0f);
 			imgvertex[1].uv = D3DXVECTOR2(1.0f, 0.0f);

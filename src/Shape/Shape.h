@@ -24,7 +24,7 @@ protected:
 };
 
 
-
+/*ゲーム内カーソルがどのパネルの上にあるか表示させるためのパネル*/
 class Panel_Blue :public Shape{
 public:
 	static Panel_Blue* GetInstance();
@@ -37,7 +37,7 @@ public:
 
 	void Draw() override;
 
-	Panel_Field* Location;
+	Panel_Field* Location;/*ゲーム内カーソルがパネルの上にあるとき、そのパネルを保持する*/
 private :
 	int LocationX, LocationY;
 	float size;
@@ -50,7 +50,7 @@ private:
 #include"Battle/ObjectMNG/ObjectManager.h"
 
 
-/*オブジェクトが存在するパネル*/
+/*試合フィールドのパネル。Player側のフィールド、Enmey側のフィールドどちらも3×3マス*/
 class Panel_Field :public Shape{
 public:
 	Panel_Field(int x, int y, Panel_Blue* panel,float lx, float ly, float lz, float r, float g,float b,float a, float size,int ID);
@@ -64,6 +64,7 @@ public:
 	void MoveUpdate();
 	void CollisionUpdate();
 	void DeathUpdate();
+	void CollisionAll();
 
 
 	void Draw() override;
@@ -84,11 +85,12 @@ public:
 	list<BattleObject*> obj;
 
 	static int GetPredmGauge();
+	static int* GetPredAddr();
 	static void ResetPredmGauge();
 	void AddPredmGauge(int add);
 
 protected:
-	list<BattleObject*> MoveObjTemp;
+	list<BattleObject*> MoveObjTemp; /*仮のオブジェクト管理リスト。別パネルからきたオブジェクトはそのフレームでは管理せず次フレームから管理する。*/
 	Panel_Blue* panel;
 private:
 	float size;

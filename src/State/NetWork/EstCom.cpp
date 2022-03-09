@@ -24,7 +24,7 @@ Game_State* EstablishCommunicate::Update(){
 			"P", "¸”s", MB_OK);
 		return this;
 	}
-	int res = p2p->Connect();
+	int res = p2p->Connect(); /*‚±‚±‚ÅNAT‰z‚¦‚ğs‚¤*/
 	if(res==1){
 		delete this;
 		return new DelayMes();

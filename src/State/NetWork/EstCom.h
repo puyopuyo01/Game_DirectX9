@@ -9,6 +9,8 @@
 class Game_State;
 class Font;
 
+
+/*IPアドレスの入力成功したか判定し、NAT越え(UDPホールパンチング)を行うゲーム状態。*/
 class EstablishCommunicate :public Game_State {
 public:
 	EstablishCommunicate(char *ip);

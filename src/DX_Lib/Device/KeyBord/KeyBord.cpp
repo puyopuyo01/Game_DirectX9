@@ -16,6 +16,7 @@ HRESULT KeyBord::init() {
 
 }
 
+/*引数のキーが押されていたかの判定を返す関数。引数は定数で指定。*/
 bool KeyBord::Press(int keycode) {
 
 	if (keycode < 0 || keycode >= KeyMax) {
@@ -25,7 +26,7 @@ bool KeyBord::Press(int keycode) {
 	return diks[keycode] & 0x80;
 }
 
-
+/*キー入力で数字が押されていたら、文字で返す関数。IPアドレスを入力する際に使用する。*/
 char GetNumber() {
 	if (controller->Press(DIK_0)) {
 		return '0';

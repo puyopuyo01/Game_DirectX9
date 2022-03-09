@@ -16,7 +16,7 @@ class BulletState;
 class BulletCharacteristic;
 class StatusBox;
 
-
+/*自機、敵機の弾クラス。(幽霊のテクスチャ)*/
 class Bullet:public BattleObject{
 public:
 	Bullet(int GroupID,int BulletID,int power, float speedx,BulletCharacteristic* BState,float posx,float posy,float size);
@@ -58,6 +58,7 @@ protected:
 private:
 	float speedx;
 	BulletState* state;
+	/*幽霊の体のテクスチャ、目のテクスチャはそれぞれ分ける。*/
 	unique_ptr<ImageBoard> board;
 	unique_ptr<ImageBoard> eye;
 

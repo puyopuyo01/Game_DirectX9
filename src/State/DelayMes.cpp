@@ -8,9 +8,10 @@ DelayMes::DelayMes() {
 }
 
 Game_State* DelayMes::Update() {
-	if (!delay->Update()) {
+	if (!delay->Update()) { /*遅延計測*/
 		return this;
 	}
+	/*計測が終わったら1秒間待機*/
 	if (wait <= WaitTime) {
 		wait++;
 		char recv[1023] = { '\0' };

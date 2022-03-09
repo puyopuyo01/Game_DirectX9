@@ -12,7 +12,7 @@ void EffectIMG::LoadImg() {
 
 Effect::Effect(float x,float y,int Img,int count, int vertical, int horizon) :DrawObject(x, y) {
 	ImgNum = Img;
-	this->Interval = new Counter(count);
+	this->Interval = new Counter(count);/*アニメーションが切り替わるインターバルフレームを指定できる*/
 	AnimationVerCounter = 0;
 	AnimationHorCounter = 0;
 
@@ -38,11 +38,13 @@ Effect::~Effect() {
 	delete img;
 }
 
+/*エフェクトのアニメーションを進める関数。*/
 void Effect::Update() {
 	if (AnimationHorCounter >= AnimationNumHor) { 
-		if (AnimationLastVer < AnimationVerCounter) { this->Death = true; return; }
+		if (AnimationLastVer < AnimationVerCounter) { this->Death = true; return; } /*アニメーション画像が全て表示されたらこのエフェクトオブジェクトは消す*/
 
 	}
+	/*インターバル分カウントできたら次のアニメーションに切り替える*/
 	if (Interval->Update()) { 
 		Interval->Reset(); 
 		AnimationVerCounter++;

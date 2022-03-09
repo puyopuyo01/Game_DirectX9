@@ -7,7 +7,7 @@ int Hero::GhostTexture;
 int Hero::GhostEyeTexture;
 int Hero::PlayerDamage;
 
-Hero::Hero(int x, int y, Panel_Field* p, int ID, float *HP, SchemeBox* schemeBox):Player(x, y, p, ID, HP, schemeBox) {
+Hero::Hero(int x, int y, Panel_Field* p, int ID, float *HP,int* Pred ,SchemeBox* schemeBox):Player(x, y, p, ID, HP,Pred ,schemeBox) {
 	Hero::PlayerTexture = Images::GetInstance()->SaveImage("back.png");
 	Hero::Portrate = Images::GetInstance()->SaveImage("Hero.png");
 	play = Hero::PlayerTexture;
@@ -28,7 +28,7 @@ int HeroT::GhostTexture;
 int HeroT::GhostEyeTexture;
 int HeroT::PlayerDamage;
 
-HeroT::HeroT(int x, int y, Panel_Field* p, int ID, float *HP, SchemeBox* schemeBox):Player(x, y, p, ID, HP, schemeBox) {
+HeroT::HeroT(int x, int y, Panel_Field* p, int ID, float *HP, int* Pred, SchemeBox* schemeBox):Player(x, y, p, ID, HP,Pred, schemeBox) {
 	HeroT::PlayerTexture = Images::GetInstance()->SaveImage("efore.png");
 	HeroT::Portrate = Images::GetInstance()->SaveImage("Enemy.png");
 	play = HeroT::PlayerTexture;

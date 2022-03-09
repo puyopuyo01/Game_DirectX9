@@ -12,8 +12,6 @@ void Split(char* a,char *b[] /*ポインタの配列*/ ,char boarder);
 
 /*サーバとの通信クラス…今後実装予定*/
 class ConnectServer {
-public:
-	//int Connect();
 private:
 	WSADATA NetData;
 	SOCKET s;
@@ -36,7 +34,6 @@ public:
 	int Send(char msg[]);
 	int Recv(char* msg);
 
-	void MtdChange();/*いらないかも*/
 protected:
 	WSADATA NetData;
 	SOCKET s;

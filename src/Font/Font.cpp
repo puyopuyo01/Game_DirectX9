@@ -11,8 +11,8 @@ Font* Font::GetInstance() {
 	return SingleTon.get();
 }
 
+/*ƒtƒHƒ“ƒg‚Ì‰ð•ú*/
 void Font::Release() {
-	/*if (RemoveFontResourceEx(FontName, FR_PRIVATE, NULL)) {}*/
 	if(RemoveFontMemResourceEx(fontHandle)){}
 	else{	
 		MessageBox(NULL,

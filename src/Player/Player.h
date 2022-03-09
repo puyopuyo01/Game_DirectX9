@@ -12,9 +12,7 @@
 #include"Charging/Charging.h"
 #include"Bullet/Reload/Reload.h"
 
-/*
-・Builderパターンでキャラのステータス実装
-*/
+
 #define Start 1	//最初のマスの位置
 
 /*グループID(無所属のみ定数)*/
@@ -37,10 +35,16 @@ class HandleScheme;
 class SchemeBox;
 class Scheme;
 
+
+/*
+・操作キャラのクラス。移動状態、弾を発射するときの状態、必殺技の状態等をBridgeパターンで保持。
+・Builderパターンでキャラのステータス実装
+*/
 class Player:public BattleObject{
 public:
+	int GetPredominant();
 	int GetID() override;
-	Player(int x,int y,Panel_Field* p,int ID,float *HP,SchemeBox* schemeBox);
+	Player(int x,int y,Panel_Field* p,int ID,float *HP,int* Pred,SchemeBox* schemeBox);
 	~Player();
 	void Update() override;
 	void Draw() override;
@@ -52,7 +56,8 @@ public:
 	ValueState<float>* hp;
 	float MaxHP;
 
-	//unique_ptr<Charging> Morale;
+
+
 	/*ユニークポインタを使うとエラー*/
 	Charging* Morale;
 
@@ -71,6 +76,7 @@ public:
 protected:
 	int ID;
 private:
+	static int* Predominant;
 
 	ImageBoard* img;
 	float h;

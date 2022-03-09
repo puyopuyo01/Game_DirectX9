@@ -29,14 +29,10 @@ void Game_State::deleteObject(int index) { objects.erase(objects.begin() + index
  
 Battle_State::Battle_State(int delay)
 {
-	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-	pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
-
-	LoadIMG();
-	
-	BGM = new Sound("PerituneMaterial_Spook4_loop.wav"); 
-	//BGM->Play(true);
 	File = FileMapping::GetInstance();
+	ObjectMNG::GetMNG();
+
+	
 	this->Finish = false;
 
 	delayFrame = delay;
@@ -48,23 +44,23 @@ Battle_State::Battle_State(int delay)
 	ProcessID = 0;
 	Communication = P2P::GetInstance();
 	KeyBoxes = KeyBox::GetInstance();
+	this->KeyBoxes->Close();
 
+	int* Pred = new int(0);
 
 	state = new InGame();
 	StateInBattle::BaseStateSet(this);
 	schemelist = new SchemeBox();
-	Predominant = new Numerical<int>(new int(0), new NormalValue<int>(), 100, -100);
+	Predominant = new Numerical<int>(Pred, new NormalValue<int>(), 5, -5);
 
 
 
-	//pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	pD3DDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-	//pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	/*UI生成(カメラ分割にするべきかステンシルバッファを利用)*/
 	UI::UIMNG* ui = UI::UIMNG::GetInstance();
-	ui->CreateUI();
+	ui->CreateUI(5);
 	ui->textBoard->SetDelayFrame(delayFrame);
 	objects.push_back((Field_Object*)ui->backGround.get());
 
@@ -81,9 +77,9 @@ Battle_State::Battle_State(int delay)
 	int i = 0, j = 0;
 	int fieldID = 0;
 	int index_h=0;
-	for (i = 0;i <= width;i++) {	//縦
-		for (j = 0;j < length;j++) {	//横
-			if (i == 0)/*プレイヤー側パネル*/
+	for (i = 0;i <= width;i++) {	
+		for (j = 0;j < length;j++) {	
+			if (i == 0)/*プレイヤー側パネルの生成*/
 			{
 				DefensePanel[0][j] = new DefenseMass(
 					PLAYER,&DMGPlayerHP,
@@ -94,7 +90,7 @@ Battle_State::Battle_State(int delay)
 				Panel_Field::AllPanel[i][j] = DefensePanel[0][j];
 				continue;
 			}
-			if(i == width)	/*敵パネル*/
+			if(i == width)	/*敵側パネルの生成*/
 			{
 				DefensePanel[1][j] = new DefenseMass(
 					ENEMY,&DMGEnemyHP,
@@ -131,10 +127,11 @@ Battle_State::Battle_State(int delay)
 	}
 
 
-	ObjectMNG::GetMNG()->player = new Hero(1, 1, Panel_ALL[1][1], PLAYER, &DMGPlayerHP, schemelist);
-	ObjectMNG::GetMNG()->enemy = new HeroT(1, 6, Panel_ALL[6][1], ENEMY, &DMGEnemyHP, schemelist);
+	ObjectMNG::GetMNG()->player = new Hero(1, 1, Panel_ALL[1][1], PLAYER, &DMGPlayerHP, Pred,schemelist);
+	ObjectMNG::GetMNG()->enemy = new HeroT(1, 6, Panel_ALL[6][1], ENEMY, &DMGEnemyHP, Pred,schemelist);
 
 
+	/*UIの生成*/
 	ui->CreatePanel(ObjectMNG::GetMNG()->player->portrate, ObjectMNG::GetMNG()->enemy->portrate);
 	objects.push_back((Field_Object*)ui->PlayerPanel);
 	objects.push_back((Field_Object*)ui->EnemyPanel);
@@ -167,6 +164,12 @@ Battle_State::Battle_State(int delay)
 
 	Panel_ALL[1][1]->AddObject(ObjectMNG::GetMNG()->player);
 	Panel_ALL[6][1]->AddObject(ObjectMNG::GetMNG()->enemy);
+	ObjectMNG::GetMNG()->AddObject(ObjectMNG::GetMNG()->player);
+	ObjectMNG::GetMNG()->AddObject(ObjectMNG::GetMNG()->enemy);
+
+	BGM = new Sound("PerituneMaterial_Spook4_loop.wav");
+	BGM->Play(true);
+	DmgSE = new Sound("Damage.wav");
 
 	this->NextState = this;
 	return;
@@ -190,7 +193,9 @@ Battle_State::~Battle_State(){
 	delete state;
 	delete schemelist;
 
+	BGM->Stop();
 	delete BGM;
+	delete DmgSE;
 
 	this->KeyBoxes->Close();
 	objects.clear();
@@ -201,6 +206,7 @@ Battle_State::~Battle_State(){
 Game_State* Battle_State::Update() { 
 	printf("CreateID Test %d \n",CreateID);
 	printf("ProcessID Test %d \n", ProcessID);
+	/*入力遅延分のフレーム待機する。*/
 	if (NoReach == 0 || wait) {
 		//ローカルプレイヤーのキーを取得。FramePacketクラスの生成。
 		KeyBoxes->CreateFramePacket(CreateID);
@@ -217,12 +223,11 @@ Game_State* Battle_State::Update() {
 
 	/*
 	処理するフレームに相手のキーがあるか確認。
-	なければ受信ループ。100フレーム以上受信が無ければ通信エラーで
+	なければ受信ループ。1000フレーム以上受信が無ければ通信エラーで
 	ゲーム中断。
 	*/
 	while(!KeyBoxes->ReachEnemyPacket(ProcessID)) {
 		bool Reach = false;
-		//余分なパケットが来たら無視
 		while (true) {
 			int a = Communication->Recv(recvKey);
 			if (a < 1) {
@@ -232,9 +237,10 @@ Game_State* Battle_State::Update() {
 				KeyBoxes->CreateSendKey(ProcessID);
 				return this;
 			}
-			if (NoReach > 100) {
+			if (NoReach > 1000) { 
 				printf("パケットが届かないため通信を終了\n");
 				Abort();  
+				delete this;
 				return NextState;
 			}
 			printf("届いた %s\n", recvKey);
@@ -261,18 +267,28 @@ Game_State* Battle_State::Update() {
 		}
 	}
 
+
 	StateInBattle* stateTemp = state->update(this);
 	if (stateTemp != state) {
-		printf("呼び出し stateTemp\n");
-		//delete state; なぜかエラー
 		state = nullptr;
 		state = stateTemp;
 	}
 
+	if (NextState != this) {
+		delete this;
+		return NextState;
+	}
+	
+
+	/*UIの更新処理*/
 	UpdateUI();
 
+
+	/*敵機と時機の体力更新*/
 	Player* enemy = ObjectMNG::GetMNG()->enemy;
 	Player* player = ObjectMNG::GetMNG()->player;
+
+	if (DMGPlayerHP != 0 || DMGEnemyHP != 0) { DmgSE->Reset(); DmgSE->Play(false); }
 
 	enemy->hp->AddValue(-DMGEnemyHP);
 	player->hp->AddValue(-DMGPlayerHP);
@@ -292,10 +308,6 @@ Game_State* Battle_State::Update() {
 
 	if (ProcessID == INT_MAX) { Abort();  return NextState; } /*intの最大値まできたら強制終了*/
 	ProcessID = NextFrame(ProcessID);
-
-	if (NextState != this) { 
-		printf("呼び出し statep\n");
-		delete this; }
 	return NextState; 
 }
 
@@ -303,24 +315,29 @@ Game_State* Battle_State::Update() {
 /*UIの更新*/
 
 void Battle_State::UpdateUI() {
-	PredmGauge += Panel_Field::GetPredmGauge();
+
+	/*優勢ゲージの更新*/
+	UI::UIMNG::GetInstance()->Predominant->UpdateGauge((*Predominant->GetVal()),Panel_Field::GetPredmGauge());
+	Predominant->AddValue(Panel_Field::GetPredmGauge());
 	Panel_Field::ResetPredmGauge();
 
-	UI::UIMNG::GetInstance()->Predominant->UpdateGauge(PredmGauge);
 
+	/*HPの更新*/
 	Player* enem = ObjectMNG::GetMNG()->enemy;
 	Player* ply = ObjectMNG::GetMNG()->player;
-
 
 	UI::UIMNG::GetInstance()->PlayerHP->UpdateGauge(ply->MaxHP, *(ply->hp->GetVal()));
 	UI::UIMNG::GetInstance()->EnemyHP->UpdateGauge(enem->MaxHP, *(enem->hp->GetVal()));
 
 
+	/*ダメージを受けた場合受けた側のパネルテクスチャを被ダメージ用に変更*/
 	UI::UIMNG::GetInstance()->PlayerPanel->Update();
 	UI::UIMNG::GetInstance()->EnemyPanel->Update();
 	if (DMGPlayerHP > 0) { UI::UIMNG::GetInstance()->PlayerPanel->Dmg(ply->damage); }
 	if (DMGEnemyHP > 0) { UI::UIMNG::GetInstance()->EnemyPanel->Dmg(enem->damage); }
 	
+
+	/*必殺技ゲージ,幽霊のリロードゲージの更新*/
 	int MaxMorale = ply->Morale->GetMaxCounter();
 	int RemainMorale = ply->Morale->GetRemainCounter();
 	float Morale = (float)RemainMorale/(float)MaxMorale;
@@ -340,6 +357,7 @@ void Battle_State::UpdateUI() {
 }
 
 void Battle_State::Reset(){
+	ObjectMNG::GetMNG()->SueSide();
 	delayFrame -= MINIMUMFRAME;
 	NextState = new Battle_State(delayFrame);
 }
@@ -350,6 +368,7 @@ void Battle_State::Abort(){
 }
 
 void Battle_State::LoadIMG() {
+	UI::UIMNG::SaveImage();
 	Number_Symbol::Init();
 	Bullet::Init();
 	EffectIMG::LoadImg();

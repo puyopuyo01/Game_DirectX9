@@ -11,12 +11,10 @@ class ObjectMNG {
 public:
 	ObjectMNG();
 
-	static ObjectMNG* GetMNG();
-	void SueSide();
+	static ObjectMNG* GetMNG(); /*SingleTon*/
+	void SueSide(); /*リスト内のオブジェクトを解放*/
 	void AddObject(BattleObject* obj);
 	void Delete(BattleObject* obj);
-
-
 
 	void AddBullet(Bullet* bullet);
 
@@ -24,8 +22,9 @@ public:
 	list<BattleObject*> Get_Object(int ID);
 	list<Bullet*> GetBullet(int ID);
 
-	Player* player;
+	Player* player; /*自機、敵機クラスはこのクラスの変数で保持。*/
 	Player* enemy;
+	list<BattleObject*> AllObject; /*フィールドに存在する全てのオブジェクト。衝突判定を行うときはこのリストを使う。*/
 
 	DrawObjectMNG* drawObj;
 
@@ -33,11 +32,14 @@ public:
 
 private:
 	list<unique_ptr<BattleObject>> object;
+	/*Player側ID、Enemey側IDごとにリストで保持しておく。*/
 	list<BattleObject*> playerObject;
 	list<BattleObject*> enemyObject;
+	
 
 	/*弾は、Bullet型でも保持しておく*/
 	list<Bullet*> playersBullet;
 	list<Bullet*> enemysBullet;
+	list<Bullet*> AllBullet;
 	static ObjectMNG* SingleTon;
 };

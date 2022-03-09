@@ -26,44 +26,50 @@ void SetAspect() {
 	}
 }
 
+/*画面左端の座標*/
 float ScreenLX() {
 	SetAspect();
 	return (CAMERA_X - r * aspect) + 1.f;
 	return (CAMERA_X-r)-1.f;
 };
 
+/*画面右端の座標*/
 float ScreenRX() {
 	SetAspect();
 	return (CAMERA_X + r * aspect) - 1.f;
 	return (CAMERA_X+r);
 };
 
-
+/*画面下の座標*/
 float ScreenLowerY(){
 	SetAspect();
 	return (CAMERA_Y - r) + 1.f;
 	return ((CAMERA_Y-r)/ aspect)-1.f;
 }
 
+/*画面上の座標*/
 float ScreenUpperY() { 
 	SetAspect();
 	return CAMERA_Y + r - 1.f;
 	return (CAMERA_Y+r)/aspect; 
 }
 
-
+/*画面x軸中央の座標*/
 float ScreenCenterX() {
 	return ScreenLX() + (ScreenWidth()/2.f);
 }
 
+/*画面y軸中央の座標*/
 float ScreenCenterY() {
 	return (ScreenLowerY() + (ScreenHeigth()/2.f));
 }
 
+/*画面の横の長さ*/
 float ScreenWidth() {
 	return (r * aspect) * 2+ 2.f;
 }
 
+/*画面の縦の長さ*/
 float ScreenHeigth() {
 	SetAspect();
 	return r * 2 +1.f+2.f;

@@ -1,13 +1,16 @@
 #include"./Player.h"
 
+int* Player::Predominant;
 
 int Player::GetID() { return this->ID; }
+int Player::GetPredominant() { return (*this->Predominant); }
 
-Player::Player(int x,int y,Panel_Field* p,int ID,float* HP,SchemeBox* schemeBox):BattleObject(p->GetLocation().x, p->GetLocation().y,new PlayerCollisionState(HP)){
-	MaxHP = 1000.f;
+Player::Player(int x,int y,Panel_Field* p,int ID,float* HP,int* Pred,SchemeBox* schemeBox):BattleObject(p->GetLocation().x, p->GetLocation().y,new PlayerCollisionState(HP)){
+	MaxHP = 10.f;
 	StandPos = p;
 	NTPrevX = StandPos->x;
 	NTPrevY = StandPos->y;
+	printf("PrevX %d PrevY %d\n");
 	Width = SIZE/1.5f;
 	Height = SIZE/1.5f;
 	MoveState = new Object<HandleMove>(new IdleMove(), new NormalValue<HandleMove>());
@@ -20,8 +23,9 @@ Player::Player(int x,int y,Panel_Field* p,int ID,float* HP,SchemeBox* schemeBox)
 	this->Move(p->GetLocation().x, p->GetLocation().y);
 
 	this->ID = ID;
-
 	this->schemeBox = schemeBox;
+
+	this->Predominant = Pred;
 }
 
 Player::~Player() {
@@ -35,9 +39,11 @@ Player::~Player() {
 	delete SBullet;
 	delete MBullet;
 	delete BBullet;
+	printf("Player Dest!!!\n");
 }
 
 void Player::SetPanel(Panel_Field* p) {
+	/*別パネルへ移動するときに呼び出される関数*/
 	StandPos = p;
 	NTPrevX = StandPos->x;
 	NTPrevY = StandPos->y;
@@ -45,7 +51,7 @@ void Player::SetPanel(Panel_Field* p) {
 }
 
 void Player::Update() {
-
+	/*各状態を更新*/
 	MoveState->ChangeValue(MoveState->GetVal()->Update(this));
 	BulletState->ChangeValue(BulletState->GetVal()->Update(this));
 	SchemeState->ChangeValue(SchemeState->GetVal()->Update(this));
@@ -61,13 +67,15 @@ void Player::Draw() {
 
 }
 
-
+/*
+今プレイヤーが居るパネルと別のパネルをマウスでクリックしていたらそのパネルの位置をキー入力を管理するKeyBoxクラスに記録、マウス操作がなければ現在いる位置を記録する。
+*/
 void Player::RecordPosition(const int FrameID) {
 	KeyBox* key = KeyBox::GetInstance();
 	if (cursor->ClickLeft()) {
 		Panel_Blue* p = Panel_Blue::GetInstance();
 		if (p->Location != nullptr) {
-			printf("SET1\n");
+			printf("Call!!!!\n");
 			key->SetPlayerPosition(FrameID, p->Location->x, p->Location->y);
 			NTPrevX = p->x;
 			NTPrevY = p->y;

@@ -3,10 +3,16 @@
 #include"DX_Lib/Imageboard/ImageBoard.h"
 #include"Battle/DrawObject/DrawObject.h"
 
+/*全てのエフェクトを初期化するクラス(まとめて画像を読み込む)*/
 class EffectIMG {
 public:
 	static void LoadImg();
 };
+
+/*
+エフェクトの基底クラス
+各エフェクトはBuilderパターンで実装。
+*/
 class Effect :public DrawObject {
 public:
 	Effect(float x,float y,int Img,int count,int vertical,int horizon);
@@ -31,6 +37,7 @@ protected:
 };
 
 
+/*幽霊が発射されたときのエフェクト*/
 class SummonBullet:public Effect {
 public:
 	static void Init();
@@ -44,7 +51,7 @@ private:
 
 };
 
-
+/*幽霊が敵を攻撃したときのエフェクト*/
 class BulletAttack :public Effect {
 public:
 	static void Init();
@@ -58,6 +65,7 @@ private:
 	static int ImageNumber;
 };
 
+/*幽霊が死亡したときのエフェクト*/
 class BulletDeath :public Effect {
 public:
 	static void Init();

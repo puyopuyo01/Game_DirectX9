@@ -2,6 +2,9 @@
 #include"DXLib_Orig.h"
 
 #define SQUARE D3DPT_TRIANGLESTRIP
+
+
+/*SQUARELINEは、線のみの矩形を表示させるときに指定する定数。*/
 #define SQUARELINE D3DPT_LINESTRIP
 
 

@@ -31,6 +31,7 @@ void Images::Init() {
 	ImageIdentifier = 0;
 }
 
+/*画像を登録する。戻り値の値をLoadImageのIdentifierに指定すれば、画像を表示させることができる。*/
 int Images::SaveImage(const char* file_name) {
 	ImageIdentifier+=1;
 	images.push_back(new LPDIRECT3DTEXTURE9);
@@ -55,10 +56,12 @@ int Images::SaveImage(const char* file_name) {
 
 }
 
+/*テクスチャを持つオブジェクトは描画後にこの関数を呼び出す。*/
 void Images::Reset() {
 	pD3DDevice->SetTexture(0,nullptr);
 }
 
+/*SaveImage関数で登録した画像を読み込む関数。*/
 void Images::LoadImage(int Identifier,int Stage) {
 	if (Identifier-1 < 0) { return; }
 	pD3DDevice->SetTexture(Stage,*images[Identifier-1]);

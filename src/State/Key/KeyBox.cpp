@@ -16,15 +16,21 @@ FramePacket* KeyBox::SearchFrame(const int FrameID) {
 }
 KeyBox* KeyBox::GetInstance() {
 	if (KeyBox::SingleTon.get() == nullptr) {
+		printf("Create KeyBox\n");
 		KeyBox::SingleTon = std::make_unique<KeyBox>(KeyBox());
 	}
 	return KeyBox::SingleTon.get();
 }
+
+/*現在処理しているフレームの通信相手の入力が届いているか判定する関数。*/
 bool KeyBox::ReachEnemyPacket(const int ProcessID) {
 	FramePacket* frame = SearchFrame(ProcessID);
 	if (frame == nullptr) { printf("なし\n"); }
 	return frame->CheckEnemyKey();
 }
+
+
+/*キー入力を取得し、FramePacketクラスに記録する関数。*/
 void KeyBox::GetPlayerKey(int LatestID) {
 	bool create = false;
 	FramePacket* Frame = SearchFrame(LatestID);
@@ -50,9 +56,6 @@ void KeyBox::GetPlayerKey(int LatestID) {
 	for (i = 0;i < KeyOnly;i++) {
 		result[i] = 0;
 	}
-
-	//printf("box\n");
-
 	if (controller->Press(Q)) { result[QB] = 1; }
 	if (controller->Press(W)) { result[WB] = 1; }
 	if (controller->Press(E)) { result[EB] = 1; }
@@ -66,16 +69,16 @@ void KeyBox::GetPlayerKey(int LatestID) {
 	for (i = 0;i < KeyOnly;i++) {
 		int a = result[i];
 		Frame->InsertPlayerKeyForIndex(i, box[a]);
-		printf("aa %d %s\n", i, box[a]);
 	}
 
 	return;
 }
 
+
+/*プレイヤーの位置を取得し、FramePacketクラスに記録する関数。*/
 void KeyBox::SetPlayerPosition(const int FrameID,int x, int y) {
 	FramePacket* frame=SearchFrame(FrameID);
 	if (frame != nullptr){
-		//printf("framepacket\n");
 		char position[6];
 		printf("x = %d,y = %d\n",x,y);
 		snprintf(position, sizeof(position), "%d_%d\0", x, y);
@@ -87,6 +90,8 @@ void KeyBox::SetPlayerPosition(const int FrameID,int x, int y) {
 	}
 
 }
+
+/*最新のFramePacketクラスを生成する関数。*/
 void KeyBox::CreateFramePacket(const int FrameID) {
 	if (SearchFrame(FrameID) != nullptr) { return; }
 	if (LatestRecvID < FrameID) { LatestRecvID = FrameID; }
@@ -98,6 +103,8 @@ void KeyBox::CreateSendKey(const int FrameID) {
 	frame = SearchFrame(FrameID);
 	char PrevKey[1023] = { '\0' };
 	int i;
+
+	/*パケットロスして前のフレームのキー入力が届いていなかったときのため、過去10フレームの入力も送る。*/
 	for (i = 1;i <= SENDPREVKEY;i++) {
 		FramePacket* prev = SearchFrame(FrameID - i);
 		char temp[1023];
@@ -111,6 +118,8 @@ void KeyBox::CreateSendKey(const int FrameID) {
 		frame->CreateSendKey(FrameID, PrevKey);
 	}
 }
+
+/*通信相手から受け取ったパケットを必要な情報ごとに分割する関数*/
 void KeyBox::ReceiveKey(const char* key,const int CreateID) {
 	if (LatestRecvID <= CreateID) { LatestRecvID = CreateID; }
 
@@ -124,11 +133,12 @@ void KeyBox::ReceiveKey(const char* key,const int CreateID) {
 	int i = 0;
 	while(ID[i] != nullptr){
 		char* Frame[3];
-		Split(ID[i], Frame, '|'); //フレーム番号分割
+		Split(ID[i], Frame, '|'); //フレーム番号ごとに分割
+		/*受け取ったパケットのフレームIDが自身の端末の最新フレームIDより大きければ、そのフレームIDのFramePacketクラスを生成し、最新フレームIDを更新する*/
 		if (LatestRecvID < atoi(Frame[0])) {
 			FramePacket* newFrame = new FramePacket(atoi(Frame[0]));
 			printf("newパケット\n");
-			newFrame->InsertEnemyKeyForIndex(Frame[1]);
+			newFrame->InsertEnemyKeyForIndex(Frame[1]);/*FramePacketクラスに通信相手のキー入力を登録*/
 			PacketQueue.push_back(unique_ptr<FramePacket>(std::move(newFrame)));
 			MaxFrame = atoi(Frame[0]);
 			i++;
@@ -150,6 +160,7 @@ void KeyBox::ReceiveKey(const char* key,const int CreateID) {
 	}
 }
 void KeyBox::UpdateFrame(const int FrameID) {
+	/*これから処理するフレームのFramePacketに更新する*/
 	updateframe = SearchFrame(FrameID);
 	if (updateframe == nullptr) {
 		printf("updateFrame == nullptr\n");
@@ -171,8 +182,10 @@ bool KeyBox::FinishPacket(const int FrameID) {
 }
 
 void KeyBox::Close() {
-	PacketQueue.clear();
 	WaitingPacket.clear();
+	PacketQueue.clear();
+	LatestRecvID = 0;
+
 
 }
 

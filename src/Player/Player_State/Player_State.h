@@ -5,6 +5,7 @@
 #include"Shape.h"
 #include"State/Battle_State.h"
 #include"State/Key/KeyBox.h"
+#include"DX_Lib/Sound/Sound.h"
 
 
 class CollisionObject;
@@ -89,6 +90,9 @@ protected:
 class IdleBullet :public HandleBullet {
 public:
 	IdleBullet();
+	~IdleBullet();
 	HandleBullet* Update(Player* player) override;
+private:
+	Sound* BulletSE;
 };
 

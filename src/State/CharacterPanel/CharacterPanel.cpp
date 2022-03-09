@@ -34,6 +34,7 @@ void CharacterPanel::Draw(){
 
 
 void CharacterPanel::UpdateMove(float speed,int vec) {
+	/*ƒpƒlƒ‹‚ÌˆÚ“®—Ê‚ðŒvŽZ*/
 	float  MoveToX = (speed + this->GetLocation().x);
 	Move(MoveToX, this->GetLocation().y);
 }

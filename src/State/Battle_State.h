@@ -21,6 +21,7 @@ class StateInBattle;
 class SchemeBox;
 
 
+/*ゲーム状態の基底クラス(試合しているか、IP入力待ちか、遅延フレームの計測中か等)*/
 class Game_State {
 public:
 	virtual Game_State* Update() { return NULL; }
@@ -36,7 +37,8 @@ protected:
 /*試合を管理するクラス*/
 class Battle_State :public Game_State {
 public:
-	static Panel_Field* Panel_ALL[width*2][length];	/*Playerの記録のみ*/
+	/*パネルは、プレイヤー側のみのパネル、敵側のみのパネル、全てのパネル等分けて保持しておく*/
+	static Panel_Field* Panel_ALL[width*2][length];	
 	Panel_Field* Player_Panel[PANELWIDTH][length];
 	Panel_Field* Enemy_Panel[PANELWIDTH][length];
 	Panel_Field* DefensePanel[2][length];	
@@ -47,8 +49,10 @@ public:
 	Battle_State(int delay);
 	~Battle_State();
 
-	void Reset();
-	void Abort();
+	static void LoadIMG();
+
+	void Reset(); /*再度試合を行う*/
+	void Abort(); /*試合を終えてIP入力待機状態へ移行する*/
 	
 	void UpdateUI();
 	Game_State* Update() override;
@@ -57,23 +61,17 @@ private:
 	ValueState<int>* Predominant;
 
 	SchemeBox* Scheme;
-	float DMGPlayerHP;
-	float DMGEnemyHP;
-
-	int PredmGauge;
-private:
-	void LoadIMG();
+	float DMGPlayerHP; /*自機の蓄積ダメージ*/
+	float DMGEnemyHP; /*敵機の蓄積ダメージ*/
 
 
-	/*ネットワーク周り*/
+	/*ネットワーク周りに必要な変数*/
 	int NoReach;
 	int ProcessID;
 	int CreateID;
 	int delayFrame;
 	P2P* Communication;
 	KeyBox* KeyBoxes;
-	list<unique_ptr<FramePacket>> PacketQueue;
-	FramePacket* LastFrame;
 
 	bool wait;
 	int WaitingFrame;
@@ -89,12 +87,11 @@ private:
 	Game_State* NextState;
 
 
+	/*サウンド系クラス*/
 	Sound* BGM;
+	Sound* DmgSE;
 
 	
 
 
 };
-
-
-bool KeyDisassembly();

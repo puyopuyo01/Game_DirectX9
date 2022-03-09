@@ -13,12 +13,15 @@ HandleMove* IdleMove::Update(Player* player) {
 	int x = atoi(pos[0]);
 	int y = atoi(pos[1]);
 
+	/*通信相手の場合の位置を計算する*/
 	if (player->GetID() == ENEMY) { 
 		y = (width*2)-1 - y; 
 		x = length-1 - x;
 		printf("成功Enemy %d %d\n", x, y);
 	}
 
+
+	/*移動を開始*/
 	Panel_Field* p = Battle_State::Panel_ALL[y][x];
 	player->StandPos = p;
 	player->Move(p->GetLocation().x, p->GetLocation().y);

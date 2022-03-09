@@ -13,7 +13,10 @@ Charging::~Charging() {
 
 
 void Charging::Update() {
+	/*Remainが最大値ならチャージ(カウントダウン)しない*/
 	if (Remain == Max) { return; }
+
+
 	else if (Remain < Max) {
 		if (this->counter->Update()) {
 			Remain++;

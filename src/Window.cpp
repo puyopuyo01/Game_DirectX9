@@ -137,6 +137,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	ValidateRect(hWnd, 0);
 
 	FileMapping::GetInstance()->Mapping();
+	Images::GetInstance()->Init();
 	// レンダラーの初期化
 	HRESULT hr;
 	hr = DX_INIT(hWnd,isFullScreen,CLIENT_WIDTH,CLIENT_HEIGHT);
@@ -148,7 +149,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	// シーンオブジェクト
-	//Scene	 scene;
 	Camera* camera = new Camera();
 	Game_State* state = new InputIP(); //new Battle_State();
 	Font* FONT = Font::GetInstance();
@@ -157,8 +157,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Finish = false;
 	fps->InitFPS();
 
+
+	pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+	Battle_State::LoadIMG();
+
 	// メッセージ処理および描画ループ
-	while (true){//!Finish) {
+	while (!Finish){
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			if (msg.message == WM_QUIT) {	// PostQuitMessage()が呼ばれた
 				break;	//ループの終了
@@ -180,7 +186,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				(wndpl.showCmd != SW_SHOWMINNOACTIVE)) {
 
 				// 描画処理の実行
-				//renderer.RenderScene(&scene);
 				fps->SMesure();
 				cursor->Update();
 				state = state->Update();
@@ -197,6 +202,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Finalize();
 	fps->ReleaseFPS();
 	FONT->Release();
+	Images::Release();
 	return (int)msg.wParam;
 }
 

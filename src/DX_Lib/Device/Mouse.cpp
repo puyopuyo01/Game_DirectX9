@@ -51,6 +51,7 @@ m_loc::m_loc(HWND hWnd, LPDIRECTINPUTDEVICE8 mouse) {
 
 }
 
+/*クリックしたか判定する処理*/
 bool m_loc::ClickLeft() {
 	if (mouse == nullptr) { return false; }
 	return m_state.rgbButtons[MOUSELEFT] & 0x80;
@@ -78,7 +79,7 @@ void m_loc::Update() {
 
 	float r= -CAMERA_Z*std::tan(D3DXToRadian(45.0f / 2.f));
 
-
+	/*画面外から出れないようにする*/
 	if (x > ScreenRX()) { x = ScreenRX(); }
 	else if (x < ScreenLX()) { x = ScreenLX(); }
 	if (y > ScreenUpperY()) { y = ScreenUpperY(); }

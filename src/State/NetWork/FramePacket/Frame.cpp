@@ -14,25 +14,26 @@ FramePacket::FramePacket(int FrameID){
 
 }
 
+/*通信相手のキー入力を記録する*/
 void FramePacket::InsertEnemyKeyForIndex(const char key[]) {
 	printf("EnemyKey is %s %d\n", key, this->FrameID);
 	strncpy_s(RecvKey,sizeof(RecvKey), key, sizeof(RecvKey));
-	Split(RecvKey, EnemyKey, '-');
+	Split(RecvKey, EnemyKey, '-');/*各キー入力を配列ごとに分ける。*/
 
 }
 
+/*ローカルプレイヤのキー入力を記録する*/
 void FramePacket::InsertPlayerKeyForIndex(const int index,const char* key) {
-	//printf("%s\n", key);
 	char temp[1023];
 	strncpy_s(temp,sizeof(SendKey),SendKey,sizeof(SendKey));
 	if (temp[0] == '\0') {
 		snprintf(SendKey, sizeof(SendKey), "%s\0" ,key);
 		return;
 	}
-	//printf("%s\n", temp);
 	snprintf(SendKey, sizeof(SendKey), "%s-%s\0",temp, key);
 }
 
+/*ローカルプレイヤの各キー入力を配列ごとに分ける。*/
 void FramePacket::SeparatePlayerKey() {
 	strncpy_s(SendKeyCpy, sizeof(SendKeyCpy),SendKey, sizeof(SendKey));
 	Split(SendKeyCpy,PlayerKey, '-');
@@ -42,6 +43,8 @@ void FramePacket::SeparatePlayerKey() {
 int FramePacket::GetFrame() const{
 	return FrameID;
 }
+
+/*ローカルプレイヤー、または通信相手の入力を返す関数。引数indexでどのキー入力を返すか指定する*/
 char* FramePacket::GetKey(int PlayerID,int index) {
 	if (PlayerID == PLAYER) {
 		return PlayerKey[index];
@@ -54,16 +57,20 @@ char* FramePacket::GetKey(int PlayerID,int index) {
 		"PlayerIDがありません", "FramePacket::GetKey", MB_OK);
 	return nullptr;
 }
+
 void FramePacket::Used() {
 	used = true;
 	return;
 }
+
+/*通信相手のキー入力が届いているか判定する関数。*/
 bool FramePacket::CheckEnemyKey() {
 	if (RecvKey[0] == '\0') {
 		return false;
 	}
 	return true;
 }
+
 bool FramePacket::operator<(const FramePacket& frame) const{
 	return this->FrameID < frame.FrameID;
 }
@@ -74,10 +81,6 @@ bool FramePacket::operator==(const int id)const {
 bool FramePacket::operator==(const FramePacket& frame) const {
 	return FrameID == frame.GetFrame();
 }
-void InsertFrame(list<FramePacket> frame, FramePacket* packet){
-	
-	return;
-}
 
 
 char *FramePacket::GetSendKey() {
@@ -85,15 +88,11 @@ char *FramePacket::GetSendKey() {
 }
 
 
-//TODO ......
 void FramePacket::CreateSendKey(const int FrameID,char prevInput[]) {
 	char Sending[1023];
 	char temp[1023] = { '\0' };
-	//strncpy_s(temp,sizeof(SendKey),SendKey,sizeof(SendKey));
 	/* パケット種類/フレーム番号|キー入力-入力-…,フレーム番号|キー入力-入力-… */
 	snprintf(temp, sizeof(temp), "%d|%s\0", FrameID,SendKey);
-	//prevInputは,から始まるからこっちで,を付け足さなくていい
-	//tempとprevInの繋がりが上手くいっていない
 	snprintf(Sending, sizeof(Sending), "%s/%s%s","BATTLE",temp,prevInput);
 	printf("CreateKey is %s\n", Sending);
 	printf("temp is %s\n", temp);

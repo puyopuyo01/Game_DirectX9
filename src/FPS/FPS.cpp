@@ -17,7 +17,6 @@ bool Available;
 void FPS::InitFPS() {
 	if (!QueryPerformanceFrequency(&Freq)) {
 		Available = false;
-		printf("無理\n");
 		return;
 	}
 	averageFPS = new Array(50);
@@ -37,20 +36,21 @@ void FPS::SMesure() {
 	}
 }
 
+/*FPSの計測*/
 void FPS::Measure() { /*56,7程度で安定した(精度の問題?)*/
-	//if (!Available) { return; }
 	QueryPerformanceFrequency(&Freq);
 	LARGE_INTEGER endTime;
 	if (!QueryPerformanceCounter(&endTime)) {
 		printf("end失敗\n");
 	}
 
+	/*フレーム間のクロック数から周波数で割って計測する。*/
 	double result = static_cast<double>(endTime.QuadPart-startTime.QuadPart)/static_cast<double>(Freq.QuadPart);
 
 
 	if (1./result > 60.) {
-		DWORD waittime = static_cast<DWORD>(((1./60.)-result)*1000); /*1000が正しいけど調整930*/
-		//printf("SleepTime %lu \n", waittime);
+		DWORD waittime = static_cast<DWORD>(((1./60.)-result)*1000); 
+
 		timeBeginPeriod(1);
 		Sleep(waittime);
 		timeEndPeriod(1);
@@ -59,12 +59,12 @@ void FPS::Measure() { /*56,7程度で安定した(精度の問題?)*/
 		}
 		result = static_cast<double>(endTime.QuadPart-startTime.QuadPart)/static_cast<double>(Freq.QuadPart);
 		averageFPS->Queue(1./result);
-		//printf("3: %.1lf, %lf %lf.2 \n", 1./result, static_cast<double>(endTime.QuadPart),result);
+
 		return;
 	}
 }
 
-
+/*FPSは常に表示させる*/
 void FPS::Draw(){
 	int imgx = (int)(ScreenLX() + (ScreenWidth() / 4.f));
 	int imgy = (int)ScreenUpperY();

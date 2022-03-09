@@ -3,7 +3,7 @@
 
 namespace UI {
 	MoraleUI::MoraleUI(float x,float y,int MoraleNum) : Field_Object(x, y, 0.f) {
-		/*Moraleバー制作*/
+		/*必殺ゲージのバー制作*/
 		float Width = 55.f;
 		float Height = 1.f;
 		MoraleBar = new ChargingBar(x,y,Width,1.f,0.f,0.f,0.6f,1.f,1.f,1.f,1.f);
@@ -27,7 +27,6 @@ namespace UI {
 
 	MoraleUI::~MoraleUI() {
 		vector<Primitive*>::iterator itr = Frame.begin();
-
 		while (itr != Frame.end()) {
 			delete *itr;
 			*itr = nullptr;
@@ -48,7 +47,7 @@ namespace UI {
 		Number->Draw();
 
 		vector<Primitive*>::iterator itr = Frame.begin();
-
+		/*必殺ゲージの枠を描画*/
 		while (itr != Frame.end()) {
 			(*itr)->Draw(this->GetMatrix());
 			itr++;

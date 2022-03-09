@@ -7,7 +7,7 @@ Result::Result(Player* player,Player* enemy){
 		portrate = player->portrate;
 	}
 
-	if (*player->hp->GetVal() == 0.f) {
+	else if (*player->hp->GetVal() == 0.f) {
 		resultStr = "まけ";
 		portrate = enemy->portrate;
 	}
@@ -46,23 +46,30 @@ Result::~Result() {
 	delete select;
 }
 
+/*試合を続けるか、IP入力画面に戻るかの選択*/
 StateInBattle* Result::update(Battle_State* state){
 	box->update();
 	State = State->Update(Panel);
 	if (State == StayMove && State->Finish()) {
 		if (!wait) { Text = baseState->AddDrawObject((Field_Object*)select); wait=true; }
+
+		/*Player側の選択*/
 		const char *KeyW = KeyBox::GetInstance()->
 			updateframe->GetKey(PLAYER, WB);
 		const char *KeyF = KeyBox::GetInstance()->
 			updateframe->GetKey(PLAYER, FB);
 
+		/*Fキーを押すと再度試合が始まる*/
 		if (strncmp(KeyF, "1", 1) == 0) {
 			box->SetMySelect(CONTINUE);
 		}
+		/*Wキーを押すとIP入力画面に戻る*/
 		else if (strncmp(KeyW, "1", 1) == 0) {
 			box->SetMySelect(ABORT);
 		}
 
+
+		/*Enmy側(通信相手)の選択*/
 		const char *KeyEnemW = KeyBox::GetInstance()->
 			updateframe->GetKey(ENEMY, WB);
 		const char *KeyEnemF = KeyBox::GetInstance()->
@@ -75,7 +82,7 @@ StateInBattle* Result::update(Battle_State* state){
 			box->EnemySelect = ABORT;
 		}
 
-
+		/*どちらも選択したら選択結果を反映*/
 		if(box->PlayerSelect != SELECTING && box ->EnemySelect != SELECTING){
 			delete this;
 			return new WaitingSelect(box);
@@ -87,7 +94,10 @@ StateInBattle* Result::update(Battle_State* state){
 	}
 
 
-/*--------------------------SelectBox--------------------------*/
+/*
+--------------------------SelectBox--------------------------
+Player(ローカルプレイヤー),Enemy(通信相手)の試合後の選択を管理する
+*/
 
 SelectBox::SelectBox() {
 	PlayerSelect = SELECTING;
@@ -107,9 +117,6 @@ SelectNextState::SelectNextState(float x,float y,float ScreenWidth,float ScreenH
 		0.5f,0.5f,0.5f,0.4f);
 
 	Text = Font::GetInstance();
-
-	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-	pD3DDevice->SetRenderState(D3DRS_ZENABLE,FALSE);
 }
 
 SelectNextState::~SelectNextState() {
@@ -118,11 +125,12 @@ SelectNextState::~SelectNextState() {
 
 void SelectNextState::Draw() {
 	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-	pD3DDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 	Panel->Draw(this->GetMatrix());
 
 	string str = "F つづける  \n W おわる";
 	Text->Draw(0, 200, 1500, 1500, str.c_str());
+	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 }
 
 
@@ -136,6 +144,8 @@ WaitingSelect::~WaitingSelect() {
 }
 
 StateInBattle* WaitingSelect::update(Battle_State* state){
+
+	/*どちらかが試合を終われば、片方が続ける選択をしても試合終了*/
 	if (Select->PlayerSelect == ABORT || Select->EnemySelect == ABORT) {
 		state->Abort();
 	}

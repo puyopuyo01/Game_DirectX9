@@ -2,12 +2,6 @@
 
 
 InputIP::InputIP() {
-	pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
-	pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-
-
 	index = 0;
 	inui = new InputUI(buf);
 	objects.push_back((Field_Object*)inui);
@@ -19,6 +13,7 @@ InputIP::~InputIP() {
 	delete inui;
 }
 
+/*IPƒAƒhƒŒƒX‚ð“ü—Í*/
 Game_State* InputIP::Update(){
 	if (AvalInp) {
 		if (interval++ >= 10) { AvalInp = false; }

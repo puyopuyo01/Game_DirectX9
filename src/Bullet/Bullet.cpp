@@ -8,8 +8,9 @@ int Bullet::GetID() { return this->GroupID; }
 int Bullet::GetObjectID() { return BULLET; }
 int Bullet::GetPow() { return *(power->GetVal()); }
 float Bullet::GetSpeed() { return *(speed->GetVal()); }
-int Bullet::GetPredominate() { return 1*this->GroupID; }
 
+
+/*更新されたパラメータは仮変数に保持*/
 void Bullet::AddPower(int pow) { status->power += pow; }
 void Bullet::AddSpeed(float speed){ status->speed += speed; }
 
@@ -21,6 +22,7 @@ void Bullet::Init() {
 	Eye = Images::GetInstance()->SaveImage("eye.png");
 }
 
+/*UI用コンストラクタ。ステータスを設定する必要がない。*/
 Bullet::Bullet(int GroupID, int BulletID, float posx, float posy, float size) :BattleObject(posx, posy, nullptr) {
 	board = make_unique<Primitive>(Primitive(SQUARE, 0.f, 0.f, 0.f, size, size, 1.f, 1.f, 1.f, 1.f));
 	eye = make_unique<Primitive>(Primitive(SQUARE, 0.f, 0.f, 0.f, size, size, 1.f, 1.f, 1.f, 1.f));
@@ -60,23 +62,33 @@ Bullet::~Bullet() {
 	if (power != nullptr) { delete power; }
 	if (status != nullptr) { delete status; }
 	if (charac != nullptr) { delete charac; }
+	printf("Bullet Dest!!!\n");
 }
 
 
+
+int Bullet::GetPredominate() {	
+	return this->GroupID; 
+}
+
+
+/*相手のHPが減るマスに到達したときの処理。ダメージ量は「強さ」のパラメータに依存する。また攻撃用のエフェクト(DrawObject)を生成。*/
 bool Bullet::Siege(float* Dmg) {
 	ObjectMNG::GetMNG()->drawObj->AddObject(new BulletAttack(this->GetLocation().x, this->GetLocation().y,
 										Width, Height));
-	(*Dmg) += this->GetPow()*10;
+	(*Dmg) += this->GetPow()*10;	//ダメージ量 = 強さ×10
 	return true;
 }
 
+
+/*死亡処理。死亡用のエフェクト(DrawObject)を生成。*/
 void Bullet::Death() {
 	if (!this->TemporaryFlag) { return; }
 	ObjectMNG::GetMNG()->drawObj->AddObject(new BulletDeath(this->GetLocation().x, this->GetLocation().y,
 		Width, Height));
 }
 
-
+/*パラメータの変更を更新する。*/
 void Bullet::ApplyStatus() {
 	this->power->ChangeValue(status->power);
 	this->speed->ChangeValue(status->speed);
@@ -102,7 +114,6 @@ void Bullet::Draw(){
 	Images::GetInstance()->Reset();
 
 	charac->Draw(this);
-	pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
 

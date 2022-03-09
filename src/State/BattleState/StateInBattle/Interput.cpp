@@ -9,9 +9,9 @@ void InterputState::init(StateInBattle* next, int TextureNumber){
 	SetPosition(&x, &y);
 	this->Panel = new CharacterPanel(x, y, TextureNumber);
 	PanelNum = baseState->AddDrawObject((Field_Object*)this->Panel);
-	InFrame = 30;
-	OutFrame = 30;
-	StayFrame = 90;
+	InFrame = 30; /*キャラクターパネル画像が画面外から入ってくるまでのフレーム*/
+	OutFrame = 30; /*キャラクターパネル画像が画面外へ出るまでのフレーム*/
+	StayFrame = 90; /*キャラクターパネル画像が入ってきて留まるフレーム*/
 	InMove = new PanelMove(1, InFrame, Panel->Width);
 	StayMove = new PanelMove(0, StayFrame, Panel->Width);
 	OutMove = new PanelMove(-1, OutFrame, Panel->Width);

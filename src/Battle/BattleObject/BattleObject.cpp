@@ -13,20 +13,20 @@ BattleObject::~BattleObject() {
 		(*itr)->RefDelete(this);
 		itr++;
 	}
+
+	printf("BattleObject Dest!!!!\n");
 }
 
-void BattleObject::SetPanel(Panel_Field* panel, float x, float y) {
-	if (StandPos != nullptr) {
-		if (StandPos->GetPredmGauge() != panel->GetPredmGauge()) {
 
-		}
-	}
+/*派生クラスのインスタンスがどのパネルに移動したか。*/
+void BattleObject::SetPanel(Panel_Field* panel, float x, float y) {
 	StandPos = panel;
 	this->Move(x,y);
 }
 
 void BattleObject::SetPanel(Panel_Field* panel){
 	if (StandPos != nullptr) {
+		/*移動先のパネルのIDが移動前のパネルと異なれば優勢ゲージを変動させる。(変動値はインスタンスによってことなる)*/
 		if (StandPos->ID != panel->ID) {
 			StandPos->AddPredmGauge(this->GetPredominate());
 		}
@@ -43,6 +43,8 @@ int BattleObject::GetPredominate() {
 	return 0;
 }
 
+
+/*赤いパネルにたどり着いたオブジェクトはこの関数を実行。ダメージを与える。*/
 bool BattleObject::Siege(float *Dmg){
 	printf("Siege\n");
 	(*Dmg) += 50.f;

@@ -28,10 +28,10 @@ public:
 	/*
 	オブジェクトからの値はオーバーライドで取り出す。
 	*/
-	virtual int GetID();// { return 0; }
+	virtual int GetID();
 	virtual int GetObjectID();
-	virtual int GetPow() { return 100; }
-	virtual float GetSpeed() { return 0.f; }
+	virtual int GetPow();
+	virtual float GetSpeed();
 	/*
 	仮の死亡フラグ。これをしないと処理によっては、通信相手との矛盾を生む。
 	*/

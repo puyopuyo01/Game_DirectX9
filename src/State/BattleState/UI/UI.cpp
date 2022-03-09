@@ -18,11 +18,13 @@ namespace UI {
 		float imgx = ((ScreenLX() + ScreenWidth()) / 2.f)*(2.f/3.f);
 		float imgy = (ScreenUpperY() + ScreenHeigth()) / 2.f;
 		img = make_unique<Primitive>(Primitive(SQUARE, ScreenCenterX()-1.f, y, -2.f, ScreenWidth()/*(2.f/3.f)*/, ScreenHeigth(),1.f, 1.f, 1.f, 1.f));
+	}
+
+	void BackGround::LoadIMG() {
 		TextureNumber = Images::GetInstance()->SaveImage("center2.png");
 	}
 
 	void BackGround::Draw() {
-		//pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 		pD3DDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 		Images::GetInstance()->LoadImage(TextureNumber, 0);
 		img->Draw(this->GetMatrix());
@@ -85,9 +87,6 @@ namespace UI {
 
 	void HitPointBar::UpdateGauge(float MAXHP, float HP) {
 		float val = OriginX + ((HP / MAXHP)*HPwidth)*(LorR*-1);
-		/*float val = OriginX + ((HP / MAXHP)*HPwidth)*-1;
-		Remain->VertexX(UPPERLEFT, val);
-		Remain->VertexX(LOWERLEFT, val);*/
 		
 		if (LEFTHP == LorR) {
 			Remain->VertexX(UPPERLEFT, val);
@@ -104,7 +103,6 @@ namespace UI {
 
 
 	void HitPointBar::Draw() {
-		//pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 		BackGroundTransparent();
 		Images::GetInstance()->LoadImage(GaugeBaseTexture, 0);
 		Overall->Draw(this->GetMatrix());
@@ -163,8 +161,14 @@ namespace UI {
 	UIMNG::UIMNG() {
 	}
 
-	void UIMNG::CreateUI() {
-		Predominant = make_unique<PredominantBar>(PredominantBar(0.f, 1.f));
+	void UIMNG::SaveImage() {
+		HitPointBar::LoadIMG();
+		BackGround::LoadIMG();
+
+	}
+
+	void UIMNG::CreateUI(int PredMax) {
+		Predominant = make_unique<PredominantBar>(PredominantBar(0.f, 1.f,PredMax));
 
 		Charging = new ChargingUI(30.f,0.f);
 
