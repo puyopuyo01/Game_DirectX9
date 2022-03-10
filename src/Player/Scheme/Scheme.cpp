@@ -16,7 +16,7 @@ Enhancement::Enhancement(int ID, int pow, float speed,int* pred,int pred_inc,int
 	this->name = name;
 	this->intro = intro;
 	this->pred = pred;
-	this->pred_inc = pred_inc;
+	this->pred_inc = pred_inc*ID;
 }
 
 

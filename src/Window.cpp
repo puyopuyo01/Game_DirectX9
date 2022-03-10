@@ -37,10 +37,14 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 //-------------------------------------------------------------
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	FILE* fp; //コンソール出力のための変数。nullのまま。
-	AllocConsole();
+	/*--------------------------デバッグ用処理--------------------------------------*/
+	/*
+	FILE* fp; 
+	AllocConsole(); //デバッグ用コンソール出力
 	freopen_s(&fp,"CONOUT$", "w", stdout);
 	freopen_s(&fp, "CONOUT$", "w", stderr);
+	*/
+
 
 	// フルスクリーンにするかどうかの判定
 	// コマンドラインに/fか/Fが設定されていたらフルスクリーンにする
