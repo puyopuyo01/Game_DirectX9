@@ -77,11 +77,13 @@ void ObjectMNG::Delete(BattleObject* obj) {
 list<Bullet*> ObjectMNG::GetBullet(int ID) {
 	if (ID == PLAYER) { return playersBullet; }
 	if (ID == ENEMY) { return enemysBullet; }
+	return playersBullet;
 }
 
 list<BattleObject*> ObjectMNG::Get_Object(int ID){
 	if (ID == PLAYER) { return playerObject; }
 	if (ID == ENEMY) { return enemyObject; }
+	return playerObject;
 }
 
 void ObjectMNG::SueSide() {

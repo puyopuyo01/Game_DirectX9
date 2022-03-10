@@ -26,15 +26,4 @@ HandleMove* IdleMove::Update(Player* player) {
 	player->StandPos = p;
 	player->Move(p->GetLocation().x, p->GetLocation().y);
 	return this;
-
-	if (p != nullptr && p != player->StandPos) {
-		player->StandPos = p;
-		float movex = (float)(p->GetLocation().x - player->GetLocation().x);
-		float movey = (float)(p->GetLocation().y - player->GetLocation().y);
-		float mx = (float)(p->GetLocation().x + (player->GetLocation().x*Code(movex)));
-		float my = (float)(p->GetLocation().y + (player->GetLocation().y*Code(movey)));
-		player->Move(p->GetLocation().x, p->GetLocation().y);
-	}
-
-	return this;
 }

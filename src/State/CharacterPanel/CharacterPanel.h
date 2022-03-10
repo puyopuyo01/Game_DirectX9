@@ -6,8 +6,10 @@
 void SetPosition(float *x, float *y);
 
 class CharacterPanel:public Field_Object {
-	/*カットイン用のパネル。
-	右は必要な情報を表示しているので左から入り左から出る。*/
+	/*
+	カットイン用のパネル。
+	画面右は幽霊の残弾数等を表示しているので、カットインパネルは左から入り左へ出ていく。
+	*/
 public:
 	CharacterPanel(float x,float y,int TextureNumber);
 	~CharacterPanel();

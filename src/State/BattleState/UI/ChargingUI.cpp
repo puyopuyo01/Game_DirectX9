@@ -11,7 +11,7 @@ namespace UI {
 
 		float bx = 22.f;
 		S = new Bullet(ENEMY, SMALLBULLET, x - bx, y - 4.f,SIZE / 3.f);
-		M = new Bullet(ENEMY, MIDDLEBULLET, x - bx, y, SIZE / 2.3);
+		M = new Bullet(ENEMY, MIDDLEBULLET, x - bx, y, SIZE / 2.3f);
 		B = new Bullet(ENEMY, BIGBULLET, x - bx, y + 4.f, SIZE / 1.6f);
 
 		float cx = 16.f;

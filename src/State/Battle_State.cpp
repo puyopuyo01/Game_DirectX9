@@ -14,6 +14,8 @@ int NextFrame(int FrameID) {
 	else { FrameID++;  return FrameID; }
 }
 
+
+/*受信パケットの文字を分割*/
 void Separate(char *recv,int CreateID) {
 	char* IDType[3];
 	Split(recv, IDType, '/');
@@ -24,6 +26,7 @@ void Game_State::Draw() {
 	Update_Draw(objects);
 }
 
+/*描画するオブジェクトを追加*/
 int Game_State::AddDrawObject(Field_Object* obj) { objects.push_back(obj); return (int)(objects.size()-1); }
 void Game_State::deleteObject(int index) { objects.erase(objects.begin() + index); } 
  

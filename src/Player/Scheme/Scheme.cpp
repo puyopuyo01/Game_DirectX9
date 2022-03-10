@@ -6,7 +6,7 @@ Scheme::Scheme(int ID,int Texture) {
 	this->TextureNumber = Texture;
 }
 
-
+/*必殺技の実行関数*/
 void Scheme::Excution(){}
 
 
@@ -19,6 +19,8 @@ Enhancement::Enhancement(int ID, int pow, float speed,int* pred,int pred_inc,int
 	this->pred_inc = pred_inc;
 }
 
+
+/*フィールド上に存在する幽霊の強化。*/
 void Enhancement::Excution(){
 	list<Bullet*> bullet = ObjectMNG::GetMNG()->GetBullet(ID);
 	list<Bullet*>::iterator itr = bullet.begin();

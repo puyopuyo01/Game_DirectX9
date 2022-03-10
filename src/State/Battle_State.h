@@ -77,7 +77,7 @@ private:
 	int WaitingFrame;
 
 
-	/*バトル中の状態*/
+	/*試合中の状態。カットイン中、試合進行中等*/
 	StateInBattle* state;
 
 	/*暗号ファイル*/

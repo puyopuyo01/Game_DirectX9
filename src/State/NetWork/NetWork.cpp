@@ -9,6 +9,8 @@ P2P* P2P::GetInstance() {
 	return SingleTon.get();
 }
 
+
+/*文字列をboarderで区切り配列に分ける*/
 void Split(char* a, char *b[], char boarder) {
 	int i=0;
 
@@ -90,12 +92,6 @@ int P2P::Init(char *ip) {
 		return -3;
 	}
 
-
-	/*
-		ホスト名を使わないためいらないかも
-		int add = inet_addr(serverAdd);
-		gethostbyaddr();
-	*/
 
 	return 1;
 }

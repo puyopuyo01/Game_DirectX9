@@ -8,9 +8,9 @@ int Player::GetPredominant() { return (*this->Predominant); }
 Player::Player(int x,int y,Panel_Field* p,int ID,float* HP,int* Pred,SchemeBox* schemeBox):BattleObject(p->GetLocation().x, p->GetLocation().y,new PlayerCollisionState(HP)){
 	MaxHP = 10.f;
 	StandPos = p;
+	/*通信処理で必要なため、前フレームにプレイヤーがいた位置を保持しておく。*/
 	NTPrevX = StandPos->x;
 	NTPrevY = StandPos->y;
-	printf("PrevX %d PrevY %d\n");
 	Width = SIZE/1.5f;
 	Height = SIZE/1.5f;
 	MoveState = new Object<HandleMove>(new IdleMove(), new NormalValue<HandleMove>());
@@ -68,14 +68,13 @@ void Player::Draw() {
 }
 
 /*
-今プレイヤーが居るパネルと別のパネルをマウスでクリックしていたらそのパネルの位置をキー入力を管理するKeyBoxクラスに記録、マウス操作がなければ現在いる位置を記録する。
+今プレイヤーが居るパネルと別のパネルをマウスでクリックしていたら、そのパネルの位置をキー入力管理クラスKeyBoxに記録。マウス操作がなければ現在いる位置を記録する。
 */
 void Player::RecordPosition(const int FrameID) {
 	KeyBox* key = KeyBox::GetInstance();
 	if (cursor->ClickLeft()) {
 		Panel_Blue* p = Panel_Blue::GetInstance();
 		if (p->Location != nullptr) {
-			printf("Call!!!!\n");
 			key->SetPlayerPosition(FrameID, p->Location->x, p->Location->y);
 			NTPrevX = p->x;
 			NTPrevY = p->y;
