@@ -100,7 +100,7 @@ extern LPDIRECTSOUNDBUFFER PrBuf;
 	class Field_Object {
 	public:
 		Field_Object(float x, float y, float depth);
-		~Field_Object();
+		virtual ~Field_Object();
 	public:
 		virtual void Update();
 		virtual void Draw();

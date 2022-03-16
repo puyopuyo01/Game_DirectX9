@@ -17,7 +17,7 @@ namespace UI {
 	BackGround::BackGround(float x, float y) :UI_Base(x, y, -2.f) {
 		float imgx = ((ScreenLX() + ScreenWidth()) / 2.f)*(2.f/3.f);
 		float imgy = (ScreenUpperY() + ScreenHeigth()) / 2.f;
-		img = make_unique<Primitive>(Primitive(SQUARE, ScreenCenterX()-1.f, y, -2.f, ScreenWidth()/*(2.f/3.f)*/, ScreenHeigth(),1.f, 1.f, 1.f, 1.f));
+		img = make_unique<Primitive>(SQUARE, ScreenCenterX()-1.f, y, -2.f, ScreenWidth()/*(2.f/3.f)*/, ScreenHeigth(),1.f, 1.f, 1.f, 1.f);
 	}
 
 	void BackGround::LoadIMG() {
@@ -52,33 +52,33 @@ namespace UI {
 		OriginX = x + ((HPwidth/2.f)*LR);
 
 
-		Remain = make_unique<PrimitiveUp>(PrimitiveUp(SQUARE,
+		Remain = make_unique<PrimitiveUp>(SQUARE,
 			x, y, 0.f,
 			HPwidth, 3.f,
-			1.f, 1.f, 1.f, 1.f));
+			1.f, 1.f, 1.f, 1.f);
 
 
 		if (LR != RIGHTHP) {
-			Overall = make_unique<Primitive>(Primitive(SQUARE,
+			Overall = make_unique<Primitive>(SQUARE,
 				x, y, 0.f,
 				HPwidth, 3.f,
-				1.f, 1.f, 1.f, 1.f,true));
-			Cover = make_unique<Primitive>(Primitive(SQUARE,
+				1.f, 1.f, 1.f, 1.f,true);
+			Cover = make_unique<Primitive>(SQUARE,
 				x, y, 0.f,
 				HPwidth+2.f, 4.f,
-				1.f, 1.f, 1.f, 1.f, true));
+				1.f, 1.f, 1.f, 1.f, true);
 			Remain->UVRevers();
 		}
 
 		else {
-			Overall = make_unique<Primitive>(Primitive(SQUARE,
+			Overall = make_unique<Primitive>(SQUARE,
 				x, y, 0.f,
 				HPwidth, 3.f,
-				1.f, 1.f, 1.f, 1.f));
-			Cover = make_unique<Primitive>(Primitive(SQUARE,
+				1.f, 1.f, 1.f, 1.f);
+			Cover = make_unique<Primitive>(SQUARE,
 				x, y, 0.f,
 				HPwidth+2.f, 4.f,
-				1.f, 1.f, 1.f, 1.f));
+				1.f, 1.f, 1.f, 1.f);
 		}
 
 
@@ -168,23 +168,31 @@ namespace UI {
 	}
 
 	void UIMNG::CreateUI(int PredMax) {
-		Predominant = make_unique<PredominantBar>(PredominantBar(0.f, 1.f,PredMax));
+		printf("UI Create \n");
+
+		Predominant = make_unique<PredominantBar>(0.f, 1.f,PredMax);
+		printf("Call Predominant Dest \n");
+
 
 		Charging = new ChargingUI(30.f,0.f);
+		printf("Call Charging Dest \n");
 
-		backGround.reset(new BackGround(CAMERA_X, CAMERA_Y));
+		backGround = make_unique<BackGround>(CAMERA_X, CAMERA_Y);
+		printf("Call BackGround Dest \n");
 
 		float imgx = CAMERA_X;
 		float imgy = CAMERA_Y;
-		textBoard.reset(new TextBoard(imgx, imgy));
+		textBoard = make_unique<TextBoard>(imgx, imgy);
 
 		imgx = ScreenLX() + (ScreenWidth() / 4.f)-1.f;
 		imgy = ScreenUpperY();
-		PlayerHP.reset(new HitPointBar(LEFTHP, imgx, imgy));
+		PlayerHP = make_unique<HitPointBar>(LEFTHP, imgx, imgy);
 
 		imgx = ScreenLX()+ScreenWidth()*(3.f/4.f)-3.f;
-		EnemyHP.reset(new HitPointBar(RIGHTHP, imgx, imgy));
-		PlayerHP->LoadIMG();
+		EnemyHP = make_unique<HitPointBar>(RIGHTHP, imgx, imgy);
+
+		printf("End UI Create \n");
+		
 
 
 	}
@@ -200,10 +208,29 @@ namespace UI {
 	}
 
 	void UIMNG::Release() {
-		delete Charging;
-		delete Morale;
-		delete PlayerPanel;
-		delete EnemyPanel;
+
+		if (backGround.get() != nullptr) { backGround.reset(); }
+		if (textBoard.get() != nullptr) { textBoard.reset(); }
+		if (PlayerHP.get() != nullptr) { PlayerHP.reset(); }
+		if (EnemyHP.get() != nullptr) { EnemyHP.reset(); }
+		if (Predominant.get() != nullptr) { Predominant.reset(); }
+
+		if (Charging != nullptr) { 
+			delete Charging;
+			Charging = nullptr;
+		}
+		if (Morale != nullptr) {
+			delete Morale;
+			Morale = nullptr;
+		}
+		if (PlayerPanel != nullptr) {
+			delete PlayerPanel;
+			PlayerPanel = nullptr;
+		}
+		if (EnemyPanel != nullptr) {
+			delete EnemyPanel;
+			EnemyPanel = nullptr;
+		}
 	}
 
 }

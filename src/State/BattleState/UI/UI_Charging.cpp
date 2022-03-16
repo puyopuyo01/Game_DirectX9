@@ -5,14 +5,14 @@ namespace UI {
 
 	void ChargingBar::init(float x, float y, float Width, float r, float g, float b,float a,float fr, float fg, float fb,float fa) {
 		Origin = x - (Width / 2.f);
-		Remain = make_unique<PrimitiveUp>(PrimitiveUp(SQUARE,
+		Remain = make_unique<PrimitiveUp>(SQUARE,
 			x, y, 0.f,
 			Width, 1.f,
-			r,g,b,a));
-		Overall = make_unique<Primitive>(Primitive(SQUARELINE,
+			r,g,b,a);
+		Overall = make_unique<Primitive>(SQUARELINE,
 			x, y, 0.f,
 			Width, 1.f,
-			fr,fg,fb,fa));
+			fr,fg,fb,fa);
 
 		this->Width = Width;
 

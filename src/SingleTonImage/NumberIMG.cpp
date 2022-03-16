@@ -13,7 +13,7 @@ void NumberIMG::Init(){
 
 NumberIMG* NumberIMG::GetInstance() {
 	if (NumberIMG::SingleTon.get() == nullptr) {
-		SingleTon = std::make_unique<NumberIMG>(NumberIMG());
+		SingleTon = std::make_unique<NumberIMG>();
 	}
 	return NumberIMG::SingleTon.get();
 }
@@ -33,19 +33,19 @@ void Number_Symbol::initialize(float x, float y, float Width, float Heigth, int 
 	SymbolNum = Symbol;
 
 	if (0.f <= SymbolNum && SymbolNum < NONSYMBOL) {	/*ˆø”‚ð’è”Žw’è‚µ‚Ä‚¢‚é‚©?*/
-		this->Symbol = make_unique<PrimitiveUp>(PrimitiveUp(SQUARE, x + displacement, y, 0.f,
+		this->Symbol = make_unique<PrimitiveUp>(SQUARE, x + displacement, y, 0.f,
 			Width, Heigth/2.f,
 			1.f, 1.f, 1.f, 1.f
-			, 10.f, 2.f));
+			, 10.f, 2.f);
 		displacement += Width;
 		this->Symbol.get()->SetUV(Symbol, 1);
 
 	}
 	for (int i = 0; i < digit; i++, displacement += Width) {
-		numberList.push_back(make_unique<PrimitiveUp>(PrimitiveUp(SQUARE, x + displacement, y, 0.f,
+		numberList.push_back(make_unique<PrimitiveUp>(SQUARE, x + displacement, y, 0.f,
 			Width, Heigth,
 			1.f, 1.f, 1.f, 1.f
-			, 10.f, 2.f)));
+			, 10.f, 2.f));
 	}
 }
 

@@ -34,6 +34,9 @@ void PrimitiveUp::init(D3DPRIMITIVETYPE type, float x, float y, float z, float i
 	LX = 0; RX = 1; LY = 2, RY = 3;
 }
 
+PrimitiveUp::~PrimitiveUp() {
+}
+
 
 /*
 UV_XÅcâ°Ç…âΩï™äÑÇ∑ÇÈÇ©.

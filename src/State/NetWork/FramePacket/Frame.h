@@ -22,14 +22,14 @@ using namespace std;
 
 class FramePacket;
 
-void InsertFrame(list<unique_ptr<FramePacket>> frame,FramePacket* packet);
-
 
 /*FrameID”Ô–Ú‚É‘Šè‚Æ©•ª‚ª‚Ç‚Ì“ü—Í‚ğ‚µ‚½‚©•Û‚·‚éƒNƒ‰ƒX*/
 class FramePacket{
 public:
 	FramePacket(int FrameID,char key[]); /*‚¢‚ç‚È‚¢‚©‚à*/
 	FramePacket(int FrameID);
+	~FramePacket();
+
 	char *GetKey(int PlayerID,int index);
 	 
 	void InsertPlayerKeyForIndex(const int index,const char* key);

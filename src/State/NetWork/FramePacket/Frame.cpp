@@ -9,10 +9,14 @@ FramePacket::FramePacket(int FrameID){
 	this->FrameID = FrameID;
 	this->RecvKey[0] = '\0';
 	this->SendKey[0] = '\0';
-
 	used = false;
 
 }
+
+FramePacket::~FramePacket() {
+	printf("Delete FramePacket\n");
+}
+
 
 /*通信相手のキー入力を記録する*/
 void FramePacket::InsertEnemyKeyForIndex(const char key[]) {

@@ -32,6 +32,8 @@ void Game_State::deleteObject(int index) { objects.erase(objects.begin() + index
  
 Battle_State::Battle_State(int delay)
 {
+
+	UI::UIMNG::GetInstance()->Release();
 	File = FileMapping::GetInstance();
 	ObjectMNG::GetMNG();
 
@@ -128,6 +130,7 @@ Battle_State::Battle_State(int delay)
 		printf("Call BattleState\n");
 #endif
 	}
+	printf("PanelCreate!!!\n");
 
 
 	ObjectMNG::GetMNG()->player = new Hero(1, 1, Panel_ALL[1][1], PLAYER, &DMGPlayerHP, Pred,schemelist);
@@ -174,14 +177,16 @@ Battle_State::Battle_State(int delay)
 	BGM->Play(true);
 	DmgSE = new Sound("Damage.wav");
 
+
+	printf("BattleState Construct End!!!\n");
 	this->NextState = this;
 	return;
 }
 
 Battle_State::~Battle_State(){
 	int i,j;
-	for (i = 0;i < width-1;i++) {	//c
-		for (j = 0;j < length;j++) {	//‰¡
+	for (i = 0;i < width-1;i++) {
+		for (j = 0;j < length;j++) {
 			delete Player_Panel[i][j];
 			delete Enemy_Panel[i][j];
 		}
@@ -199,9 +204,10 @@ Battle_State::~Battle_State(){
 	BGM->Stop();
 	delete BGM;
 	delete DmgSE;
-
-	this->KeyBoxes->Close();
+	
 	objects.clear();
+
+	printf("BattleState Dest!!!\n");
 }
 
 

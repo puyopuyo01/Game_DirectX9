@@ -25,7 +25,7 @@ Panel_Blue::Panel_Blue():Shape(0.f,0.f,0.f)
 	LocationX = 0;
 	LocationY = 0;
 	size = SIZE;
-	img = make_unique<Primitive>(Primitive(SQUARE,0.f, 0.f, -1.f,SIZE,SIZE,0.f, 0.f, 1.f, 1.f));
+	img = make_unique<Primitive>(SQUARE,0.f, 0.f, -1.f,SIZE,SIZE,0.f, 0.f, 1.f, 1.f);
 	return;
 };
 

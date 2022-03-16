@@ -12,7 +12,7 @@ CharacterPanel::CharacterPanel(float x, float y,int TextureNumber):Field_Object(
 	this->TextureNumber = TextureNumber;
 	this->Height = ScreenHeigth()-7.f;
 	this->Width = this->Height*0.7f;
-	img = make_unique<Primitive>(Primitive(SQUARE, 0.f, 0.f, -1.f,this->Width,this->Height, 1.f, 1.f, 1.f, 1.f));
+	img = make_unique<Primitive>(SQUARE, 0.f, 0.f, -1.f,this->Width,this->Height, 1.f, 1.f, 1.f, 1.f);
 
 	Move(x,y);
 

@@ -38,5 +38,4 @@ void DefenseMass::Draw() {
 		if (i != obj.end())(*i)->Draw();
 		i++;
 	}
-	//Images::GetInstance()->Reset();
 }

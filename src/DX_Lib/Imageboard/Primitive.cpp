@@ -58,6 +58,10 @@ Primitive::Primitive(D3DPRIMITIVETYPE type, float x, float y, float z, float img
 }
 
 Primitive::~Primitive() {
+	if (pVB != NULL) { 
+		pVB->Release(); 
+		printf("pVB Dest!!\n");
+	}
 }
 
 

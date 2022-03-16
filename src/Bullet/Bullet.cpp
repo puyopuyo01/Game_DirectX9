@@ -24,8 +24,8 @@ void Bullet::Init() {
 
 /*UI用コンストラクタ。ステータスを設定する必要がない。*/
 Bullet::Bullet(int GroupID, int BulletID, float posx, float posy, float size) :BattleObject(posx, posy, nullptr) {
-	board = make_unique<Primitive>(Primitive(SQUARE, 0.f, 0.f, 0.f, size, size, 1.f, 1.f, 1.f, 1.f));
-	eye = make_unique<Primitive>(Primitive(SQUARE, 0.f, 0.f, 0.f, size, size, 1.f, 1.f, 1.f, 1.f));
+	board = make_unique<Primitive>(SQUARE, 0.f, 0.f, 0.f, size, size, 1.f, 1.f, 1.f, 1.f);
+	eye = make_unique<Primitive>(SQUARE, 0.f, 0.f, 0.f, size, size, 1.f, 1.f, 1.f, 1.f);
 	if (BulletID == MIDDLEBULLET) {
 		charac = new Shield(GroupID,posx,posy, SIZE / 2.3f);
 	}
@@ -46,11 +46,11 @@ Bullet::Bullet(int GroupID,int BulletID,int power,float speed,BulletCharacterist
 	this->speed = new Numerical<float>(new float(speedTemp), new NormalValue<float>(), 1000.f, 0);
 	state = BState->bulletState;
 	charac = BState;
-	board=make_unique<Primitive>(Primitive(SQUARE, 0.f, 0.f, 0.f,this->Width,this->Height, 1.f, 1.f, 1.f, 1.f));
+	board=make_unique<Primitive>(SQUARE, 0.f, 0.f, 0.f,this->Width,this->Height, 1.f, 1.f, 1.f, 1.f);
 	this->Move(posx,posy);
 	speedx = 0.f;
 	this->vec = GroupID;
-	eye = make_unique<Primitive>(Primitive(SQUARE, 0.f, 0.f, 0.f,this->Width,this->Height, 1.f, 1.f, 1.f, 1.f));
+	eye = make_unique<Primitive>(SQUARE, 0.f, 0.f, 0.f,this->Width,this->Height, 1.f, 1.f, 1.f, 1.f);
 	if (GroupID == PLAYER) { this->Rot(180.f); }
 	status = new StatusBox(*(this->power->GetVal()), *(this->speed->GetVal()));
 	ObjectMNG::GetMNG()->drawObj->AddObject(new SummonBullet(posx,posy,size,size));

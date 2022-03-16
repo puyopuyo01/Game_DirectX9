@@ -8,7 +8,7 @@ namespace UI {
 		this->TextureMem = TextureNumber;
 		this->Height = ScreenHeigth() - 7.f;
 		this->Width = this->Height*0.7f;
-		img = make_unique<Primitive>(Primitive(SQUARE, 0.f, 0.f, -2.f, this->Width, this->Height, 1.f, 1.f, 1.f, 1.f));
+		img = make_unique<Primitive>(SQUARE, 0.f, 0.f, -2.f, this->Width, this->Height, 1.f, 1.f, 1.f, 1.f);
 
 		counter = new Counter(30);
 		DMG = false;

@@ -9,30 +9,33 @@ namespace UI {
 
 		offsetX = x;
 		offsetY = y;
-		CurrentPoint = make_unique<PredominantPointer>(PredominantPointer(x,y));
-		PlayerSide = make_unique<PrimitiveUp>(PrimitiveUp(SQUARE,x, y - baseHeight, 0.f,
+		CurrentPoint = make_unique<PredominantPointer>(x,y);
+		PlayerSide = make_unique<PrimitiveUp>(SQUARE,x, y - baseHeight, 0.f,
 			1.f, Height,
-			1.f, 0.1f, 0.1f, 0.8f));
-		EnemySide = make_unique<PrimitiveUp>(PrimitiveUp(SQUARE, x, y + baseHeight, 0.f,
+			1.f, 0.1f, 0.1f, 0.8f);
+		EnemySide = make_unique<PrimitiveUp>(SQUARE, x, y + baseHeight, 0.f,
 			1.f, Height,
-			0.1f, 0.1f, 1.0f, 0.8f));
+			0.1f, 0.1f, 1.0f, 0.8f);
 
 		float lv1_y = y+Height*(1.f / (float)Max); 
 		float lv2_y = y+Height*(3.f / (float)Max); 
 		float lv3_y = y+Height*(5.f / (float)Max)-0.2f;
-		lv1 = make_unique <Primitive>(Primitive(SQUARE, x + 1.f,lv1_y, 0.f,
-					2.f,0.5f,
-					1.f,1.f,1.f,1.f));
-		lv2 = make_unique <Primitive>(Primitive(SQUARE, x + 1.f, lv2_y, 0.f,
+		lv1 = make_unique <Primitive>(
+			SQUARE, x + 1.f, lv1_y, 0.f,
 			2.f, 0.5f,
-			1.f, 1.f, 1.f, 1.f));
+			1.f, 1.f, 1.f, 1.f
+);
+		lv2 = make_unique <Primitive>(SQUARE, x + 1.f, lv2_y, 0.f,
+			2.f, 0.5f,
+			1.f, 1.f, 1.f, 1.f
+);
 
-		lv3 = make_unique <Primitive>(Primitive(SQUARE, x + 1.f, lv3_y, 0.f,
+		lv3 = make_unique <Primitive>(SQUARE, x + 1.f, lv3_y, 0.f,
 			2.f, 0.5f,
-			1.f, 1.f, 1.f, 1.f));
-		lv1Num = make_unique<Number_Symbol>(Number_Symbol(x+4.f,lv1_y,2.f,2.f,1));
-		lv2Num = make_unique<Number_Symbol>(Number_Symbol(x+4.f,lv2_y, 2.f, 2.f, 1));
-		lv3Num = make_unique<Number_Symbol>(Number_Symbol(x+4.f,lv3_y, 2.f, 2.f, 1));
+			1.f, 1.f, 1.f, 1.f);
+		lv1Num = make_unique<Number_Symbol>(x+4.f,lv1_y,2.f,2.f,1);
+		lv2Num = make_unique<Number_Symbol>(x+4.f,lv2_y, 2.f, 2.f, 1);
+		lv3Num = make_unique<Number_Symbol>(x+4.f,lv3_y, 2.f, 2.f, 1);
 		lv1Num->Update(1);
 		lv2Num->Update(2);
 		lv3Num->Update(3);
@@ -73,10 +76,10 @@ namespace UI {
 	}
 
 	PredominantPointer::PredominantPointer(float x, float y) :Field_Object(0.f, 0.f, 0.f) {
-		CurrentPoint = make_unique<Primitive>(Primitive(SQUARE,
+		CurrentPoint = make_unique<Primitive>(SQUARE,
 			x, y, 0.f,
 			2.f, 1.f,
-			1.f, 1.f, 1.f, 1.f));
+			1.f, 1.f, 1.f, 1.f);
 	}
 
 	void PredominantPointer::Draw() {

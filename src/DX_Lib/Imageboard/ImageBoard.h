@@ -22,8 +22,6 @@ public:
 	void SquareLine(ImageVertex* imgvertex,float x,float y,float z,float imgWidth, float imgHeight,float r, float g, float b,float a);
 protected:
 	D3DPRIMITIVETYPE type;
-	LPDIRECT3DVERTEXBUFFER9	pVB;
-	LPDIRECT3DTEXTURE9 texture;
 	D3DXMATRIX pos;
 	int VNum;
 
@@ -38,6 +36,7 @@ public:
 private:
 	ImageVertex* imgvertex;
 	void init(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a,bool Reverse);
+	LPDIRECT3DVERTEXBUFFER9	pVB;
 };
 
 /*Square‚Ì‚Æ‚«‚Ì‚ÝŽg‚¦‚é*/
@@ -50,6 +49,7 @@ class PrimitiveUp :public ImageBoard {
 public:
 	PrimitiveUp(D3DPRIMITIVETYPE type, float x, float y, float z, float imgWidth, float imgHeight, float r, float g, float b, float a,float UV_X,float UV_Y);
 	PrimitiveUp(D3DPRIMITIVETYPE type, float x, float y, float z,float imgWidth, float imgHeight, float r, float g, float b, float a);
+	~PrimitiveUp();
 	void Draw(D3DXMATRIX location) override;
 	void VertexPosition(const int index, float x, float y, float z);
 	void VertexX(const int index, float x);

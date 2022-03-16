@@ -60,7 +60,7 @@ StateInBattle* InGame::update(Battle_State* state) {
 		}
 	}
 	NextState = state->schemelist->Update(this);
-
+	
 	if (InGame::NextState != this) { delete this; }
 	return NextState;
 }

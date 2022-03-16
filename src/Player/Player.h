@@ -45,7 +45,7 @@ public:
 	int GetPredominant();
 	int GetID() override;
 	Player(int x,int y,Panel_Field* p,int ID,float *HP,int* Pred,SchemeBox* schemeBox);
-	~Player();
+	virtual ~Player();
 	void Update() override;
 	void Draw() override;
 

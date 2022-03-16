@@ -39,10 +39,10 @@ Panel_Field::Panel_Field(int x,int y,Panel_Blue* panel, float lx, float ly, floa
 	this->y = y;
 	this->panel = panel;
 	this->size = size;
-	img = make_unique<Primitive>(Primitive(SQUARELINE,
+	img = make_unique<Primitive>(SQUARELINE,
 								lx,ly,lz,
 								size,size,
-								r,g,b,a));
+								r,g,b,a);
 	
 
 	return;

@@ -92,11 +92,6 @@ namespace UI {
 		unique_ptr <Number_Symbol> lv2Num;
 		unique_ptr <Number_Symbol> lv3Num;
 
-		/*
-		Number_Symbol* lv2Num;
-		Number_Symbol* lv3Num;
-		*/
-
 		unique_ptr<PredominantPointer> CurrentPoint;
 
 		void Draw() override;
@@ -128,11 +123,6 @@ namespace UI {
 
 		void init(float x, float y, float Width,float r,float g,float b, float a,float fr, float fg, float fb,float ra);
 
-	};
-
-	class BulletBuilder:public Field_Object{
-	public:
-		void Draw() override;
 	};
 
 

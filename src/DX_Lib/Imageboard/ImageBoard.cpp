@@ -5,6 +5,7 @@ ImageBoard::ImageBoard() {
 }
 
 ImageBoard::~ImageBoard(){
+	
 }
 
 void ImageBoard::Draw(D3DXMATRIX location) {
