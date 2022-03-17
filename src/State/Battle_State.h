@@ -60,7 +60,7 @@ public:
 private:
 	ValueState<int>* Predominant;
 
-	SchemeBox* Scheme;
+	//SchemeBox* Scheme;
 	float DMGPlayerHP; /*自機の蓄積ダメージ*/
 	float DMGEnemyHP; /*敵機の蓄積ダメージ*/
 

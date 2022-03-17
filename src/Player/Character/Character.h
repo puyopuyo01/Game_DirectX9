@@ -7,6 +7,8 @@ class SchemeBox;
 /*Builderパターンでキャラクタークラスを実装。 現時点では読み込む画像のみしか違いがない。*/
 class Hero:public Player{
 public:
+	static void LoadIMG();
+
 	Hero(int x, int y, Panel_Field* p, int ID, float *HP, int* Pred, SchemeBox* schemeBox);
 
 	static int PlayerTexture;
@@ -19,6 +21,8 @@ public:
 
 class HeroT:public Player{
 public:
+	static void LoadIMG();
+
 	HeroT(int x, int y, Panel_Field* p, int ID, float *HP, int* Pred, SchemeBox* schemeBox);
 
 	static int PlayerTexture;

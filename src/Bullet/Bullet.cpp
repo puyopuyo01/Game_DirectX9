@@ -20,6 +20,7 @@ void Bullet::Init() {
 	/*画像を読み込む*/
 	Body = Images::GetInstance()->SaveImage("body.png");
 	Eye = Images::GetInstance()->SaveImage("eye.png");
+	Shield::LoadIMG();
 }
 
 /*UI用コンストラクタ。ステータスを設定する必要がない。*/

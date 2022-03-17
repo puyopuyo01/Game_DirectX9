@@ -207,6 +207,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	fps->ReleaseFPS();
 	FONT->Release();
 	Images::Release();
+	FileMapping::GetInstance()->Release();
 	return (int)msg.wParam;
 }
 

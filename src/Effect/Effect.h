@@ -19,7 +19,7 @@ public:
 
 	Effect(float x,float y,int Img,int count, int lastvertical,int vertical ,int horizon); /*ÅŒã‚Ì—ñ‚ª‰½–‡‚ ‚é‚©w’è*/
 
-	~Effect();
+	virtual ~Effect();
 	void Update() override;
 	void Draw() override;
 protected:

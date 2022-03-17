@@ -377,6 +377,8 @@ void Battle_State::Abort(){
 }
 
 void Battle_State::LoadIMG() {
+	Hero::LoadIMG();
+	HeroT::LoadIMG();
 	UI::UIMNG::SaveImage();
 	Number_Symbol::Init();
 	Bullet::Init();

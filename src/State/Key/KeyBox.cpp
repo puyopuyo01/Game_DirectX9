@@ -17,7 +17,7 @@ FramePacket* KeyBox::SearchFrame(const int FrameID) {
 KeyBox* KeyBox::GetInstance() {
 	if (KeyBox::SingleTon.get() == nullptr) {
 		printf("Create KeyBox\n");
-		KeyBox::SingleTon = std::make_unique<KeyBox>(KeyBox());
+		KeyBox::SingleTon = std::make_unique<KeyBox>();
 	}
 	return KeyBox::SingleTon.get();
 }
@@ -95,7 +95,7 @@ void KeyBox::SetPlayerPosition(const int FrameID,int x, int y) {
 void KeyBox::CreateFramePacket(const int FrameID) {
 	if (SearchFrame(FrameID) != nullptr) { return; }
 	if (LatestRecvID < FrameID) { LatestRecvID = FrameID; }
-	PacketQueue.push_back(make_unique<FramePacket>(FramePacket(FrameID)));
+	PacketQueue.push_back(make_unique<FramePacket>(FrameID));
 	WaitingPacket.push_back(PacketQueue.back().get());
 }
 void KeyBox::CreateSendKey(const int FrameID) {

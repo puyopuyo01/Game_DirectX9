@@ -44,13 +44,16 @@ NonCharacteristic::NonCharacteristic():BulletCharacteristic(){
 
 int Shield::ImageID;
 
+void Shield::LoadIMG() {
+	ImageID = Images::GetInstance()->SaveImage("Shield.png");
+}
+
 Shield::Shield(int ID,float x,float y,float size){
 	this->collisionState = new CollisionShield();
 	this->bulletState = new BulletNormal();
-	ImageID = Images::GetInstance()->SaveImage("Shield.png");
 	float posY;
 	posY = -(size / 2.f);
-	this->board=make_unique<Primitive>(Primitive(SQUARE,0.f,posY,0.f,size,size,1.f, 1.f, 1.f, 1.f));
+	this->board=make_unique<Primitive>(SQUARE,0.f,posY,0.f,size,size,1.f, 1.f, 1.f, 1.f);
 }
 
 

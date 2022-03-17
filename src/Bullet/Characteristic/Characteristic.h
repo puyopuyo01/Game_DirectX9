@@ -38,6 +38,7 @@ public:
 class Shield :public BulletCharacteristic {
 	
 public:
+	static void LoadIMG();
 	Shield(int ID,float x,float y,float size);
 	void Draw(Bullet* bullet) override;
 private:

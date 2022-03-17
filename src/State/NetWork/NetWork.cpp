@@ -4,7 +4,7 @@ std::unique_ptr<P2P> P2P::SingleTon;
 
 P2P* P2P::GetInstance() {
 	if (P2P::SingleTon.get() == nullptr) {
-		P2P::SingleTon = std::make_unique<P2P>(P2P());
+		P2P::SingleTon = std::make_unique<P2P>();
 	}
 	return SingleTon.get();
 }

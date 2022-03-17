@@ -36,6 +36,7 @@ Effect::Effect(float x,float y,int Img,int count, int lastvertical,int vertical 
 Effect::~Effect() {
 	delete Interval;
 	delete img;
+	printf("Effect Delete\n");
 }
 
 /*エフェクトのアニメーションを進める関数。*/

@@ -6,7 +6,7 @@ unique_ptr<Font> Font::SingleTon;
 
 Font* Font::GetInstance() {
 	if (Font::SingleTon.get() == nullptr) {
-		Font::SingleTon = make_unique<Font>(Font());
+		Font::SingleTon = make_unique<Font>();
 	}
 	return SingleTon.get();
 }

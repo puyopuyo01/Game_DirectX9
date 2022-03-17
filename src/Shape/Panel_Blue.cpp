@@ -5,7 +5,7 @@ using namespace std;
 unique_ptr<Panel_Blue> Panel_Blue::SingleTon;
 Panel_Blue* Panel_Blue::GetInstance() {
 	if (SingleTon == nullptr) {
-		SingleTon = make_unique<Panel_Blue>(Panel_Blue());
+		SingleTon = make_unique<Panel_Blue>();
 	}
 	return SingleTon.get();
 }
