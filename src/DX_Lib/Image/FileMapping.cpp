@@ -22,7 +22,9 @@ void FileMapping::Release() {
 	vector<MyFileInfo*>::iterator itr;
 	itr = FileDataVec.begin();
 	while(itr != FileDataVec.end()){
-		delete *itr; *itr = nullptr;
+		delete *itr; 
+		itr++;
+		*itr = nullptr;
 	}
 	CloseHandle(MappedFileHandle);   // ファイルマッピングオブジェクトハンドルを閉じる;
 	CloseHandle(FileHandle);   // ファイルハンドルを閉じる
