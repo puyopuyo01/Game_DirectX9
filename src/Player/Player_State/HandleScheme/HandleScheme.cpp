@@ -13,7 +13,7 @@ HandleScheme* IdleScheme::Update(Player* player) {
 	const char *KeyG = KeyBox::GetInstance()->
 		updateframe->GetKey(player->GetID(), GB);
 
-	if (player->GetID() == ENEMY) { return this; } /*デバッグ用処理*/
+	//if (player->GetID() == ENEMY) { return this; } /*デバッグ用処理*/
 
 	if (strncmp(KeySpace, "1", 1) == 0){ 
 		/*この必殺技に消費する必殺ゲージは5*/

@@ -37,13 +37,14 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 //-------------------------------------------------------------
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+
 	/*--------------------------デバッグ用処理--------------------------------------*/
-	
+	/*
 	FILE* fp; 
 	AllocConsole(); //デバッグ用コンソール出力
 	freopen_s(&fp,"CONOUT$", "w", stdout);
 	freopen_s(&fp, "CONOUT$", "w", stderr);
-	
+	*/
 
 
 	// フルスクリーンにするかどうかの判定
@@ -152,9 +153,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;	// 初期化失敗
 	}
 
-	// シーンオブジェクト
 	Camera* camera = new Camera();
-	Game_State* state = new InputIP(); //new Battle_State();
+	Game_State* state = new InputIP(); 
 	Font* FONT = Font::GetInstance();
 	FPS* fps = FPS::GetInstance();
 
@@ -189,7 +189,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				(wndpl.showCmd != SW_SHOWMINIMIZED) &&
 				(wndpl.showCmd != SW_SHOWMINNOACTIVE)) {
 
-				// 描画処理の実行
+				// 更新、描画処理の実行
 				fps->SMesure();
 				cursor->Update();
 				state = state->Update();

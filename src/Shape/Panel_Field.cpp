@@ -15,7 +15,7 @@ float Panel_Field::GetSize() {
 	return size;
 }
 
-/*別のパネルから移動してきたオブジェクトをこのパネルに移す関数。各端末の整合性を合わせるため仮のリストに入れて次フレームからそのオブジェクトを管理する*/
+/*別のパネルから移動してきたオブジェクトをこの関数を実行しているパネルに移す関数。各端末の整合性を合わせるため仮のリストに入れて次フレームからそのオブジェクトを管理する*/
 void Panel_Field::AddObject(BattleObject* object,float x,float y) {
 	ObjectMNG::GetMNG()->AddObject(object);
 	this->MoveObjTemp.push_back(object);
@@ -60,7 +60,7 @@ Panel_Field* Panel_Field::Notif(Field_Object* obj) {
 
 void Panel_Field::Update() {
 	if (ID == PLAYER) {
-		/*カーソルが入ってるかをフラグで管理すると処理速度的にいい気がする*/
+		/*カーソルが入ってるかをフラグで管理*/
 		if (cursor->x <= (GetLocation().x + size / 2.f) && cursor->x >= (GetLocation().x - size / 2.f) &&
 			cursor->y <= (GetLocation().y + size / 2.f) && cursor->y >= (GetLocation().y - size / 2.f)) {
 			/*カーソルが枠内に入っていたら　カーソルが外→内の処理*/
@@ -264,7 +264,7 @@ Panel_Field* Panel_Field::GetPanel(int x, int y) {
 	}
 }
 
-/*このパネル上にあるオブジェクトのリストの中のオブジェクトIDが引数IDのものを全て返す。Exceptがtrueならそれ以外を全て返す。*/
+/*この関数を実行しているパネル上にあるオブジェクトのリストの中のオブジェクトIDが引数IDのものを全て返す。Exceptがtrueならそれ以外を全て返す。*/
 list<BattleObject*> Panel_Field::GetBattleObject(int ID, bool Except) {
 	list<BattleObject*> result;
 	list<BattleObject*>::iterator itr;
