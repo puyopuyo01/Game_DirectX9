@@ -40,9 +40,9 @@ private:
 	string SchemeName;
 	string intro;
 
-	TextState* In;
-	TextState* Stay;
-	TextState* Out;
+	unique_ptr<TextState> In;
+	unique_ptr<TextState> Stay;
+	unique_ptr<TextState> Out;
 
 	TextState* NowState;
 

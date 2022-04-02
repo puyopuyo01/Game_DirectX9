@@ -24,7 +24,6 @@ void FileMapping::Release() {
 	while(itr != FileDataVec.end()){
 		delete *itr; 
 		itr++;
-		*itr = nullptr;
 	}
 	CloseHandle(MappedFileHandle);   // ファイルマッピングオブジェクトハンドルを閉じる;
 	CloseHandle(FileHandle);   // ファイルハンドルを閉じる

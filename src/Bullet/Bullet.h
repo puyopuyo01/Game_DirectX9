@@ -40,8 +40,8 @@ public:
 	bool Siege(float* Dmg) override;
 	void Death() override;
 
-	ValueState<int>* power;
-	ValueState<float>* speed;
+	unique_ptr<ValueState<int>> power;
+	unique_ptr<ValueState<float>> speed;
 
 	int GetBulletID();
 	int GetID() override;
@@ -57,14 +57,14 @@ protected:
 
 private:
 	float speedx;
-	BulletState* state;
+	unique_ptr<BulletState> state;
 	/*幽霊の体のテクスチャ、目のテクスチャはそれぞれ分ける。*/
 	unique_ptr<ImageBoard> board;
 	unique_ptr<ImageBoard> eye;
 
-	BulletCharacteristic* charac;
+	unique_ptr<BulletCharacteristic> charac;
 
-	StatusBox* status;
+	unique_ptr<StatusBox> status;
 
 	int vec;
 	

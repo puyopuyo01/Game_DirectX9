@@ -19,6 +19,6 @@ public:
 	void InsertScheme(Scheme* scheme);
 	StateInBattle* Update(StateInBattle* nowState);
 private:
-	std::vector<Scheme*> schemelist;
-	Sound* SchemeSE;
+	std::vector<unique_ptr<Scheme>> schemelist;
+	unique_ptr<Sound> SchemeSE;
 };

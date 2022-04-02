@@ -2,7 +2,7 @@
 
 
 DelayMes::DelayMes() {
-	delay = new DelayMNG();
+	delay = make_unique<DelayMNG>();
 	this->WaitTime = 60;
 	this->wait = 0;
 }
@@ -26,7 +26,5 @@ Game_State* DelayMes::Update() {
 
 	int res = delay->AverageFrame;
 	printf("averageDelay = %d\n", delay->AverageFrame);
-	delete delay;
-	delete this;
 	return new Battle_State(res);
 }

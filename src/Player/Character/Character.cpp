@@ -20,9 +20,9 @@ Hero::Hero(int x, int y, Panel_Field* p, int ID, float *HP,int* Pred ,SchemeBox*
 	portrate = Hero::Portrate;
 	damage = Hero::PlayerDamage;
 
-	SBullet = new Reload(5,5,70);
-	MBullet = new Reload(4,4,120);
-	BBullet = new Reload(2, 2, 180);
+	SBullet = make_unique<Reload>(5,5,70);
+	MBullet = make_unique<Reload>(4,4,120);
+	BBullet = make_unique<Reload>(2, 2, 180);
 
 }
 
@@ -45,8 +45,8 @@ HeroT::HeroT(int x, int y, Panel_Field* p, int ID, float *HP, int* Pred, SchemeB
 	damage = HeroT::PlayerDamage;
 	play = HeroT::PlayerTexture;
 	portrate = HeroT::Portrate;
-	SBullet = new Reload(5,5,70);
-	MBullet = new Reload(4,4,120);
-	BBullet = new Reload(2,2,180);
+	SBullet = make_unique<Reload>(5,5,70);
+	MBullet = make_unique<Reload>(4,4,120);
+	BBullet = make_unique<Reload>(2,2,180);
 
 }

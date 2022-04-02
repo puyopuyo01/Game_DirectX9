@@ -22,7 +22,6 @@ BulletCharacteristic* BulletCharacteristic::GetState() {
 }
 
 BulletCharacteristic* BulletCharacteristic::ChangeCharacteristic(BulletCharacteristic* chara) {
-	delete this;
 	return chara;
 }
 

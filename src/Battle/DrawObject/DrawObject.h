@@ -6,6 +6,7 @@
 class DrawObject :public Field_Object {
 public:
 	DrawObject(float x,float y);
+	~DrawObject();
 
 	bool GetDeath();
 protected:
@@ -23,5 +24,5 @@ public:
 	void Update() override;
 	void Draw() override;
 private:
-	list<DrawObject*> drawobj;
+	list<unique_ptr<DrawObject>> drawobj;
 };

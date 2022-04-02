@@ -32,8 +32,6 @@ void Game_State::deleteObject(int index) { objects.erase(objects.begin() + index
  
 Battle_State::Battle_State(int delay)
 {
-
-	UI::UIMNG::GetInstance()->Release();
 	File = FileMapping::GetInstance();
 	ObjectMNG::GetMNG();
 
@@ -53,10 +51,10 @@ Battle_State::Battle_State(int delay)
 
 	int* Pred = new int(0);
 
-	state = new InGame();
+	state = make_unique<InGame>();
 	StateInBattle::BaseStateSet(this);
-	schemelist = new SchemeBox();
-	Predominant = new Numerical<int>(Pred, new NormalValue<int>(), 5, -5);
+	schemelist = make_unique<SchemeBox>();
+	Predominant = make_unique<Numerical<int>>(Pred, new NormalValue<int>(), 5, -5);
 
 
 
@@ -64,16 +62,16 @@ Battle_State::Battle_State(int delay)
 	pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	/*UI生成(カメラ分割にするべきかステンシルバッファを利用)*/
-	UI::UIMNG* ui = UI::UIMNG::GetInstance();
+	ui = make_unique<UI::UIMNG>();
 	ui->CreateUI(5);
 	ui->textBoard->SetDelayFrame(delayFrame);
 	objects.push_back((Field_Object*)ui->backGround.get());
-
+	p_blue = Panel_Blue::GetInstance();
+	objects.push_back(p_blue);
 	objects.push_back((Field_Object*)ObjectMNG::GetMNG()->drawObj);
 
 
-	p_blue = Panel_Blue::GetInstance();
-	objects.push_back(p_blue);
+
 
 
 
@@ -86,43 +84,43 @@ Battle_State::Battle_State(int delay)
 		for (j = 0;j < length;j++) {	
 			if (i == 0)/*プレイヤー側パネルの生成*/
 			{
-				DefensePanel[0][j] = new DefenseMass(
+				DefensePanel[0][j] = make_unique<DefenseMass>(
 					PLAYER,&DMGPlayerHP,
 					j, i, p_blue,
 					Side_Location + (SIZE*j), Player_Location+(i*SIZE),1.f,
 					1.f, 0.f, 0.f, 0.6f, SIZE);
-				Panel_ALL[i][j] = DefensePanel[0][j];
-				Panel_Field::AllPanel[i][j] = DefensePanel[0][j];
+				Panel_ALL[i][j] = DefensePanel[0][j].get();
+				Panel_Field::AllPanel[i][j] = DefensePanel[0][j].get();
 				continue;
 			}
 			if(i == width)	/*敵側パネルの生成*/
 			{
-				DefensePanel[1][j] = new DefenseMass(
+				DefensePanel[1][j] = make_unique<DefenseMass>(
 					ENEMY,&DMGEnemyHP,
 					j, i+PANELWIDTH, p_blue,
 					Side_Location + (SIZE*j), Enemy_Location + (i*SIZE), 1.f,
 					1.f, 0.f, 0.f, 0.6f, SIZE);
 				index_h = i+PANELWIDTH;
-				Panel_ALL[index_h][j] = DefensePanel[1][j];
-				Panel_Field::AllPanel[index_h][j] = DefensePanel[1][j];
+				Panel_ALL[index_h][j] = DefensePanel[1][j].get();
+				Panel_Field::AllPanel[index_h][j] = DefensePanel[1][j].get();
 				continue;
 			}
 
 
-			Player_Panel[fieldID][j]=new Panel_Field(j,i,p_blue,
+			Player_Panel[fieldID][j]=make_unique<Panel_Field>(j,i,p_blue,
 				Side_Location+(SIZE*j), Player_Location+(i*SIZE),1.f,
 				0.f, 1.f, 1.f, 0.6f,SIZE,PLAYER);
 
 
-			Enemy_Panel[fieldID][j]=new Panel_Field(j,i+PANELWIDTH,p_blue,
+			Enemy_Panel[fieldID][j]=make_unique<Panel_Field>(j,i+PANELWIDTH,p_blue,
 				Side_Location+(SIZE*j),Enemy_Location+(i*SIZE),1.f,
 				1.f, 1.f, 0.f, 0.6f, SIZE,ENEMY);
 
-			Panel_ALL[i][j] = Player_Panel[fieldID][j];
-			Panel_Field::AllPanel[i][j] = Player_Panel[fieldID][j];
+			Panel_ALL[i][j] = Player_Panel[fieldID][j].get();
+			Panel_Field::AllPanel[i][j] = Player_Panel[fieldID][j].get();
 			index_h = i + PANELWIDTH;
-			Panel_ALL[index_h][j] = Enemy_Panel[fieldID][j];
-			Panel_Field::AllPanel[index_h][j] = Enemy_Panel[fieldID][j];
+			Panel_ALL[index_h][j] = Enemy_Panel[fieldID][j].get();
+			Panel_Field::AllPanel[index_h][j] = Enemy_Panel[fieldID][j].get();
 			if(j==length-1)fieldID++;
 
 		}
@@ -133,35 +131,35 @@ Battle_State::Battle_State(int delay)
 	printf("PanelCreate!!!\n");
 
 
-	ObjectMNG::GetMNG()->player = new Hero(1, 1, Panel_ALL[1][1], PLAYER, &DMGPlayerHP, Pred,schemelist);
-	ObjectMNG::GetMNG()->enemy = new HeroT(1, 6, Panel_ALL[6][1], ENEMY, &DMGEnemyHP, Pred,schemelist);
+	ObjectMNG::GetMNG()->player = new Hero(1, 1, Panel_ALL[1][1], PLAYER, &DMGPlayerHP, Pred,schemelist.get());
+	ObjectMNG::GetMNG()->enemy = new HeroT(1, 6, Panel_ALL[6][1], ENEMY, &DMGEnemyHP, Pred,schemelist.get());
 
 
 	/*UIの生成*/
 	ui->CreatePanel(ObjectMNG::GetMNG()->player->portrate, ObjectMNG::GetMNG()->enemy->portrate);
-	objects.push_back((Field_Object*)ui->PlayerPanel);
-	objects.push_back((Field_Object*)ui->EnemyPanel);
+	objects.push_back((Field_Object*)ui->PlayerPanel.get());
+	objects.push_back((Field_Object*)ui->EnemyPanel.get());
 
 	objects.push_back((Field_Object*)ui->textBoard.get());
 	objects.push_back((Field_Object*)ui->PlayerHP.get());
 	objects.push_back((Field_Object*)ui->EnemyHP.get());
 	objects.push_back((Field_Object*)ui->Predominant.get());
-	objects.push_back((Field_Object*)ui->Charging);
+	objects.push_back((Field_Object*)ui->Charging.get());
 
 	ui->SetMorale(ObjectMNG::GetMNG()->player->Morale->GetMax());
-	objects.push_back((Field_Object*)ui->Morale);
+	objects.push_back((Field_Object*)ui->Morale.get());
 
 
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < length; j++) {
-			objects.push_back((Field_Object*)DefensePanel[i][j]);
+			objects.push_back((Field_Object*)DefensePanel[i][j].get());
 		}
 	}
 
 	for (i = 0; i < width - 1; i++) {
 		for (j = 0; j < length; j++) {
-			objects.push_back((Field_Object*)Player_Panel[i][j]);
-			objects.push_back((Field_Object*)Enemy_Panel[i][j]);
+			objects.push_back((Field_Object*)Player_Panel[i][j].get());
+			objects.push_back((Field_Object*)Enemy_Panel[i][j].get());
 		}
 	}
 
@@ -173,9 +171,9 @@ Battle_State::Battle_State(int delay)
 	ObjectMNG::GetMNG()->AddObject(ObjectMNG::GetMNG()->player);
 	ObjectMNG::GetMNG()->AddObject(ObjectMNG::GetMNG()->enemy);
 
-	BGM = new Sound("PerituneMaterial_Spook4_loop.wav");
+	BGM =make_unique<Sound>("PerituneMaterial_Spook4_loop.wav");
 	BGM->Play(true);
-	DmgSE = new Sound("Damage.wav");
+	DmgSE =make_unique<Sound>("Damage.wav");
 
 
 	printf("BattleState Construct End!!!\n");
@@ -184,29 +182,15 @@ Battle_State::Battle_State(int delay)
 }
 
 Battle_State::~Battle_State(){
-	int i,j;
-	for (i = 0;i < width-1;i++) {
-		for (j = 0;j < length;j++) {
-			delete Player_Panel[i][j];
-			delete Enemy_Panel[i][j];
+	int i, j;
+	for (i = 0; i < width * 2; i++) {
+		for (j = 0; j < length; j++) {
+			Panel_ALL[i][j] = nullptr;
+			Panel_Field::AllPanel[i][j] = nullptr;
 		}
 	}
-	for (i = 0;i < 2;i++) {
-		for (j = 0;j < length;j++) {
-			delete DefensePanel[i][j];
-		}
-	}
-
-	delete Predominant;
-	delete state;
-	delete schemelist;
-
 	BGM->Stop();
-	delete BGM;
-	delete DmgSE;
-	
 	objects.clear();
-
 	printf("BattleState Dest!!!\n");
 }
 
@@ -278,13 +262,11 @@ Game_State* Battle_State::Update() {
 
 
 	StateInBattle* stateTemp = state->update(this);
-	if (stateTemp != state) {
-		state = nullptr;
-		state = stateTemp;
+	if (stateTemp != state.get()) {
+		state.reset(stateTemp);
 	}
 
 	if (NextState != this) {
-		delete this;
 		return NextState;
 	}
 	
@@ -307,8 +289,7 @@ Game_State* Battle_State::Update() {
 
 	if (*player->hp->GetVal() == 0.f || *enemy->hp->GetVal() == 0.f){
 		if (!Finish) {
-			delete state;
-			state = new Result(player, enemy);
+			state.reset(new Result(player, enemy));
 			Finish = true;
 		}
 	}
@@ -326,7 +307,7 @@ Game_State* Battle_State::Update() {
 void Battle_State::UpdateUI() {
 
 	/*優勢ゲージの更新*/
-	UI::UIMNG::GetInstance()->Predominant->UpdateGauge((*Predominant->GetVal()),Panel_Field::GetPredmGauge());
+	ui->Predominant->UpdateGauge((*Predominant->GetVal()),Panel_Field::GetPredmGauge());
 	Predominant->AddValue(Panel_Field::GetPredmGauge());
 	Panel_Field::ResetPredmGauge();
 
@@ -335,15 +316,15 @@ void Battle_State::UpdateUI() {
 	Player* enem = ObjectMNG::GetMNG()->enemy;
 	Player* ply = ObjectMNG::GetMNG()->player;
 
-	UI::UIMNG::GetInstance()->PlayerHP->UpdateGauge(ply->MaxHP, *(ply->hp->GetVal()));
-	UI::UIMNG::GetInstance()->EnemyHP->UpdateGauge(enem->MaxHP, *(enem->hp->GetVal()));
+	ui->PlayerHP->UpdateGauge(ply->MaxHP, *(ply->hp->GetVal()));
+	ui->EnemyHP->UpdateGauge(enem->MaxHP, *(enem->hp->GetVal()));
 
 
 	/*ダメージを受けた場合受けた側のパネルテクスチャを被ダメージ用に変更*/
-	UI::UIMNG::GetInstance()->PlayerPanel->Update();
-	UI::UIMNG::GetInstance()->EnemyPanel->Update();
-	if (DMGPlayerHP > 0) { UI::UIMNG::GetInstance()->PlayerPanel->Dmg(ply->damage); }
-	if (DMGEnemyHP > 0) { UI::UIMNG::GetInstance()->EnemyPanel->Dmg(enem->damage); }
+	ui->PlayerPanel->Update();
+	ui->EnemyPanel->Update();
+	if (DMGPlayerHP > 0) { ui->PlayerPanel->Dmg(ply->damage); }
+	if (DMGEnemyHP > 0) { ui->EnemyPanel->Dmg(enem->damage); }
 	
 
 	/*必殺技ゲージ,幽霊のリロードゲージの更新*/
@@ -354,14 +335,14 @@ void Battle_State::UpdateUI() {
 	float MBullet = (float)ply->MBullet->GetRemainCounter() / (float)ply->MBullet->GetMaxCounter();
 	float BBullet = (float)ply->BBullet->GetRemainCounter() / (float)ply->BBullet->GetMaxCounter();
 
-	UI::UIMNG::GetInstance()->Charging->UpdateGauge(SBullet,MBullet,BBullet,Morale);
-	UI::UIMNG::GetInstance()->Charging->UpdateBullet(ply->SBullet->GetRemain(), 
+	ui->Charging->UpdateGauge(SBullet,MBullet,BBullet,Morale);
+	ui->Charging->UpdateBullet(ply->SBullet->GetRemain(), 
 		ply->MBullet->GetRemain(), ply->BBullet->GetRemain(),ply->Morale->GetRemain());
 
 	float MoraleRate = ((float)ply->Morale->GetRemain()*(float)ply->Morale->GetMaxCounter() + (float)ply->Morale->GetRemainCounter()) /
 		((float)ply->Morale->GetMax()*(float)ply->Morale->GetMaxCounter());
 
-	UI::UIMNG::GetInstance()->Morale->UpdateGauge(MoraleRate,ply->Morale->GetRemain());
+	ui->Morale->UpdateGauge(MoraleRate,ply->Morale->GetRemain());
 
 }
 
@@ -372,6 +353,7 @@ void Battle_State::Reset(){
 }
 
 void Battle_State::Abort(){
+	ObjectMNG::GetMNG()->SueSide();
 	Communication->Close();
 	NextState = new InputIP();
 }

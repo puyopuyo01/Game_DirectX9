@@ -3,14 +3,13 @@
 
 InputIP::InputIP() {
 	index = 0;
-	inui = new InputUI(buf);
-	objects.push_back((Field_Object*)inui);
+	inui = make_unique<InputUI>(buf);
+	objects.push_back((Field_Object*)inui.get());
 	AvalInp = false;
 	printf("%d\n", INT_MAX);
 }
 
 InputIP::~InputIP() {
-	delete inui;
 }
 
 /*IPƒAƒhƒŒƒX‚ð“ü—Í*/
@@ -40,7 +39,6 @@ Game_State* InputIP::Update(){
 	}
 	else if (controller->Press(ENT)) {
 		printf("“ü—ÍŠ®—¹\n");
-		delete this;
 		return new EstablishCommunicate(buf);
 	}
 	

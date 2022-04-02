@@ -1,7 +1,6 @@
 #pragma once
 #include"State/Battle_State.h"
-#include"State/CharacterPanel/CharacterPanel.h"
-#include"State/CharacterPanel/CharacterPanelMove.h"
+#include"State/CharacterPanel/CutInCharacter.h"
 #include"State/CharacterPanel/TextBox.h"
 #include"Result/Result.h"
 
@@ -15,6 +14,7 @@ class Game_State;
 /*試合状態の基底クラス*/
 class StateInBattle{
 public:
+	virtual ~StateInBattle();
 	virtual StateInBattle* update(Battle_State* state);
 	virtual void change_state();
 	static void BaseStateSet(Game_State* state);
@@ -63,23 +63,19 @@ private:
 
 	void init(StateInBattle* next, int TextureNumber);
 	StateInBattle* NextState;
-	CharacterPanel* Panel;
 	int PanelNum;
 
 
-	TextBox* text;
+	unique_ptr<TextBox> text;
 	int TextNum;
 
 	int InFrame;
 	int OutFrame;
 	int StayFrame;
-	PanelMove* InMove;
-	PanelMove* StayMove;
-	PanelMove* OutMove;
-	PanelMove* State;
+	unique_ptr<CutInCharacter> CutIn;
 };
 
-/*リザルト*/
+/*リザルト状態を管理するクラス*/
 class Result : public StateInBattle{
 public:
 	Result(Player* playerHp,Player* enemyHp);
@@ -88,22 +84,17 @@ public:
 private:
 	string resultStr;
 	int portrate;
-
-	CharacterPanel* Panel;
-	PanelMove* start;
-	PanelMove* InMove;
-	PanelMove* StayMove;
-
-	PanelMove* State;
-
+	unique_ptr<CutInCharacter> CutIn;
+	
 
 	int PanelNum;
 	int Text;
 
 	bool wait;
 
+
 	SelectBox* box;
-	SelectNextState* select;
+	unique_ptr<SelectNextState> select;
 };
 
 class WaitingSelect :public StateInBattle {
@@ -112,5 +103,5 @@ public:
 	~WaitingSelect();
 	StateInBattle* update(Battle_State* state) override;
 private:
-	SelectBox* Select;
+	unique_ptr<SelectBox> Select;
 };

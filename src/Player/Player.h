@@ -50,20 +50,20 @@ public:
 	void Draw() override;
 
 	void SetPanel(Panel_Field* p);
-	ValueState<HandleMove>* MoveState;
-	ValueState<HandleBullet>* BulletState;
-	ValueState<HandleScheme>* SchemeState;
-	ValueState<float>* hp;
+	unique_ptr < ValueState<HandleMove>> MoveState;
+	unique_ptr < ValueState<HandleBullet>> BulletState;
+	unique_ptr<ValueState<HandleScheme>> SchemeState;
+	unique_ptr<ValueState<float>> hp;
 	float MaxHP;
 
 
 
 	/*ユニークポインタを使うとエラー*/
-	Charging* Morale;
+	unique_ptr<Charging> Morale;
 
-	Reload* SBullet;
-	Reload* MBullet;
-	Reload* BBullet;
+	unique_ptr<Reload> SBullet;
+	unique_ptr<Reload> MBullet;
+	unique_ptr<Reload> BBullet;
 
 	void RecordPosition(const int FrameID); /*自分のポジション,また移動する予定の位置をパケットに書き込む*/
 
@@ -78,7 +78,7 @@ protected:
 private:
 	static int* Predominant;
 
-	ImageBoard* img;
+	unique_ptr<ImageBoard> img;
 	float h;
 
 	int NTPrevX, NTPrevY; 

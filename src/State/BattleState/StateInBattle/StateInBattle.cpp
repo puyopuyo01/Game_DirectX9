@@ -2,7 +2,7 @@
 
 Game_State* StateInBattle::baseState;
 void StateInBattle::BaseStateSet(Game_State* state) { baseState = state; }
-
+StateInBattle::~StateInBattle(){}
 StateInBattle* StateInBattle::update(Battle_State* state) { return nullptr; }
 
 void StateInBattle::change_state(){}
@@ -60,8 +60,7 @@ StateInBattle* InGame::update(Battle_State* state) {
 		}
 	}
 	NextState = state->schemelist->Update(this);
-	
-	if (InGame::NextState != this) { delete this; }
+
 	return NextState;
 }
 
@@ -77,7 +76,6 @@ WaitingNextState::WaitingNextState(int counter, StateInBattle* next) {
 
 StateInBattle* WaitingNextState::update(Battle_State* state) {
 	if (counter <= 0) {
-		delete this;
 		return NextState;
 	}
 	counter--;

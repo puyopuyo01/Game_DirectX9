@@ -28,12 +28,12 @@ Bullet::Bullet(int GroupID, int BulletID, float posx, float posy, float size) :B
 	board = make_unique<Primitive>(SQUARE, 0.f, 0.f, 0.f, size, size, 1.f, 1.f, 1.f, 1.f);
 	eye = make_unique<Primitive>(SQUARE, 0.f, 0.f, 0.f, size, size, 1.f, 1.f, 1.f, 1.f);
 	if (BulletID == MIDDLEBULLET) {
-		charac = new Shield(GroupID,posx,posy, SIZE / 2.3f);
+		charac = make_unique<Shield>(GroupID,posx,posy, SIZE / 2.3f);
 	}
 	else {
-		charac = new NonCharacteristic();
+		charac = make_unique<NonCharacteristic>();
 	}
-	state = new BulletNormal();
+	state = make_unique<BulletNormal>();
 	this->Move(posx, posy);
 }
 /*speedは、1マス移動するのにかかるフレーム数を指定*/
@@ -42,27 +42,22 @@ Bullet::Bullet(int GroupID,int BulletID,int power,float speed,BulletCharacterist
 	this->Height = size;
 	this->BulletID = BulletID;
 	this->GroupID = GroupID;
-	this->power=new Numerical<int>(new int(power), new NormalValue<int>(), 99, 0);
+	this->power=make_unique<Numerical<int>>(new int(power), new NormalValue<int>(), 99, 0);
 	float speedTemp = (FRAMEPERSEC / speed) *SIZE;
-	this->speed = new Numerical<float>(new float(speedTemp), new NormalValue<float>(), 1000.f, 0);
-	state = BState->bulletState;
-	charac = BState;
+	this->speed = make_unique<Numerical<float>>(new float(speedTemp), new NormalValue<float>(), 1000.f, 0);
+	state=unique_ptr<BulletState>(BState->bulletState);
+	charac=unique_ptr<BulletCharacteristic>(BState);
 	board=make_unique<Primitive>(SQUARE, 0.f, 0.f, 0.f,this->Width,this->Height, 1.f, 1.f, 1.f, 1.f);
 	this->Move(posx,posy);
 	speedx = 0.f;
 	this->vec = GroupID;
 	eye = make_unique<Primitive>(SQUARE, 0.f, 0.f, 0.f,this->Width,this->Height, 1.f, 1.f, 1.f, 1.f);
 	if (GroupID == PLAYER) { this->Rot(180.f); }
-	status = new StatusBox(*(this->power->GetVal()), *(this->speed->GetVal()));
+	status = make_unique<StatusBox>(*(this->power->GetVal()), *(this->speed->GetVal()));
 	ObjectMNG::GetMNG()->drawObj->AddObject(new SummonBullet(posx,posy,size,size));
 }
 
 Bullet::~Bullet() {
-	delete state;
-	if (speed != nullptr) { delete speed; }
-	if (power != nullptr) { delete power; }
-	if (status != nullptr) { delete status; }
-	if (charac != nullptr) { delete charac; }
 	printf("Bullet Dest!!!\n");
 }
 
@@ -94,7 +89,7 @@ void Bullet::ApplyStatus() {
 	this->power->ChangeValue(status->power);
 	this->speed->ChangeValue(status->speed);
 	if (status->chara != nullptr) {
-		this->charac = this->charac->ChangeCharacteristic(status->chara);
+		this->charac.reset(status->chara);
 		this->ChangeState(charac->collisionState);
 	}
 	status->Reset(*(this->power->GetVal()), *(this->speed->GetVal()));

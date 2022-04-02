@@ -148,16 +148,6 @@ namespace UI {
 
 
 
-	unique_ptr<UIMNG> UIMNG::SingleTon;
-
-	UIMNG* UIMNG::GetInstance() {
-		if (SingleTon.get() == nullptr) {
-			SingleTon.reset(new UIMNG());
-		}
-
-		return SingleTon.get();
-	}
-
 	UIMNG::UIMNG() {
 	}
 
@@ -174,7 +164,7 @@ namespace UI {
 		printf("Call Predominant Dest \n");
 
 
-		Charging = new ChargingUI(30.f,0.f);
+		Charging = make_unique<ChargingUI>(30.f,0.f);
 		printf("Call Charging Dest \n");
 
 		backGround = make_unique<BackGround>(CAMERA_X, CAMERA_Y);
@@ -198,39 +188,13 @@ namespace UI {
 	}
 
 	void UIMNG::SetMorale(int MaxMorale) {
-		Morale = new MoraleUI(-10.f, -30.f, MaxMorale);
+		Morale = make_unique<MoraleUI>(-10.f, -30.f, MaxMorale);
 		
 	}
 
 	void UIMNG::CreatePanel(int Player, int Enemy) {
-		PlayerPanel = new CharacterPanelUI(ScreenLX()+3.f, 0.f,Player);
-		EnemyPanel = new CharacterPanelUI(ScreenRX()-10.f, 0.f, Enemy);
-	}
-
-	void UIMNG::Release() {
-
-		if (backGround.get() != nullptr) { backGround.reset(); }
-		if (textBoard.get() != nullptr) { textBoard.reset(); }
-		if (PlayerHP.get() != nullptr) { PlayerHP.reset(); }
-		if (EnemyHP.get() != nullptr) { EnemyHP.reset(); }
-		if (Predominant.get() != nullptr) { Predominant.reset(); }
-
-		if (Charging != nullptr) { 
-			delete Charging;
-			Charging = nullptr;
-		}
-		if (Morale != nullptr) {
-			delete Morale;
-			Morale = nullptr;
-		}
-		if (PlayerPanel != nullptr) {
-			delete PlayerPanel;
-			PlayerPanel = nullptr;
-		}
-		if (EnemyPanel != nullptr) {
-			delete EnemyPanel;
-			EnemyPanel = nullptr;
-		}
+		PlayerPanel = make_unique<CharacterPanelUI>(ScreenLX()+3.f, 0.f,Player);
+		EnemyPanel = make_unique<CharacterPanelUI>(ScreenRX()-10.f, 0.f, Enemy);
 	}
 
 }

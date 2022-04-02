@@ -1,22 +1,9 @@
 #include"./NumberIMG.h"
 
 
-unique_ptr<NumberIMG> NumberIMG::SingleTon;
-int NumberIMG::ImageNumber;
 
 int Number_Symbol::ImageNumber;
 
-
-void NumberIMG::Init(){
-	ImageNumber = Images::GetInstance()->SaveImage("Message.png");
-}
-
-NumberIMG* NumberIMG::GetInstance() {
-	if (NumberIMG::SingleTon.get() == nullptr) {
-		SingleTon = std::make_unique<NumberIMG>();
-	}
-	return NumberIMG::SingleTon.get();
-}
 
 
 

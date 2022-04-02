@@ -24,7 +24,8 @@ class SchemeBox;
 /*ゲーム状態の基底クラス(試合しているか、IP入力待ちか、遅延フレームの計測中か等)*/
 class Game_State {
 public:
-	virtual Game_State* Update() { return NULL; }
+	virtual ~Game_State();
+	virtual Game_State* Update();
 	void Draw();
 
 	int AddDrawObject(Field_Object* obj);
@@ -39,12 +40,12 @@ class Battle_State :public Game_State {
 public:
 	/*パネルは、プレイヤー側のみのパネル、敵側のみのパネル、全てのパネル等分けて保持しておく*/
 	static Panel_Field* Panel_ALL[width*2][length];	
-	Panel_Field* Player_Panel[PANELWIDTH][length];
-	Panel_Field* Enemy_Panel[PANELWIDTH][length];
-	Panel_Field* DefensePanel[2][length];	
+	unique_ptr<Panel_Field> Player_Panel[PANELWIDTH][length];
+	unique_ptr<Panel_Field> Enemy_Panel[PANELWIDTH][length];
+	unique_ptr<Panel_Field> DefensePanel[2][length];	
 	Panel_Blue* p_blue;
 
-	SchemeBox* schemelist;
+	unique_ptr<SchemeBox> schemelist;
 public:
 	Battle_State(int delay);
 	~Battle_State();
@@ -58,9 +59,10 @@ public:
 	Game_State* Update() override;
 
 private:
-	ValueState<int>* Predominant;
 
-	//SchemeBox* Scheme;
+	unique_ptr<UI::UIMNG> ui;
+	unique_ptr<ValueState<int>> Predominant;
+
 	float DMGPlayerHP; /*自機の蓄積ダメージ*/
 	float DMGEnemyHP; /*敵機の蓄積ダメージ*/
 
@@ -78,7 +80,7 @@ private:
 
 
 	/*試合中の状態。カットイン中、試合進行中等*/
-	StateInBattle* state;
+	unique_ptr<StateInBattle> state;
 
 	/*暗号ファイル*/
 	FileMapping* File;
@@ -88,8 +90,8 @@ private:
 
 
 	/*サウンド系クラス*/
-	Sound* BGM;
-	Sound* DmgSE;
+	unique_ptr<Sound> BGM;
+	unique_ptr<Sound> DmgSE;
 
 	
 

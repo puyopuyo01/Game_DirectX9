@@ -16,7 +16,6 @@ Game_State* EstablishCommunicate::Update(){
 	if (InitRes == -3) {
 		MessageBox(NULL,
 			"失敗しました。IPアドレスを再入力してください。", "失敗", MB_OK);
-		delete this;
 		return new InputIP();
 	}
 	if (FAILED(controller->init())) {
@@ -26,7 +25,6 @@ Game_State* EstablishCommunicate::Update(){
 	}
 	int res = p2p->Connect(); /*ここでNAT越えを行う*/
 	if(res==1){
-		delete this;
 		return new DelayMes();
 	}
 

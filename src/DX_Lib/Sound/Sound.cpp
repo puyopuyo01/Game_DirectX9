@@ -129,11 +129,12 @@ Sound::Sound(const char* file) {
 }
 
 Sound::~Sound() {
-	Release();
+	this->Release();
 }
 
 void Sound::Release() {
 	Secondary->Release();
+	printf("SoundRelease!\n");
 }
 
 

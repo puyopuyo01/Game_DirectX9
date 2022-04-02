@@ -159,18 +159,18 @@ namespace UI {
 	private:
 		Font* Text;
 
-		Bullet* S;
-		Bullet* M;
-		Bullet* B;
+		unique_ptr<Bullet> S;
+		unique_ptr<Bullet> M;
+		unique_ptr<Bullet> B;
 
-		ChargingBar* SBar;
-		ChargingBar* MBar;
-		ChargingBar* BBar;
-		ChargingBar* Morale;	
+		unique_ptr<ChargingBar> SBar;
+		unique_ptr<ChargingBar> MBar;
+		unique_ptr<ChargingBar> BBar;
+		unique_ptr<ChargingBar> Morale;
 
-		Number_Symbol* SNumber;
-		Number_Symbol* MNumber;
-		Number_Symbol* BNumber;
+		unique_ptr<Number_Symbol> SNumber;
+		unique_ptr<Number_Symbol> MNumber;
+		unique_ptr<Number_Symbol> BNumber;
 	};
 
 	class MoraleUI :public Field_Object {
@@ -183,10 +183,9 @@ namespace UI {
 		void UpdateGauge(float MoraleRate,int Mol);
 
 	private:
-		vector<Primitive*> Frame;
-		ChargingBar* MoraleBar;
-
-		Number_Symbol* Number;
+		vector<unique_ptr<Primitive>> Frame;
+		unique_ptr<ChargingBar> MoraleBar;
+		unique_ptr<Number_Symbol> Number;
 	};
 
 
@@ -209,7 +208,7 @@ namespace UI {
 		int TextureNumber;
 
 	private:
-		Counter* counter;
+		unique_ptr<Counter> counter;
 		bool DMG;
 
 		unique_ptr<ImageBoard> img;
@@ -231,28 +230,20 @@ namespace UI {
 		void CreatePanel(int Hero, int Enemy);
 
 
-		void Release();
-
-		static UIMNG* GetInstance();
-
 		unique_ptr<BackGround> backGround;
 		unique_ptr<TextBoard> textBoard;
 		unique_ptr<HitPointBar> PlayerHP;
 		unique_ptr<HitPointBar> EnemyHP;
 
-		/*unique_ptrÇ™égÇ¶Ç»Ç¢(C2280î≠ê∂)*/
-		ChargingUI* Charging;
-		MoraleUI* Morale;
+		unique_ptr<ChargingUI> Charging;
+		unique_ptr<MoraleUI> Morale;
 
-		/*unique_ptrÇ™égÇ¶Ç»Ç¢(C2280î≠ê∂)*/
-		CharacterPanelUI* PlayerPanel;
-		CharacterPanelUI* EnemyPanel;
+		unique_ptr<CharacterPanelUI> PlayerPanel;
+		unique_ptr<CharacterPanelUI> EnemyPanel;
 
 
 
 		unique_ptr<PredominantBar> Predominant;
 
-	private:
-		static unique_ptr<UIMNG> SingleTon;
 	};
 };

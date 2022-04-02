@@ -39,14 +39,13 @@ TextBox::TextBox(int x, int y, string name, string intro,int In,int Stay,int Out
 	this->y = y;
 	SchemeName = name;
 	this->intro = intro;
-	this->In = new TextInterput();
-	this->Stay = new TextStay();
-	this->Out = new TextO();
-
-	this->In->Set(In, this->Stay, &Height);
-	this->Stay->Set(Stay, this->Out, &Height);
-	this->Out->Set(Out, this->Out, &Height);
-	this->NowState = this->In;
+	this->In = make_unique<TextInterput>();
+	this->Stay = make_unique<TextStay>();
+	this->Out = make_unique<TextO>();
+	this->In->Set(In, this->Stay.get(), &Height);
+	this->Stay->Set(Stay, this->Out.get(), &Height);
+	this->Out->Set(Out, this->Out.get(), &Height);
+	this->NowState = this->In.get();
 
 	Height = 0;
 
@@ -54,9 +53,6 @@ TextBox::TextBox(int x, int y, string name, string intro,int In,int Stay,int Out
 }
 
 TextBox::~TextBox() {
-	delete In;
-	delete Stay;
-	delete Out;
 
 }
 

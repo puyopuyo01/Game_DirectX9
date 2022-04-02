@@ -30,7 +30,7 @@ public:
 	Game_State* Update() override;
 private:
 	char buf[14];
-	InputUI* inui;
+	unique_ptr<InputUI> inui;
 	int index;
 
 	bool AvalInp;

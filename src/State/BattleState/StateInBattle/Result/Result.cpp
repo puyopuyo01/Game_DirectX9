@@ -18,40 +18,29 @@ Result::Result(Player* player,Player* enemy){
 
 	float x, y;
 	SetPosition(&x, &y);
-	this->Panel = new CharacterPanel(x, y,portrate);
-	start = new PanelMove(0, 30, Panel->Width);
-	InMove = new PanelMove(1,40, Panel->Width);
-	StayMove = new PanelMove(0,60, Panel->Width);
-	start->Set(InMove);
-	InMove->Set(StayMove);
-	StayMove->Set(StayMove);
-	State = start;
+	CutIn = make_unique<CutInCharacter>(x, y, 60, 90, 30, portrate,1,0,0);
+
 
 	wait = false;
-	PanelNum = baseState->AddDrawObject((Field_Object*)this->Panel);
+	PanelNum = baseState->AddDrawObject((Field_Object*)CutIn->Panel.get());
 
 	box = new SelectBox();
 	float ScreenWidth, ScreenHeight;
 	SetScreenSize(&x, &y, &ScreenWidth, &ScreenHeight);
-	select = new SelectNextState(x,y,ScreenWidth,ScreenHeight);
+	select = make_unique<SelectNextState>(x,y,ScreenWidth,ScreenHeight);
 }
 
 Result::~Result() {
 	baseState->deleteObject(PanelNum);
 	baseState->deleteObject(Text-1);
-	delete start;
-	delete Panel;
-	delete InMove;
-	delete StayMove;
-	delete select;
 }
 
 /*試合を続けるか、IP入力画面に戻るかの選択*/
 StateInBattle* Result::update(Battle_State* state){
 	box->update();
-	State = State->Update(Panel);
-	if (State == StayMove && State->Finish()) {
-		if (!wait) { Text = baseState->AddDrawObject((Field_Object*)select); wait=true; }
+	CutIn->Update();
+	if (CutIn->Update()) {
+		if (!wait) { Text = baseState->AddDrawObject((Field_Object*)select.get()); wait=true; }
 
 		/*Player側の選択*/
 		const char *KeyW = KeyBox::GetInstance()->
@@ -84,7 +73,6 @@ StateInBattle* Result::update(Battle_State* state){
 
 		/*どちらも選択したら選択結果を反映*/
 		if(box->PlayerSelect != SELECTING && box ->EnemySelect != SELECTING){
-			delete this;
 			return new WaitingSelect(box);
 		}
 
@@ -112,7 +100,7 @@ void SelectBox::update(){}
 
 /*-------------------------SelectNextState---------------------*/
 SelectNextState::SelectNextState(float x,float y,float ScreenWidth,float ScreenHeight):Field_Object(0.f,0.f,-1.f) {
-	Panel = new Primitive(SQUARE,x,y,0.f,
+	Panel = make_unique<Primitive>(SQUARE,x,y,0.f,
 		ScreenWidth,ScreenHeight,
 		0.5f,0.5f,0.5f,0.4f);
 
@@ -120,7 +108,6 @@ SelectNextState::SelectNextState(float x,float y,float ScreenWidth,float ScreenH
 }
 
 SelectNextState::~SelectNextState() {
-	delete Panel;
 }
 
 void SelectNextState::Draw() {
@@ -136,11 +123,10 @@ void SelectNextState::Draw() {
 
 /*------------------------WaitingSelect------------------------*/
 WaitingSelect::WaitingSelect(SelectBox* box) {
-	this->Select = box;
+	this->Select = unique_ptr<SelectBox>(std::move(box));
 }
 
 WaitingSelect::~WaitingSelect() {
-	delete this->Select;
 }
 
 StateInBattle* WaitingSelect::update(Battle_State* state){

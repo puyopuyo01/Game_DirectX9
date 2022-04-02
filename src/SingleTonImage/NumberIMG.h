@@ -16,7 +16,7 @@
 
 
 /*複数の桁を持つ数字をテクスチャで表す場合、このクラスの機能を使用する。*/
-class NumberIMG {
+/*class NumberIMG {
 public:
 	static NumberIMG* GetInstance();
 
@@ -27,7 +27,7 @@ private:
 	static unique_ptr<NumberIMG> SingleTon;
 	
 
-};
+};*/
 
 
 class Number_Symbol:public Field_Object{

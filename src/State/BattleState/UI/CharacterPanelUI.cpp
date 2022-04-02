@@ -10,14 +10,14 @@ namespace UI {
 		this->Width = this->Height*0.7f;
 		img = make_unique<Primitive>(SQUARE, 0.f, 0.f, -2.f, this->Width, this->Height, 1.f, 1.f, 1.f, 1.f);
 
-		counter = new Counter(30);
+		counter = make_unique<Counter>(30);
 		DMG = false;
 
 		Move(x, y);
 	}
 
 	CharacterPanelUI::~CharacterPanelUI() {
-		delete counter;
+		//delete counter;
 	}
 
 	void CharacterPanelUI::Update() {

@@ -10,7 +10,7 @@ public:
 	DelayMes();
 	Game_State* Update() override;
 private:
-	DelayMNG* delay;
+	unique_ptr<DelayMNG> delay;
 
 	int WaitTime;
 	int wait;

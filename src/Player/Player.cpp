@@ -6,20 +6,20 @@ int Player::GetID() { return this->ID; }
 int Player::GetPredominant() { return (*this->Predominant); }
 
 Player::Player(int x,int y,Panel_Field* p,int ID,float* HP,int* Pred,SchemeBox* schemeBox):BattleObject(p->GetLocation().x, p->GetLocation().y,new PlayerCollisionState(HP)){
-	MaxHP = 1000.f;
+	MaxHP = 1.f;
 	StandPos = p;
 	/*通信処理で必要なため、前フレームにプレイヤーがいた位置を保持しておく。*/
 	NTPrevX = StandPos->x;
 	NTPrevY = StandPos->y;
 	Width = SIZE/1.5f;
 	Height = SIZE/1.5f;
-	MoveState = new Object<HandleMove>(new IdleMove(), new NormalValue<HandleMove>());
-	BulletState = new Object<HandleBullet>(new IdleBullet(), new NormalValue<HandleBullet>());
-	SchemeState = new Object<HandleScheme>(new IdleScheme(), new NormalValue<HandleScheme>());
-	hp = new Numerical<float>(new float(MaxHP), new NormalValue<float>(),1000.f,0.f);
-	Morale = new Charging(0, 10, 200);
+	MoveState = make_unique<Object<HandleMove>>(new IdleMove(), new NormalValue<HandleMove>());
+	BulletState = make_unique<Object<HandleBullet>>(new IdleBullet(), new NormalValue<HandleBullet>());
+	SchemeState =  make_unique<Object<HandleScheme>>(new IdleScheme(), new NormalValue<HandleScheme>());
+	hp = make_unique<Numerical<float>>(new float(MaxHP), new NormalValue<float>(),1000.f,0.f);
+	Morale = make_unique<Charging>(0, 10, 200);
 	/*確保位置を変えると座標ずれが発生。全部同じ位置で頂点確保して、Translation関数で調整する。*/
-	img = new Primitive(SQUARE, 0.f, 0.f, -1.f,Width,Height,1.f, 1.f, 1.f, 1.f);
+	img = make_unique<Primitive>(SQUARE, 0.f, 0.f, -1.f,Width,Height,1.f, 1.f, 1.f, 1.f);
 	this->Move(p->GetLocation().x, p->GetLocation().y);
 
 	this->ID = ID;
@@ -29,17 +29,6 @@ Player::Player(int x,int y,Panel_Field* p,int ID,float* HP,int* Pred,SchemeBox* 
 }
 
 Player::~Player() {
-	delete img;
-	delete hp;
-	delete MoveState;
-	delete BulletState;
-	delete SchemeState;
-	delete Morale;
-
-	delete SBullet;
-	delete MBullet;
-	delete BBullet;
-	printf("Player Dest!!!\n");
 }
 
 void Player::SetPanel(Panel_Field* p) {

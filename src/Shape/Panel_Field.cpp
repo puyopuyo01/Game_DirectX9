@@ -28,6 +28,7 @@ void Panel_Field::AddObject(BattleObject* object) {
 }
 
 Panel_Field::~Panel_Field() {
+	printf("Delete Pnael\n");
 }
 
 Panel_Field::Panel_Field(int x,int y,Panel_Blue* panel, float lx, float ly, float lz, float r, float g, float b, float a,float size,int ID)

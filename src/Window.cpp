@@ -39,12 +39,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
 
 	/*--------------------------デバッグ用処理--------------------------------------*/
-	/*
+	
 	FILE* fp; 
 	AllocConsole(); //デバッグ用コンソール出力
 	freopen_s(&fp,"CONOUT$", "w", stdout);
 	freopen_s(&fp, "CONOUT$", "w", stderr);
-	*/
+	
 
 
 	// フルスクリーンにするかどうかの判定
@@ -154,7 +154,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	Camera* camera = new Camera();
-	Game_State* state = new InputIP(); 
+	unique_ptr<Game_State> game_State = make_unique<InputIP>(); 
 	Font* FONT = Font::GetInstance();
 	FPS* fps = FPS::GetInstance();
 
@@ -192,15 +192,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				// 更新、描画処理の実行
 				fps->SMesure();
 				cursor->Update();
-				state = state->Update();
-				state->Draw();
+				Game_State* state = game_State->Update();
+				if (game_State.get() != state) {
+					printf("NewState!!\n");
+					game_State.reset(state); 
+				}
+				game_State->Draw();
 				camera->Update();
 				fps->Measure();
 			}
 		}
 
 	}
-	delete state;
 	delete camera;
 	ObjectMNG::GetMNG()->SueSide();
 	Finalize();

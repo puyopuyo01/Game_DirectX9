@@ -28,6 +28,6 @@ public:
 	/*パネルと文字 F:続行 W:タイトルに戻る*/
 	void Draw() override;
 private:
-	Primitive* Panel;
+	unique_ptr<Primitive> Panel;
 	Font* Text;
 };
