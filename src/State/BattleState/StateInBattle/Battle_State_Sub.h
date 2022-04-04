@@ -97,6 +97,10 @@ private:
 	unique_ptr<SelectNextState> select;
 };
 
+/*
+お互いの試合後の選択の結果を反映させる。(再試合を行うか、対戦を終えてIP入力画面に戻るか)
+どちらかが対戦を終えてIP入力画面に戻る選択をした場合、どちらも対戦を終えてIP入力画面に戻る
+*/
 class WaitingSelect :public StateInBattle {
 public:
 	WaitingSelect(SelectBox* box);

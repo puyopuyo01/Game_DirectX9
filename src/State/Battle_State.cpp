@@ -7,7 +7,10 @@
 float UpperPanel;
 float ButtomPanel;
 
-Panel_Field* Battle_State::Panel_ALL[width * 2][length];
+Field_Move_Mass* Battle_State::Panel_ALL[width * 2][length];
+int Battle_State::BGM;
+int Battle_State::DmgSE;
+
 
 int NextFrame(int FrameID) {
 	if (FrameID == INT_MAX) { return 0; }
@@ -39,7 +42,7 @@ Battle_State::Battle_State(int delay)
 	this->Finish = false;
 
 	delayFrame = delay;
-	delayFrame += MINIMUMFRAME;
+	delayFrame += MINIMUMDELAY;
 	wait = true;
 	WaitingFrame = 0;
 	NoReach = 0;
@@ -53,6 +56,7 @@ Battle_State::Battle_State(int delay)
 
 	state = make_unique<InGame>();
 	StateInBattle::BaseStateSet(this);
+
 	schemelist = make_unique<SchemeBox>();
 	Predominant = make_unique<Numerical<int>>(Pred, new NormalValue<int>(), 5, -5);
 
@@ -90,7 +94,7 @@ Battle_State::Battle_State(int delay)
 					Side_Location + (SIZE*j), Player_Location+(i*SIZE),1.f,
 					1.f, 0.f, 0.f, 0.6f, SIZE);
 				Panel_ALL[i][j] = DefensePanel[0][j].get();
-				Panel_Field::AllPanel[i][j] = DefensePanel[0][j].get();
+				Field_Move_Mass::AllPanel[i][j] = DefensePanel[0][j].get();
 				continue;
 			}
 			if(i == width)	/*敵側パネルの生成*/
@@ -102,25 +106,25 @@ Battle_State::Battle_State(int delay)
 					1.f, 0.f, 0.f, 0.6f, SIZE);
 				index_h = i+PANELWIDTH;
 				Panel_ALL[index_h][j] = DefensePanel[1][j].get();
-				Panel_Field::AllPanel[index_h][j] = DefensePanel[1][j].get();
+				Field_Move_Mass::AllPanel[index_h][j] = DefensePanel[1][j].get();
 				continue;
 			}
 
 
-			Player_Panel[fieldID][j]=make_unique<Panel_Field>(j,i,p_blue,
+			Player_Panel[fieldID][j]=make_unique<Field_Move_Mass>(j,i,p_blue,
 				Side_Location+(SIZE*j), Player_Location+(i*SIZE),1.f,
 				0.f, 1.f, 1.f, 0.6f,SIZE,PLAYER);
 
 
-			Enemy_Panel[fieldID][j]=make_unique<Panel_Field>(j,i+PANELWIDTH,p_blue,
+			Enemy_Panel[fieldID][j]=make_unique<Field_Move_Mass>(j,i+PANELWIDTH,p_blue,
 				Side_Location+(SIZE*j),Enemy_Location+(i*SIZE),1.f,
 				1.f, 1.f, 0.f, 0.6f, SIZE,ENEMY);
 
 			Panel_ALL[i][j] = Player_Panel[fieldID][j].get();
-			Panel_Field::AllPanel[i][j] = Player_Panel[fieldID][j].get();
+			Field_Move_Mass::AllPanel[i][j] = Player_Panel[fieldID][j].get();
 			index_h = i + PANELWIDTH;
 			Panel_ALL[index_h][j] = Enemy_Panel[fieldID][j].get();
-			Panel_Field::AllPanel[index_h][j] = Enemy_Panel[fieldID][j].get();
+			Field_Move_Mass::AllPanel[index_h][j] = Enemy_Panel[fieldID][j].get();
 			if(j==length-1)fieldID++;
 
 		}
@@ -171,9 +175,8 @@ Battle_State::Battle_State(int delay)
 	ObjectMNG::GetMNG()->AddObject(ObjectMNG::GetMNG()->player);
 	ObjectMNG::GetMNG()->AddObject(ObjectMNG::GetMNG()->enemy);
 
-	BGM =make_unique<Sound>("PerituneMaterial_Spook4_loop.wav");
-	BGM->Play(true);
-	DmgSE =make_unique<Sound>("Damage.wav");
+	
+	SoundMNG::GetInstance()->Play(BGM,true);
 
 
 	printf("BattleState Construct End!!!\n");
@@ -182,14 +185,15 @@ Battle_State::Battle_State(int delay)
 }
 
 Battle_State::~Battle_State(){
+	/*
 	int i, j;
 	for (i = 0; i < width * 2; i++) {
 		for (j = 0; j < length; j++) {
 			Panel_ALL[i][j] = nullptr;
-			Panel_Field::AllPanel[i][j] = nullptr;
+			Field_Move_Mass::AllPanel[i][j] = nullptr;
 		}
 	}
-	BGM->Stop();
+	*/
 	objects.clear();
 	printf("BattleState Dest!!!\n");
 }
@@ -279,7 +283,7 @@ Game_State* Battle_State::Update() {
 	Player* enemy = ObjectMNG::GetMNG()->enemy;
 	Player* player = ObjectMNG::GetMNG()->player;
 
-	if (DMGPlayerHP != 0 || DMGEnemyHP != 0) { DmgSE->Reset(); DmgSE->Play(false); }
+	if (DMGPlayerHP != 0 || DMGEnemyHP != 0) { SoundMNG::GetInstance()->Play(DmgSE,false); }
 
 	enemy->hp->AddValue(-DMGEnemyHP);
 	player->hp->AddValue(-DMGPlayerHP);
@@ -307,9 +311,9 @@ Game_State* Battle_State::Update() {
 void Battle_State::UpdateUI() {
 
 	/*優勢ゲージの更新*/
-	ui->Predominant->UpdateGauge((*Predominant->GetVal()),Panel_Field::GetPredmGauge());
-	Predominant->AddValue(Panel_Field::GetPredmGauge());
-	Panel_Field::ResetPredmGauge();
+	ui->Predominant->UpdateGauge((*Predominant->GetVal()),Field_Move_Mass::GetPredmGauge());
+	Predominant->AddValue(Field_Move_Mass::GetPredmGauge());
+	Field_Move_Mass::ResetPredmGauge();
 
 
 	/*HPの更新*/
@@ -348,7 +352,7 @@ void Battle_State::UpdateUI() {
 
 void Battle_State::Reset(){
 	ObjectMNG::GetMNG()->SueSide();
-	delayFrame -= MINIMUMFRAME;
+	delayFrame -= MINIMUMDELAY;
 	NextState = new Battle_State(delayFrame);
 }
 
@@ -365,5 +369,11 @@ void Battle_State::LoadIMG() {
 	Number_Symbol::Init();
 	Bullet::Init();
 	EffectIMG::LoadImg();
+}
+
+void Battle_State::LoadSound() {
+	BGM = SoundMNG::GetInstance()->Regist_Sound("PerituneMaterial_Spook4_loop.wav");
+	DmgSE = SoundMNG::GetInstance()->Regist_Sound("Damage.wav");
+	SchemeBox::LoadSound();
 }
 

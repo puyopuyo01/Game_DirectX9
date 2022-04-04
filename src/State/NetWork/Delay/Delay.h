@@ -2,9 +2,9 @@
 #include"State/NetWork/NetWork.h"
 #include<vector>
 
-#define MINIMUMFRAME 3
+#define MINIMUMDELAY 3
 
-#define MAXFRAME 30
+#define MAXDELAY 30
 
 #define NUMBER_AVERAGE 50
 

@@ -66,11 +66,11 @@ void m_loc::Update() {
 	ZeroMemory(&m_state, sizeof(DIMOUSESTATE));
 	if (FAILED(mouse->GetDeviceState(
 		sizeof(DIMOUSESTATE), &m_state))) {
-		MessageBox(NULL,"デバイスUpdate", "失敗", MB_OK);
+		//MessageBox(NULL,"デバイスUpdate", "失敗", MB_OK);
 	}
 
 	if (FAILED(mouse->Acquire())) {
-		MessageBox(NULL,"マウスが取得不能", "失敗", MB_OK);
+		//MessageBox(NULL,"マウスが取得不能", "失敗", MB_OK);
 		return;
 	}
 

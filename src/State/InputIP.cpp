@@ -19,8 +19,7 @@ Game_State* InputIP::Update(){
 		return this;
 	}
 	if (FAILED(controller->init())) {
-		MessageBox(NULL,
-			"P", "Ž¸”s", MB_OK);
+		//MessageBox(NULL,"P", "Ž¸”s", MB_OK);
 		return this;
 	}
 	if (controller->Press(BACK)){

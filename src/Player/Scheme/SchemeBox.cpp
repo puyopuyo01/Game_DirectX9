@@ -1,10 +1,13 @@
 #include"./SchemeBox.h"
 
+int SchemeBox::SchemeSE;
+
 SchemeBox::SchemeBox() {
-	SchemeSE = make_unique<Sound>("scheme.wav");
+	printf("SchemeBoxt\n");
 }
 
 SchemeBox::~SchemeBox() {
+	printf("SchemeBoxDest\n");
 }
 
 void SchemeBox::InsertScheme(Scheme* scheme) {
@@ -14,8 +17,7 @@ void SchemeBox::InsertScheme(Scheme* scheme) {
 StateInBattle* SchemeBox::Update(StateInBattle* nowState) {
 	/*必殺技ボタンを押したフレームが重なったらゲージのみ消費*/
 	if ((int)schemelist.size() == 1) {
-		SchemeSE->Reset();SchemeSE->Play(false);
-
+		SoundMNG::GetInstance()->Play(SchemeSE,false);
 		std::vector<unique_ptr<Scheme>>::iterator itr = schemelist.begin();
 		(*itr)->Excution();
 		StateInBattle* next = new WaitingNextState(30, new InterputState(new InGame(), (*itr)->TextureNumber,(*itr)->name,(*itr)->intro));
@@ -26,4 +28,8 @@ StateInBattle* SchemeBox::Update(StateInBattle* nowState) {
 		schemelist.clear();
 		return nowState;
 	}
+}
+
+void SchemeBox::LoadSound() {
+	SchemeSE = SoundMNG::GetInstance()->Regist_Sound("scheme.wav");
 }

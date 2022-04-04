@@ -39,7 +39,7 @@ HRESULT Get_Keybord(LPDIRECTINPUT8 key, HWND hWnd) {
 
 	if (FAILED(Keybord->SetCooperativeLevel(
 		hWnd,
-		DISCL_BACKGROUND | DISCL_NONEXCLUSIVE))) {
+		DISCL_FOREGROUND | DISCL_NONEXCLUSIVE))) {
 		MessageBox(NULL,
 			"キーボードの確保に失敗(SetCooprativelevel)", "失敗", MB_OK);
 			return E_FAIL;
@@ -71,7 +71,7 @@ HRESULT Get_Mouse(LPDIRECTINPUT8 mouse, HWND hWnd) {
 		非排他的で他のアプリケーションでもそのまま入力デバイスを取得(DISCL_NONEXCLUSIVE)
 		*/
 		if (FAILED(Mouse->SetCooperativeLevel(hWnd,
-			DISCL_BACKGROUND | DISCL_NONEXCLUSIVE))) {  /*DISCL_FOREGROUND | DISCL_EXCLUSIVE 本番はこのせってい*/
+			DISCL_FOREGROUND | DISCL_NONEXCLUSIVE)))/*DISCL_BACKGROUND | DISCL_NONEXCLUSIVE)))*/ {  /*DISCL_FOREGROUND | DISCL_EXCLUSIVE 本番はこのせってい*/
 			MessageBox(NULL,
 				"マウスの確保に失敗(SetCooperativeLevel)", "失敗", MB_OK);
 			return E_FAIL;

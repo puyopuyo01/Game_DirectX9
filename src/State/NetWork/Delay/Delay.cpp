@@ -29,7 +29,7 @@ bool DelayMNG::Update() {
 	for (i = 0;i < SendID;i++) {
 		if (!delayList[i]->finish) {
 			delayList[i]->Update();
-			if (delayList[i]->wait >= MAXFRAME) {
+			if (delayList[i]->wait >= MAXDELAY) {
 				//このフレームを超えたらパケットロスと判断。再送信。
 				delayList[i]->wait = 0;
 				char send[20];

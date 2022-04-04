@@ -20,7 +20,7 @@
 
 
 
-class Panel_Field;
+class Field_Move_Mass;
 
 class CollisionObject;
 class Field_Object;
@@ -44,12 +44,12 @@ class Player:public BattleObject{
 public:
 	int GetPredominant();
 	int GetID() override;
-	Player(int x,int y,Panel_Field* p,int ID,float *HP,int* Pred,SchemeBox* schemeBox);
+	Player(int x,int y,Field_Move_Mass* p,int ID,float *HP,int* Pred,SchemeBox* schemeBox);
 	virtual ~Player();
 	void Update() override;
 	void Draw() override;
 
-	void SetPanel(Panel_Field* p);
+	void SetPanel(Field_Move_Mass* p);
 	unique_ptr < ValueState<HandleMove>> MoveState;
 	unique_ptr < ValueState<HandleBullet>> BulletState;
 	unique_ptr<ValueState<HandleScheme>> SchemeState;

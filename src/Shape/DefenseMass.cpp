@@ -2,7 +2,7 @@
 
 
 DefenseMass::DefenseMass(int ID,float* Dmg,int x, int y, Panel_Blue* panel, float lx, float ly, float lz, float r, float g, float b, float a, float size)
-	:Panel_Field(x,y,panel,lx,ly,lz,r,g,b,a,size,ID)
+	:Field_Move_Mass(x,y,panel,lx,ly,lz,r,g,b,a,size,ID)
 {
 	this->Dmg= Dmg;
 	this->ID = ID;

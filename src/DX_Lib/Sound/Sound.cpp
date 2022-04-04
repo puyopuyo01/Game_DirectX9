@@ -1,6 +1,7 @@
 #include"./Sound.h"
 
 Sound::Sound(const char* file) {
+	Secondary = NULL;
 
 	/*アーカイブファイルから音声を読み込む*/
 	MyFileInfo* texture = FileMapping::GetInstance()->GetFile(file);
@@ -129,12 +130,11 @@ Sound::Sound(const char* file) {
 }
 
 Sound::~Sound() {
-	this->Release();
-}
-
-void Sound::Release() {
-	Secondary->Release();
-	printf("SoundRelease!\n");
+	if (Secondary) {
+		Secondary->Stop();
+		Secondary->Release();
+		printf("SoundRelease!\n");
+	}
 }
 
 

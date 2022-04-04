@@ -14,11 +14,13 @@ class StateInBattle;
 */
 class SchemeBox {
 public:
+
+	static void LoadSound();
 	SchemeBox();
 	~SchemeBox();
 	void InsertScheme(Scheme* scheme);
 	StateInBattle* Update(StateInBattle* nowState);
 private:
 	std::vector<unique_ptr<Scheme>> schemelist;
-	unique_ptr<Sound> SchemeSE;
+	static int SchemeSE;
 };

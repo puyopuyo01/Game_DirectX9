@@ -7,7 +7,7 @@
 #include"Battle/BattleObject/BattleObject.h"
 #include"Battle/BattleDefines.h"
 
-class Panel_Field;
+class Field_Move_Mass;
 class BattleObject;
 class ObjectMNG;
 
@@ -28,16 +28,16 @@ protected:
 class Panel_Blue :public Shape{
 public:
 	static Panel_Blue* GetInstance();
-	static void Set(Panel_Field* offset);
+	static void Set(Field_Move_Mass* offset);
 	bool EXIST;
 public:
 	Panel_Blue();
-	void notif(Panel_Field* location,int x,int y);
+	void notif(Field_Move_Mass* location,int x,int y);
 	void Update() override;
 
 	void Draw() override;
 
-	Panel_Field* Location;/*ゲーム内カーソルがパネルの上にあるとき、そのパネルを保持する*/
+	Field_Move_Mass* Location;/*ゲーム内カーソルがパネルの上にあるとき、そのパネルを保持する*/
 private :
 	int LocationX, LocationY;
 	float size;
@@ -51,10 +51,10 @@ private:
 
 
 /*試合フィールドのパネル。Player側のフィールド、Enmey側のフィールドどちらも3×3マス*/
-class Panel_Field :public Shape{
+class Field_Move_Mass :public Shape{
 public:
-	Panel_Field(int x, int y, Panel_Blue* panel,float lx, float ly, float lz, float r, float g,float b,float a, float size,int ID);
-	~Panel_Field();
+	Field_Move_Mass(int x, int y, Panel_Blue* panel,float lx, float ly, float lz, float r, float g,float b,float a, float size,int ID);
+	~Field_Move_Mass();
 
 	float GetSize();
 
@@ -71,14 +71,14 @@ public:
 	void AddObject(BattleObject* object,float x,float y);
 	void AddObject(BattleObject* object);
 	void MoveObject();
-	static Panel_Field* AllPanel[width*2][length];
-	Panel_Field* Notif(Field_Object* obj);
+	static Field_Move_Mass* AllPanel[width*2][length];
+	Field_Move_Mass* Notif(Field_Object* obj);
 
 	void ApplyStatus();
 
 
 	bool ExistPanel(int x,int y);
-	Panel_Field* GetPanel(int x, int y);
+	Field_Move_Mass* GetPanel(int x, int y);
 	list<BattleObject*> GetBattleObject(int ID, bool Except);
 	list<BattleObject*> GetBattleObject();
 
@@ -101,7 +101,7 @@ private:
 
 
 /*このパネルにオブジェクトが入るとダメージを与える*/
-class DefenseMass :public Panel_Field{
+class DefenseMass :public Field_Move_Mass{
 public:
 	DefenseMass(int ID,float* Dmg,int x, int y, Panel_Blue* panel, float lx, float ly, float lz, float r, float g, float b, float a, float size);
 	void Update() override;

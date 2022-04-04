@@ -39,11 +39,12 @@ protected:
 class Battle_State :public Game_State {
 public:
 	/*パネルは、プレイヤー側のみのパネル、敵側のみのパネル、全てのパネル等分けて保持しておく*/
-	static Panel_Field* Panel_ALL[width*2][length];	
-	unique_ptr<Panel_Field> Player_Panel[PANELWIDTH][length];
-	unique_ptr<Panel_Field> Enemy_Panel[PANELWIDTH][length];
-	unique_ptr<Panel_Field> DefensePanel[2][length];	
+	static Field_Move_Mass* Panel_ALL[width*2][length];	
+	unique_ptr<Field_Move_Mass> Player_Panel[PANELWIDTH][length];
+	unique_ptr<Field_Move_Mass> Enemy_Panel[PANELWIDTH][length];
+	unique_ptr<Field_Move_Mass> DefensePanel[2][length];	
 	Panel_Blue* p_blue;
+
 
 	unique_ptr<SchemeBox> schemelist;
 public:
@@ -51,6 +52,7 @@ public:
 	~Battle_State();
 
 	static void LoadIMG();
+	static void LoadSound();
 
 	void Reset(); /*再度試合を行う*/
 	void Abort(); /*試合を終えてIP入力待機状態へ移行する*/
@@ -89,9 +91,9 @@ private:
 	Game_State* NextState;
 
 
-	/*サウンド系クラス*/
-	unique_ptr<Sound> BGM;
-	unique_ptr<Sound> DmgSE;
+	/*サウンド系登録変数*/
+	static int BGM;
+	static int DmgSE;
 
 	
 

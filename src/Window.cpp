@@ -14,6 +14,7 @@
 #include"./State/InputIP.h"
 #include"DX_Lib/Image/FileMapping.h"
 #include"FPS/FPS.h"
+#include"Editor/Editor.h"
 
 bool Finish; //ゲーム終了ふらぐ
 
@@ -40,10 +41,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	/*--------------------------デバッグ用処理--------------------------------------*/
 	
+	
 	FILE* fp; 
 	AllocConsole(); //デバッグ用コンソール出力
 	freopen_s(&fp,"CONOUT$", "w", stdout);
 	freopen_s(&fp, "CONOUT$", "w", stderr);
+
+	Editor editor = Editor(WindowProc, hInstance);
 	
 
 
@@ -141,6 +145,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// WM_PAINTが呼ばれないようにする
 	ValidateRect(hWnd, 0);
 
+
 	FileMapping::GetInstance()->Mapping();
 	Images::GetInstance()->Init();
 	// レンダラーの初期化
@@ -164,8 +169,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-
 	Battle_State::LoadIMG();
+	Battle_State::LoadSound();
 
 	// メッセージ処理および描画ループ
 	while (!Finish){
@@ -180,7 +185,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 		}
 		else {	// 処理するメッセージが無いときは描画を行う
-
+			editor.Update(hWnd);
 			// ウィンドウが見えている時だけ描画するための処理
 			WINDOWPLACEMENT wndpl;
 			GetWindowPlacement(hWnd, &wndpl);	// ウインドウの状態を取得
@@ -204,6 +209,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 
 	}
+	
+	SoundMNG::Release(); //先に解放しないとSoundクラスのReleaseでアクセス違反が起こる。
 	delete camera;
 	ObjectMNG::GetMNG()->SueSide();
 	Finalize();

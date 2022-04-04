@@ -104,7 +104,7 @@ void KeyBox::CreateSendKey(const int FrameID) {
 	char PrevKey[1023] = { '\0' };
 	int i;
 
-	/*パケットロスして前のフレームのキー入力が届いていなかったときのため、過去10フレームの入力も送る。*/
+	/*パケットロスして前のフレームのキー入力が届いていなかったときのため、過去10フレーム分の入力も送る。*/
 	for (i = 1;i <= SENDPREVKEY;i++) {
 		FramePacket* prev = SearchFrame(FrameID - i);
 		char temp[1023];
@@ -119,7 +119,10 @@ void KeyBox::CreateSendKey(const int FrameID) {
 	}
 }
 
-/*通信相手から受け取ったパケットを必要な情報ごとに分割する関数*/
+/*
+通信相手から受け取ったパケットを必要な情報ごとに分割する関数
+相手の情報は、キー入力と相手のマウスをクリックして指定したマスの位置で、それぞれの情報を「-」で分ける。(キー入力-キー入力-…-x_y)
+*/
 void KeyBox::ReceiveKey(const char* key,const int CreateID) {
 	if (LatestRecvID <= CreateID) { LatestRecvID = CreateID; }
 

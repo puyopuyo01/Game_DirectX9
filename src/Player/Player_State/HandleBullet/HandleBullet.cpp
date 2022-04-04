@@ -5,10 +5,10 @@ IdleBullet::IdleBullet() {
 	Small = false;
 	Middle = false;
 	Big = false;
-	BulletSE = new Sound("Bullet.wav");
+	BulletSE =  make_unique<Sound>("Bullet.wav");
 }
 
-IdleBullet::~IdleBullet() { delete BulletSE; }
+IdleBullet::~IdleBullet() {  }
 
 /*プレイヤーの攻撃状態を管理するクラス(Bridgeパターンで実装)*/
 HandleBullet* IdleBullet::Update(Player* player) {
@@ -32,7 +32,7 @@ HandleBullet* IdleBullet::Update(Player* player) {
 	y = player->StandPos->GetLocation().y - ((player->StandPos->GetSize() / 2.f)*player->GetID());
 
 	/*Qが押されていたときの処理*/
-	if (strncmp(Key_Q, "1", 1) == 0) {
+	if (strncmp(Key_Q, "1", 1) == MATCHKEYPRESS) {
 		if (Small) { return this; }
 		if (player->SBullet->Consumption(1)/*この攻撃に消費する弾は1*/ ) {
 			BulletSE->Reset(); BulletSE->Play(false);
@@ -47,7 +47,7 @@ HandleBullet* IdleBullet::Update(Player* player) {
 
 
 	/*Wが押されていたときの処理*/
-	if (strncmp(Key_W, "1", 1) == 0) {
+	if (strncmp(Key_W, "1", 1) == MATCHKEYPRESS) {
 		if (Middle) { return this; }
 		if (player->MBullet->Consumption(1))
 		{
@@ -62,7 +62,7 @@ HandleBullet* IdleBullet::Update(Player* player) {
 	else { Middle = false; }
 
 	/*Eが押されていたときの処理*/
-	if (strncmp(Key_E, "1", 1) == 0) {
+	if (strncmp(Key_E, "1", 1) == MATCHKEYPRESS) {
 		if (Big) { return this; }
 		if (player->BBullet->Consumption(1)) {
 			BulletSE->Reset(); BulletSE->Play(false);

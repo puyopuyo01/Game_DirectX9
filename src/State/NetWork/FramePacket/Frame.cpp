@@ -37,7 +37,10 @@ void FramePacket::InsertPlayerKeyForIndex(const int index,const char* key) {
 	snprintf(SendKey, sizeof(SendKey), "%s-%s\0",temp, key);
 }
 
-/*ローカルプレイヤの各キー入力を配列ごとに分ける。*/
+/*
+ローカルプレイヤの各キー入力を配列ごとに分ける。
+各キーの情報は「-」で分けられている。
+*/
 void FramePacket::SeparatePlayerKey() {
 	strncpy_s(SendKeyCpy, sizeof(SendKeyCpy),SendKey, sizeof(SendKey));
 	Split(SendKeyCpy,PlayerKey, '-');
@@ -95,7 +98,9 @@ char *FramePacket::GetSendKey() {
 void FramePacket::CreateSendKey(const int FrameID,char prevInput[]) {
 	char Sending[1023];
 	char temp[1023] = { '\0' };
-	/* パケット種類/フレーム番号|キー入力-入力-…,フレーム番号|キー入力-入力-… */
+	/* 
+	送受信する文字列の情報を分け方:パケット種類/フレーム番号|キー入力-入力-…,フレーム番号|キー入力-入力-… 
+	*/
 	snprintf(temp, sizeof(temp), "%d|%s\0", FrameID,SendKey);
 	snprintf(Sending, sizeof(Sending), "%s/%s%s","BATTLE",temp,prevInput);
 	printf("CreateKey is %s\n", Sending);

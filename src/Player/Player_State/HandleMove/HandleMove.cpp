@@ -6,6 +6,7 @@ HandleMove* IdleMove::Update(Player* player) {
 	char* position = KeyBox::GetInstance()->
 						updateframe->GetKey(player->GetID(), POSITION);
 	printf("position %s Player %d\n", position, player->GetID());
+	/*playerの位置するマスの情報 x_yは,xがマスの横の位置、yが縦の位置を意味する。*/
 	char* pos[3];
 	Split(position,pos, '_');
 	printf("why %s %s\n", pos[0],pos[1]);
@@ -22,7 +23,7 @@ HandleMove* IdleMove::Update(Player* player) {
 
 
 	/*移動を開始*/
-	Panel_Field* p = Battle_State::Panel_ALL[y][x];
+	Field_Move_Mass* p = Battle_State::Panel_ALL[y][x];
 	player->StandPos = p;
 	player->Move(p->GetLocation().x, p->GetLocation().y);
 	return this;

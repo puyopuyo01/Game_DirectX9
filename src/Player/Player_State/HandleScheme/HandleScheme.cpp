@@ -15,33 +15,33 @@ HandleScheme* IdleScheme::Update(Player* player) {
 
 	if (player->GetID() == ENEMY) { return this; } /*ƒfƒoƒbƒO—pˆ—*/
 
-	if (strncmp(KeySpace, "1", 1) == 0){ 
+	if (strncmp(KeySpace, "1", 1) == MATCHKEYPRESS){
 		/*‚±‚Ì•KE‹Z‚ÉÁ”ï‚·‚é•KEƒQ[ƒW‚Í5*/
 		if (player->Morale->Consumption(5)) {
-			int power = 2;
+			int Power_Up = 2;
 			/*—D¨ƒŒƒxƒ‹‚É‚æ‚Á‚ÄŒø‰Ê‚ª‚‚Ü‚é*/
-			if (player->GetPredominant() > 0 && player->GetPredominant() <= LV1) { power = 3; }
-			else if (player->GetPredominant() > 0 && player->GetPredominant() <= LV2) { power = 4; }
-			else if (player->GetPredominant() > 0 && player->GetPredominant() <= LV3) { power = 5; }
+			if (player->GetPredominant() > 0 && player->GetPredominant() <= LV1) { Power_Up = 3; }
+			else if (player->GetPredominant() > 0 && player->GetPredominant() <= LV2) { Power_Up = 4; }
+			else if (player->GetPredominant() > 0 && player->GetPredominant() <= LV3) { Power_Up = 5; }
 
 
 			string name = "—H—ì‹­‰»";
 			string intro = "ƒtƒB[ƒ‹ƒh‚É‚¢‚é©g‚Ì—H—ì‚ğ‹­‰»‚·‚éB\n‚±‚ÌŒø‰Ê‚Í—D¨ƒŒƒxƒ‹‚ª‘å‚«‚¢’ö‘å‚«‚¢B\n‚½‚¾‚µ—D¨ƒŒƒxƒ‹‚ª‰º‚ª‚éB";
-			player->schemeBox->InsertScheme(new Enhancement(player->GetID(), power, 0.f,Panel_Field::GetPredAddr(),-2,player->portrate,name,intro));
+			player->schemeBox->InsertScheme(new Enhancement(player->GetID(), Power_Up, 0.f,Field_Move_Mass::GetPredAddr(),-2,player->portrate,name,intro));
 		}
 
 	}
-	if (strncmp(KeyF, "1", 1) == 0){
+	if (strncmp(KeyF, "1", 1) == MATCHKEYPRESS){
 		/*‚±‚Ì•KE‹Z‚ÉÁ”ï‚·‚é•KEƒQ[ƒW‚Í3*/
 		if (player->Morale->Consumption(3)) {
-			float speed = 10.f;
+			float Speed_Up = 10.f;
 			/*—D¨ƒŒƒxƒ‹‚É‚æ‚Á‚ÄŒø‰Ê‚ª‚‚Ü‚é*/
-			if (player->GetPredominant() > 0 && player->GetPredominant() <= LV1) { speed = 15.f; }
-			else if (player->GetPredominant() > 0 && player->GetPredominant() <= LV2) { speed = 20.f; }
-			else if (player->GetPredominant() > 0 && player->GetPredominant() <= LV3) { speed = 25.f; }
+			if (player->GetPredominant() > 0 && player->GetPredominant() <= LV1) { Speed_Up = 15.f; }
+			else if (player->GetPredominant() > 0 && player->GetPredominant() <= LV2) { Speed_Up = 20.f; }
+			else if (player->GetPredominant() > 0 && player->GetPredominant() <= LV3) { Speed_Up = 25.f; }
 			string name = "‘¬“xã¸";
 			string intro = "ƒtƒB[ƒ‹ƒh‚É‚¢‚é©g‚Ì—H—ì‚Ì‘¬“x‚ğã¸‚³‚¹‚éB\n‚±‚ÌŒø‰Ê‚Í—D¨ƒŒƒxƒ‹‚ª‘å‚«‚¢’ö‘å‚«‚¢B";
-			player->schemeBox->InsertScheme(new Enhancement(player->GetID(),0,speed,Panel_Field::GetPredAddr(),0, player->portrate,name,intro));
+			player->schemeBox->InsertScheme(new Enhancement(player->GetID(),0,Speed_Up,Field_Move_Mass::GetPredAddr(),0, player->portrate,name,intro));
 		}
 
 	}

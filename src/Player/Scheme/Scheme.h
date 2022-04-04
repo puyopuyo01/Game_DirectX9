@@ -1,6 +1,7 @@
 #pragma once
 #include"Bullet/Bullet.h"
 #include"Battle/ObjectMNG/ObjectManager.h"
+#include"DX_Lib/Sound/Sound.h"
 
 #define LV1 2
 #define LV2 4
@@ -12,6 +13,7 @@ class Bullet;
 /*•KŽE‹Z‚ÌŠî’êƒNƒ‰ƒX*/
 class Scheme{
 public:
+	virtual ~Scheme();
 	Scheme(int ID,int Texture);
 	int TextureNumber;
 	int ID;
@@ -25,6 +27,7 @@ public:
 
 class Enhancement :public Scheme {
 public:
+	~Enhancement();
 	Enhancement(int ID, int pow, float speed,int* pred,int pred_inc,int TextureNumber, string name, string intro);
 	void Excution() override;
 

@@ -8,11 +8,14 @@ void InterputState::init(StateInBattle* next, int TextureNumber){
 	float x, y;
 	SetPosition(&x, &y);
 
-	CutIn = make_unique<CutInCharacter>(x, y, 30, 90, 30, TextureNumber,1,0,-1);
-	PanelNum = baseState->AddDrawObject((Field_Object*)CutIn->Panel.get());
 	InFrame = 30; /*キャラクターパネル画像が画面外から入ってくるまでのフレーム*/
-	OutFrame = 30; /*キャラクターパネル画像が画面外へ出るまでのフレーム*/
 	StayFrame = 90; /*キャラクターパネル画像が入ってきて留まるフレーム*/
+	OutFrame = 30; /*キャラクターパネル画像が画面外へ出るまでのフレーム*/
+	
+
+	CutIn = make_unique<CutInCharacter>(x, y, InFrame, StayFrame, OutFrame, TextureNumber,1,0,-1);
+	PanelNum = baseState->AddDrawObject((Field_Object*)CutIn->Panel.get());
+
 
 	TextNum = -1;
 

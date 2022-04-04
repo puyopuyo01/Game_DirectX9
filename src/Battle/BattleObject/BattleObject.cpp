@@ -19,12 +19,12 @@ BattleObject::~BattleObject() {
 
 
 /*派生クラスのインスタンスがどのパネルに移動したか。*/
-void BattleObject::SetPanel(Panel_Field* panel, float x, float y) {
+void BattleObject::SetPanel(Field_Move_Mass* panel, float x, float y) {
 	StandPos = panel;
 	this->Move(x,y);
 }
 
-void BattleObject::SetPanel(Panel_Field* panel){
+void BattleObject::SetPanel(Field_Move_Mass* panel){
 	if (StandPos != nullptr) {
 		/*移動先のパネルのIDが移動前のパネルと異なれば優勢ゲージを変動させる。(変動値はインスタンスによってことなる)*/
 		if (StandPos->ID != panel->ID) {

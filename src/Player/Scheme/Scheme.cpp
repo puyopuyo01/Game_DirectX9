@@ -1,9 +1,13 @@
 #include"./Scheme.h"
 
 
-Scheme::Scheme(int ID,int Texture) {
+Scheme::Scheme(int ID,int Texture) {	
 	this->ID = ID;
 	this->TextureNumber = Texture;
+}
+
+Scheme::~Scheme(){
+	printf("Delete Scheme\n");
 }
 
 /*必殺技の実行関数*/
@@ -17,8 +21,13 @@ Enhancement::Enhancement(int ID, int pow, float speed,int* pred,int pred_inc,int
 	this->intro = intro;
 	this->pred = pred;
 	this->pred_inc = pred_inc*ID;
+	printf("Call EnhanceMent\n");
 }
 
+
+Enhancement::~Enhancement() {
+	printf("Delete EnhanceMent\n");
+}
 
 /*フィールド上に存在する幽霊の強化。*/
 void Enhancement::Excution(){

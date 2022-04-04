@@ -1,7 +1,10 @@
 #include"DXLib_Orig.h"
 #include"./FileMapping.h"
 
-/*画像の読み込み管理クラス*/
+/*
+画像の読み込み管理クラス
+classの宣言はDX_Lib_Orig.h
+*/
 
 
 Images* Images::SingleTon;

@@ -3,7 +3,7 @@
 #include"Shape.h"
 
 class Field_Object;
-class Panel_Field;
+class Field_Move_Mass;
 
 /*衝突判定等を持つクラス*/
 class BattleObject:public Field_Object,public CollisionObject {
@@ -11,13 +11,13 @@ public:
 	BattleObject(float posx,float posy,CollisionState* state);
 	virtual ~BattleObject();	/*自身の情報を持っているオブジェクトに自信の終わりを伝える*/
 	void RefDelete(BattleObject* obj); /*自身を参照するオブジェクトから引数のオブジェクトを削除*/
-	void SetPanel(Panel_Field* panel,float x,float y);
-	void SetPanel(Panel_Field* panel);
+	void SetPanel(Field_Move_Mass* panel,float x,float y);
+	void SetPanel(Field_Move_Mass* panel);
 	virtual bool Siege(float* Dmg);
 	virtual int GetPredominate();
 	virtual void Death();
 	bool MoveFlag;
-	Panel_Field* StandPos;
+	Field_Move_Mass* StandPos;
 
 	float Width;
 	float Height;

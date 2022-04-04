@@ -10,7 +10,7 @@ Panel_Blue* Panel_Blue::GetInstance() {
 	return SingleTon.get();
 }
 
-void Panel_Blue::Set(Panel_Field* offset) {
+void Panel_Blue::Set(Field_Move_Mass* offset) {
 	if (SingleTon.get() == nullptr) {
 		return;
 	}
@@ -30,8 +30,8 @@ Panel_Blue::Panel_Blue():Shape(0.f,0.f,0.f)
 };
 
 
-/*ゲーム内カーソルがPanel_Field上にきたらそのパネルを保持する。*/
-void Panel_Blue::notif(Panel_Field* location,int x,int y){
+/*ゲーム内カーソルがField_Move_Mass上にきたらそのパネルを保持する。*/
+void Panel_Blue::notif(Field_Move_Mass* location,int x,int y){
 	if (location == nullptr) {
 		Location = nullptr;
 		EXIST = false;

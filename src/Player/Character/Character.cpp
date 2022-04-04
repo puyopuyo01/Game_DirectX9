@@ -15,7 +15,7 @@ void Hero::LoadIMG() {
 }
 
 /*ローカルプレイヤ側のテクスチャ*/
-Hero::Hero(int x, int y, Panel_Field* p, int ID, float *HP,int* Pred ,SchemeBox* schemeBox):Player(x, y, p, ID, HP,Pred ,schemeBox) {
+Hero::Hero(int x, int y, Field_Move_Mass* p, int ID, float *HP,int* Pred ,SchemeBox* schemeBox):Player(x, y, p, ID, HP,Pred ,schemeBox) {
 	play = Hero::PlayerTexture;
 	portrate = Hero::Portrate;
 	damage = Hero::PlayerDamage;
@@ -41,7 +41,7 @@ void HeroT::LoadIMG() {
 
 
 /*リモートプレイヤ(通信相手)側のテクスチャ*/
-HeroT::HeroT(int x, int y, Panel_Field* p, int ID, float *HP, int* Pred, SchemeBox* schemeBox):Player(x, y, p, ID, HP,Pred, schemeBox) {
+HeroT::HeroT(int x, int y, Field_Move_Mass* p, int ID, float *HP, int* Pred, SchemeBox* schemeBox):Player(x, y, p, ID, HP,Pred, schemeBox) {
 	damage = HeroT::PlayerDamage;
 	play = HeroT::PlayerTexture;
 	portrate = HeroT::Portrate;

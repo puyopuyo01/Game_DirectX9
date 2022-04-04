@@ -9,7 +9,7 @@ class Hero:public Player{
 public:
 	static void LoadIMG();
 
-	Hero(int x, int y, Panel_Field* p, int ID, float *HP, int* Pred, SchemeBox* schemeBox);
+	Hero(int x, int y, Field_Move_Mass* p, int ID, float *HP, int* Pred, SchemeBox* schemeBox);
 
 	static int PlayerTexture;
 	static int Portrate;
@@ -23,7 +23,7 @@ class HeroT:public Player{
 public:
 	static void LoadIMG();
 
-	HeroT(int x, int y, Panel_Field* p, int ID, float *HP, int* Pred, SchemeBox* schemeBox);
+	HeroT(int x, int y, Field_Move_Mass* p, int ID, float *HP, int* Pred, SchemeBox* schemeBox);
 
 	static int PlayerTexture;
 	static int Portrate;

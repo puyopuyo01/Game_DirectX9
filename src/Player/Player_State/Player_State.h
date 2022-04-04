@@ -7,6 +7,8 @@
 #include"State/Key/KeyBox.h"
 #include"DX_Lib/Sound/Sound.h"
 
+#define MATCHKEYPRESS 0
+
 
 class CollisionObject;
 class Field_Object;
@@ -93,6 +95,6 @@ public:
 	~IdleBullet();
 	HandleBullet* Update(Player* player) override;
 private:
-	Sound* BulletSE;
+	unique_ptr<Sound> BulletSE;
 };
 
