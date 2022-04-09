@@ -46,7 +46,7 @@ Bullet::Bullet(int GroupID,int BulletID,int power,float speed,BulletCharacterist
 	float speedTemp = (FRAMEPERSEC / speed) *SIZE;
 	this->speed = make_unique<Numerical<float>>(new float(speedTemp), new NormalValue<float>(), 1000.f, 0);
 	state=unique_ptr<BulletState>(BState->bulletState);
-	charac=unique_ptr<BulletCharacteristic>(BState);
+	charac=unique_ptr<BulletCharacteristic>(std::move(BState));
 	board=make_unique<Primitive>(SQUARE, 0.f, 0.f, 0.f,this->Width,this->Height, 1.f, 1.f, 1.f, 1.f);
 	this->Move(posx,posy);
 	speedx = 0.f;

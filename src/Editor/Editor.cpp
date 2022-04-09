@@ -2,24 +2,51 @@
 #define EDITOR_WIDTH 400
 #define EDITOR_HEIGHT 400
 
-#define BUTTON_ID 1
-
 #define EDIT_HEIGTH 20
+
+std::unique_ptr<Editor> Editor::SingleTon;
+Parameter_Window* Editor::Chosen;
 
 
 LRESULT CALLBACK EditProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
+	
+	
 	switch (msg) {
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
+	case WM_PAINT:
+		/*TODO:ちらつき防止用に何かする*/
+		HDC hdc;
+		PAINTSTRUCT ps;
+		TEXTMETRIC tm;
+		hdc = BeginPaint(hwnd, &ps);
+		SetBkMode(hdc, TRANSPARENT);
+		GetTextMetrics(hdc, &tm);
+		Editor::Chosen->Draw(&hdc);
+		EndPaint(hwnd, &ps);
+	
+		return 0;
 	case WM_COMMAND:
 		switch (LOWORD(wp)) {
-			case WM_CREATE:
-				MessageBox(NULL,
-					"EditorCreate", "失敗_Editor_WC", MB_OK);
+			case UPDATE_BUTTON:
+				Editor::Get()->UpdateParameter();
 				return 0;
+
+			case HP_BUTTON:
+				Editor::Get()->ChangeChosen(HP_BUTTON);
+				break;
+			case SBULLET_BUTTON:
+				Editor::Get()->ChangeChosen(SBULLET_BUTTON);
+				break;
+			case MBULLET_BUTTON:
+				Editor::Get()->ChangeChosen(MBULLET_BUTTON);
+				break;
+			case BBULLET_BUTTON:
+				Editor::Get()->ChangeChosen(BBULLET_BUTTON);
+				break;
 			}
-			break;
+			return 0;
 
 	case WM_KEYDOWN:				// キーが押された
 		if (wp == VK_ESCAPE) {	// 押されたのはESCキーだ
@@ -33,7 +60,9 @@ LRESULT CALLBACK EditProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 
 
-Editor::Editor(WNDPROC proc,HINSTANCE hInstance) {
+
+
+Editor::Editor() {
 
 	// ウィンドウクラスの情報を設定
 	wc.cbSize = sizeof(wc); // 構造体サイズ
@@ -45,7 +74,7 @@ Editor::Editor(WNDPROC proc,HINSTANCE hInstance) {
 	wc.hIcon = NULL;
 	wc.hIconSm = wc.hIcon; // 子アイコン
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)GetStockObject(GRAY_BRUSH); // ウィンドウ背景
+	wc.hbrBackground = (HBRUSH)GetStockObject(GRAY_BRUSH); // ウィンドウ背景GRAY_BRUSH
 	wc.lpszMenuName = NULL; // メニュー名
 	wc.lpszClassName = TEXT("ParametersEditor");// ウィンドウクラス名
 
@@ -57,7 +86,8 @@ Editor::Editor(WNDPROC proc,HINSTANCE hInstance) {
 	
 	DWORD dwStyle = WS_VISIBLE | WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX;
 
-	hWnd = CreateWindow(
+	hWnd = CreateWindowEx(
+		WS_EX_COMPOSITED,
 		(TCHAR*)TEXT("ParametersEditor"), 			// 登録されているクラス名
 		(TCHAR*)TEXT("Editor"), 			// ウインドウ名
 		dwStyle,		// ウインドウスタイル（ポップアップウインドウを作成）
@@ -99,34 +129,78 @@ Editor::Editor(WNDPROC proc,HINSTANCE hInstance) {
 	ShowWindow(hWnd, SW_SHOWNORMAL);
 	ValidateRect(hWnd, 0);
 
-	button = CreateWindow(
+	Parameter_Window::Set_ParentHandle(&hWnd);
+
+	Update_Button = CreateWindow(
 		(TCHAR*)"button", (TCHAR*) "更新",
 		WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON | WS_BORDER,
-		250, 300, 30, 60, hWnd, (HMENU)BUTTON_ID, this->hInstance, NULL);
-		
-
-	edit = CreateWindow(
-				(TCHAR*)"EDIT", (TCHAR*)"1122",
-				WS_CHILD|WS_VISIBLE|ES_LEFT|ES_NUMBER| ES_MULTILINE | WS_BORDER,
-				0, 0, 100, 30, hWnd, (HMENU)2,
-				this->hInstance, NULL);
-
-	edit = CreateWindow(
-		(TCHAR*)"EDIT", NULL,
-		WS_CHILD | WS_VISIBLE | ES_LEFT | ES_NUMBER,
-		100, 60, 100, 60, hWnd, (HMENU)2,
-		this->hInstance, NULL);
-	ShowWindow(edit, SW_HIDE);
-	if (edit == NULL) {
+		200, 300, 100, 90, hWnd, (HMENU)UPDATE_BUTTON, this->hInstance, NULL);
+	if (Update_Button == NULL) {
 		MessageBox(NULL,
-			"失敗_EditorButton", "EditorCreate", MB_OK);
+			"失敗_Update_Button", "EditorCreate", MB_OK);
 	}
-	TextOut(GetDC(hWnd), 30, 30, (LPTSTR)"TestTTT", lstrlen("TestTTT"));
+	
+	Parameter* pram = Parameter::Get();
+	
+	HP = std::make_unique<HP_Window>(&hInstance, HP_BUTTON,pram->HP);
+	Windows.push_back(HP.get());
+	Chosen = HP.get();
+	Chosen->Active();
 
+	
+	SBullet = std::make_unique<Bullet_Window>(&hInstance, SBULLET_BUTTON,(TCHAR*)"Bullet(小)",100,
+												pram->SBulletSpeed,pram->SBulletPower,pram->SBulletReloadSpeed,pram->SBulletNum);
+	Windows.push_back(SBullet.get());
+	SBullet->Inactive();
+
+	MBullet = std::make_unique<Bullet_Window>(&hInstance, MBULLET_BUTTON, (TCHAR*)"MBullet(中)", 200,
+												pram->MBulletSpeed, pram->MBulletPower, pram->MBulletReloadSpeed, pram->MBulletNum);
+	Windows.push_back(MBullet.get());
+	MBullet->Inactive();
+
+	BBullet = std::make_unique<Bullet_Window>(&hInstance, BBULLET_BUTTON, (TCHAR*)"BBullet(大)", 300,
+												pram->BBulletSpeed, pram->BBulletPower, pram->BBulletReloadSpeed, pram->BBulletNum);
+	Windows.push_back(BBullet.get());
+	BBullet->Inactive();
 }
 
-void Editor::Update(HWND hWnd) {
+void Editor::Update() {
+	InvalidateRect(this->hWnd, NULL, true);
+	UpdateWindow(this->hWnd);
 	// ウィンドウが見えている時だけ描画するための処理
 	WINDOWPLACEMENT wndpl;
 	GetWindowPlacement(this->hWnd, &wndpl);	// ウインドウの状態を取得
+
+}
+
+void Editor::ChangeChosen(int Button_ID) {
+	std::list<Parameter_Window*>::iterator itr = Windows.begin();
+	while (itr != Windows.end()) {
+		if((*itr)->ID == Button_ID){
+			(*itr)->Active();
+			Chosen = (*itr);
+		}
+		else {
+			(*itr)->Inactive();
+		}
+
+		itr++;
+	}
+}
+
+/*EditorProc関数(コールバック)の中からでもこのクラスを扱えるようにするためシングルトンパターンで実装する。*/
+Editor* Editor::Get(){
+	if (SingleTon.get() == nullptr) {
+		SingleTon = std::make_unique<Editor>();
+	}
+	return SingleTon.get();
+}
+
+/*「更新」ボタンが押されるとこの関数を呼び出してパラメータを反映させる*/
+void Editor::UpdateParameter() {
+	Parameter* pram = Parameter::Get();
+	HP->Update_Parameter(&pram->HP);
+	SBullet->Update_Parameter(&pram->SBulletSpeed, &pram->SBulletPower, &pram->SBulletReloadSpeed, &pram->SBulletNum);
+	MBullet->Update_Parameter(&pram->MBulletSpeed, &pram->MBulletPower, &pram->MBulletReloadSpeed, &pram->MBulletNum);
+	BBullet->Update_Parameter(&pram->BBulletSpeed, &pram->BBulletPower, &pram->BBulletReloadSpeed, &pram->BBulletNum);
 }

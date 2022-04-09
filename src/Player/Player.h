@@ -11,6 +11,7 @@
 #include"Player/Scheme/Scheme.h"
 #include"Charging/Charging.h"
 #include"Bullet/Reload/Reload.h"
+#include"Parameter/Parameter.h"
 
 
 #define Start 1	//Å‰‚Ìƒ}ƒX‚ÌˆÊ’u

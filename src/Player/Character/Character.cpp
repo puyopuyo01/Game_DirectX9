@@ -20,9 +20,11 @@ Hero::Hero(int x, int y, Field_Move_Mass* p, int ID, float *HP,int* Pred ,Scheme
 	portrate = Hero::Portrate;
 	damage = Hero::PlayerDamage;
 
-	SBullet = make_unique<Reload>(5,5,70);
-	MBullet = make_unique<Reload>(4,4,120);
-	BBullet = make_unique<Reload>(2, 2, 180);
+	Parameter* pram = Parameter::Get();
+
+	SBullet = make_unique<Reload>(pram->SBulletNum,pram->SBulletNum,pram->SBulletReloadSpeed);
+	MBullet = make_unique<Reload>(pram->MBulletNum, pram->MBulletNum, pram->MBulletReloadSpeed);
+	BBullet = make_unique<Reload>(pram->BBulletNum, pram->BBulletNum, pram->BBulletReloadSpeed);
 
 }
 
@@ -45,8 +47,11 @@ HeroT::HeroT(int x, int y, Field_Move_Mass* p, int ID, float *HP, int* Pred, Sch
 	damage = HeroT::PlayerDamage;
 	play = HeroT::PlayerTexture;
 	portrate = HeroT::Portrate;
-	SBullet = make_unique<Reload>(5,5,70);
-	MBullet = make_unique<Reload>(4,4,120);
-	BBullet = make_unique<Reload>(2,2,180);
+
+	Parameter* pram = Parameter::Get();
+
+	SBullet = make_unique<Reload>(pram->SBulletNum, pram->SBulletNum, pram->SBulletReloadSpeed);
+	MBullet = make_unique<Reload>(pram->MBulletNum, pram->MBulletNum, pram->MBulletReloadSpeed);
+	BBullet = make_unique<Reload>(pram->BBulletNum, pram->BBulletNum, pram->BBulletReloadSpeed);
 
 }

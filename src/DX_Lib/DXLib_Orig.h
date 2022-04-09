@@ -27,6 +27,8 @@ extern LPDIRECT3D9 pD3D;
 extern LPDIRECT3DDEVICE9 pD3DDevice;
 extern D3DPRESENT_PARAMETERS D3DPP;
 
+/*-----------------------------------“ü—ÍŠÖŒW-----------------------------------*/
+
 extern LPDIRECTINPUTDEVICE8 Mouse;
 extern LPDIRECTINPUTDEVICE8 Keybord;
 
@@ -35,10 +37,6 @@ extern LPDIRECTINPUTDEVICE8 Keybord;
 
 extern LPDIRECTSOUND8 pSound;
 extern LPDIRECTSOUNDBUFFER PrBuf;
-
-	/*-----------------------------------“ü—ÍŠÖŒW-----------------------------------*/
-	//extern LPDIRECTINPUT8 dinput;
-	//extern LPDIRECTINPUTDEVICE8 Mouse;
 
 
 	HRESULT DX_INIT(HWND hWnd, bool fullscreen, int width_a, int height);

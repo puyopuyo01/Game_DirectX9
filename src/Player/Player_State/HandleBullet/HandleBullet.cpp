@@ -1,5 +1,6 @@
 #include"Player/Player_State/Player_State.h"
 #include"Bullet/Characteristic/Characteristic.h"
+#include"Parameter/Parameter.h"
 
 IdleBullet::IdleBullet() {
 	Small = false;
@@ -31,12 +32,14 @@ HandleBullet* IdleBullet::Update(Player* player) {
 	float y = 0.f;
 	y = player->StandPos->GetLocation().y - ((player->StandPos->GetSize() / 2.f)*player->GetID());
 
+	Parameter* pram = Parameter::Get();
+
 	/*Q‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚Æ‚«‚Ìˆ—*/
 	if (strncmp(Key_Q, "1", 1) == MATCHKEYPRESS) {
 		if (Small) { return this; }
 		if (player->SBullet->Consumption(1)/*‚±‚ÌUŒ‚‚ÉÁ”ï‚·‚é’e‚Í1*/ ) {
 			BulletSE->Reset(); BulletSE->Play(false);
-			Bullet* bullet = new Bullet(player->GetID(), SMALLBULLET, 3, 10.f, new NonCharacteristic(), x, y, SIZE / 3.f);
+			Bullet* bullet = new Bullet(player->GetID(), SMALLBULLET, pram->SBulletPower, pram->SBulletSpeed, new NonCharacteristic(), x, y, SIZE / 3.f);
 			player->StandPos->AddObject(bullet, x, y);
 			ObjectMNG::GetMNG()->AddBullet(bullet);
 			Small = true;
@@ -52,7 +55,7 @@ HandleBullet* IdleBullet::Update(Player* player) {
 		if (player->MBullet->Consumption(1))
 		{
 			BulletSE->Reset(); BulletSE->Play(false);
-			Bullet* bullet = new Bullet(player->GetID(), MIDDLEBULLET, 5, 30.0f, new Shield(player->GetID(), x, y, SIZE / 2.3f), x, y, SIZE / 2.3f);
+			Bullet* bullet = new Bullet(player->GetID(), MIDDLEBULLET, pram->MBulletPower, pram->MBulletSpeed, new Shield(player->GetID(), x, y, SIZE / 2.3f), x, y, SIZE / 2.3f);
 			player->StandPos->AddObject(bullet, x, y);
 			ObjectMNG::GetMNG()->AddBullet(bullet);
 			Middle = true;
@@ -66,7 +69,7 @@ HandleBullet* IdleBullet::Update(Player* player) {
 		if (Big) { return this; }
 		if (player->BBullet->Consumption(1)) {
 			BulletSE->Reset(); BulletSE->Play(false);
-			Bullet* bullet = new Bullet(player->GetID(), BIGBULLET, 10, 90.f, new NonCharacteristic(), x, y, SIZE / 1.6f);
+			Bullet* bullet = new Bullet(player->GetID(), BIGBULLET, pram->BBulletPower, pram->BBulletSpeed, new NonCharacteristic(), x, y, SIZE / 1.6f);
 			player->StandPos->AddObject(bullet, x, y);
 			ObjectMNG::GetMNG()->AddBullet(bullet);
 			Big = true;

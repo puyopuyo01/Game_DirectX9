@@ -47,7 +47,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	freopen_s(&fp,"CONOUT$", "w", stdout);
 	freopen_s(&fp, "CONOUT$", "w", stderr);
 
-	Editor editor = Editor(WindowProc, hInstance);
+	
 	
 
 
@@ -145,6 +145,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// WM_PAINTが呼ばれないようにする
 	ValidateRect(hWnd, 0);
 
+	Editor::Get();
 
 	FileMapping::GetInstance()->Mapping();
 	Images::GetInstance()->Init();
@@ -185,7 +186,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 		}
 		else {	// 処理するメッセージが無いときは描画を行う
-			editor.Update(hWnd);
+			Editor::Get()->Update();
 			// ウィンドウが見えている時だけ描画するための処理
 			WINDOWPLACEMENT wndpl;
 			GetWindowPlacement(hWnd, &wndpl);	// ウインドウの状態を取得

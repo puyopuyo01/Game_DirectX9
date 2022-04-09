@@ -6,7 +6,7 @@ int Player::GetID() { return this->ID; }
 int Player::GetPredominant() { return (*this->Predominant); }
 
 Player::Player(int x,int y,Field_Move_Mass* p,int ID,float* HP,int* Pred,SchemeBox* schemeBox):BattleObject(p->GetLocation().x, p->GetLocation().y,new PlayerCollisionState(HP)){
-	MaxHP = 1000.f;
+	MaxHP = Parameter::Get()->HP;
 	StandPos = p;
 	/*通信処理で必要なため、前フレームにプレイヤーがいた位置を保持しておく。*/
 	NTPrevX = StandPos->x;
